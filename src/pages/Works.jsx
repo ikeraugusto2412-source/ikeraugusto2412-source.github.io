@@ -5,8 +5,8 @@ import { useLanguage } from '../context/LanguageContext';
 import { projects } from '../data/projects';
 import Footer from '../components/Footer';
 import PageTransition from '../components/PageTransition';
-import { EASE } from '../components/motion/tokens';
-import { lift } from '../components/motion/pressable';
+import { EASE, EASE_EXIT, DUR, RISE } from '../components/motion/tokens';
+import { lift, MotionLink } from '../components/motion/pressable';
 import DrawLine from '../components/DrawLine';
 import { sileo } from 'sileo';
 import './Works.css';
@@ -53,6 +53,34 @@ function generateEditorialGrid(projectsList) {
 
   return cells;
 }
+
+/*
+ * Grid ↔ list: the outgoing view lifts away quickly, the incoming one cascades in.
+ * Stagger is capped so the whole cascade stays under ~350 ms whatever the project count.
+ */
+const viewVariants = {
+  hidden: {},
+  visible: {},
+  exit: { opacity: 0, y: -RISE / 2, transition: { duration: 0.22, ease: EASE_EXIT } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: RISE },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: DUR.standard, delay: 0.08 + Math.min(i, 7) * 0.045, ease: EASE },
+  }),
+};
+
+const rowVariants = {
+  hidden: { opacity: 0, y: RISE / 2 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: DUR.quick, delay: Math.min(i, 9) * 0.03, ease: EASE },
+  }),
+};
 
 export default function Works() {
   const { language } = useLanguage();
@@ -127,10 +155,10 @@ export default function Works() {
                 <motion.div
                   key="grid"
                   className="swagg-works-grid"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  variants={viewVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
                 >
                   {gridCells.map((cell, idx) => {
                     if (cell.type === 'blank') {
@@ -149,9 +177,11 @@ export default function Works() {
                       : item.category;
 
                     return (
-                      <div
+                      <motion.div
                         key={item.id + '-' + idx}
                         className={`swagg-grid-card-wrap span-${cell.span}`}
+                        variants={cardVariants}
+                        custom={idx}
                       >
                         <Link
                           to={`/project/${item.id}`}
@@ -179,7 +209,7 @@ export default function Works() {
                             </div>
                           </div>
                         </Link>
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </motion.div>
@@ -187,10 +217,10 @@ export default function Works() {
                 <motion.div
                   key="list"
                   className="swagg-works-list-wrapper"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  variants={viewVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
                   onMouseLeave={() => setHoveredProject(null)}
                 >
                   {/* Floating Center Cover Image that reveals on row hover */}
@@ -229,10 +259,12 @@ export default function Works() {
                       const isHovered = hoveredProject?.id === item.id;
 
                       return (
-                        <Link
+                        <MotionLink
                           key={item.id}
                           to={`/project/${item.id}`}
                           className={`swagg-list-row ${isHovered ? 'active-hover' : ''}`}
+                          variants={rowVariants}
+                          custom={idx}
                           onMouseEnter={() => setHoveredProject(item)}
                           onFocus={() => setHoveredProject(item)}
                           data-cursor-text="VIEW"
@@ -249,7 +281,7 @@ export default function Works() {
                           <div className="swagg-list-col-title">{item.title}</div>
                           <div className="swagg-list-col-field">{categoryLabel}</div>
                           <div className="swagg-list-col-year">{item.year}</div>
-                        </Link>
+                        </MotionLink>
                       );
                     })}
                   </div>
