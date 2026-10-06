@@ -205,13 +205,14 @@
   width: 100%;
   transform: translateY(100%);
   opacity: 0;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  transition: transform 260ms var(--ease-exit), opacity 260ms var(--ease-exit);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .swagg-grid-card:hover .swagg-card-header-inner {
     transform: translateY(0);
     opacity: 1;
+    transition: transform var(--dur-quick) var(--ease-out), opacity var(--dur-quick) var(--ease-out);
   }
 }
 
@@ -236,7 +237,7 @@
   text-transform: uppercase;
   white-space: nowrap;
   padding-left: 8px;
-  transition: color 0.3s ease;
+  transition: color var(--dur-quick) var(--ease-state);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -268,7 +269,7 @@
   object-position: center;
   display: block;
   transform: scale(1.001);
-  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--dur-slow) var(--ease-state);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -286,13 +287,15 @@
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 260ms var(--ease-exit);
   z-index: 2;
 }
 
 @media (hover: hover) and (pointer: fine) {
+  /* Follow-through: the badge arrives a beat after the caption */
   .swagg-grid-card:hover .swagg-card-hover-overlay {
     opacity: 1;
+    transition: opacity var(--dur-quick) var(--ease-out) 60ms;
   }
 }
 

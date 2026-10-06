@@ -101,7 +101,9 @@
   will-change: transform;
   backface-visibility: hidden;
   cursor: pointer;
-  transition: box-shadow 0.4s ease;
+  /* Hover: quick to answer, slower to let go. Leaving uses the base (slower) values. */
+  transition: box-shadow var(--dur-standard) var(--ease-state),
+    border-color var(--dur-standard) var(--ease-state);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -114,6 +116,7 @@
   .playbook-dynamic-card:hover {
     border-color: rgba(255, 255, 255, 0.5);
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
+    transition-duration: 200ms;
   }
 }
 
@@ -128,13 +131,13 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--dur-slow) var(--ease-state);
   pointer-events: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .playbook-dynamic-card:hover .card-image-wrap img {
-    transform: scale(1.05);
+    transform: scale(1.04);
   }
 }
 
@@ -153,7 +156,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   transform: translateY(-100%);
-  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 260ms var(--ease-exit);
   pointer-events: none;
   z-index: 5;
   display: flex;
@@ -176,6 +179,7 @@
 @media (hover: hover) and (pointer: fine) {
   .playbook-dynamic-card:hover .card-slide-top {
     transform: translateY(0%);
+    transition: transform var(--dur-quick) var(--ease-out);
   }
 }
 
@@ -190,7 +194,7 @@
   padding: 10px 12px;
   font-family: var(--font-mono, 'Space Mono', monospace);
   transform: translateY(100%);
-  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 260ms var(--ease-exit);
   pointer-events: none;
   z-index: 5;
   display: flex;
@@ -214,8 +218,10 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+  /* Follow-through: the caption lands a beat after the number tab */
   .playbook-dynamic-card:hover .card-slide-bottom {
     transform: translateY(0%);
+    transition: transform var(--dur-quick) var(--ease-out) 60ms;
   }
 }
 
