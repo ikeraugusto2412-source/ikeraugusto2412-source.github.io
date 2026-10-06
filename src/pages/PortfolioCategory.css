@@ -1,0 +1,108 @@
+.portfolio-category-page {
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-bottom: 0;
+}
+
+/* ── Header ── */
+.portfolio-category-header {
+  padding-top: 18vh;
+  padding-bottom: 6vw;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 8vw;
+}
+
+.portfolio-category-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+}
+
+.breadcrumb-link {
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .breadcrumb-link:hover {
+    color: var(--accent);
+  }
+}
+
+.breadcrumb-sep {
+  opacity: 0.4;
+}
+
+.portfolio-category-title {
+  font-size: clamp(3.5rem, 8vw, 9rem);
+  text-transform: uppercase;
+  line-height: 0.9;
+  margin-left: -0.3vw;
+}
+
+/* ── Projects list ── */
+.portfolio-category-list {
+  padding-bottom: 10vw;
+}
+
+/* ── Coming soon state ── */
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 6vw 0 10vw;
+}
+
+.coming-soon-label {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.coming-soon-desc {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1.4;
+  color: var(--text-muted);
+  max-width: 600px;
+}
+
+.coming-soon-back {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 0.3rem;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .coming-soon-back:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
+@media (max-width: 768px) {
+  .portfolio-category-header {
+    padding-top: 15vh;
+    padding-bottom: 8vw;
+    margin-bottom: 10vw;
+  }
+
+  .portfolio-category-title {
+    font-size: clamp(2.4rem, 13vw, 3.5rem);
+    margin-left: 0;
+    overflow-wrap: anywhere;
+  }
+}

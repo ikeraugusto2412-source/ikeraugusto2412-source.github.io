@@ -1,0 +1,162 @@
+.gravity-demo-card {
+  background: #0a0a0c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 36px;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+.kinetic-badge {
+  color: #a855f7 !important;
+  background: rgba(168, 85, 247, 0.12) !important;
+  border-color: rgba(168, 85, 247, 0.3) !important;
+}
+
+.gravity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.gravity-title-wrap {
+  max-width: 620px;
+}
+
+.gravity-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gravity-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gravity-btn:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: translateY(-2px);
+}
+
+/* Physics Chamber */
+.gravity-chamber {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  border-radius: 16px;
+  background: #050507;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chamber-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  pointer-events: none;
+}
+
+.chamber-watermark {
+  position: absolute;
+  font-size: clamp(2rem, 6vw, 5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: rgba(255, 255, 255, 0.02);
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Letter Block */
+.physics-letter-block {
+  position: absolute;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s ease;
+}
+
+.block-letter {
+  font-size: 32px;
+  font-weight: 900;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.block-3d-bevel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), inset 0 -3px 6px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+.chamber-ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.04);
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: #666670;
+  pointer-events: none;
+}
+
+.gravity-footer-note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: #888890;
+}
+
+@media (max-width: 768px) {
+  .gravity-chamber {
+    height: 380px;
+  }
+  .physics-letter-block {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+  }
+  .block-letter {
+    font-size: 24px;
+  }
+}

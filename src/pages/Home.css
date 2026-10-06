@@ -1,0 +1,352 @@
+/* Home CSS starts here */
+
+
+.about {
+  padding: 10vw 0;
+  background-color: #0a0a0a;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 5vw;
+  align-items: center;
+}
+
+/* Image column — PolaroidPhoto component handles its own frame & animation styles */
+
+
+.about-text-content h2 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 0.75rem;
+}
+
+/* F — Animated underline below the About title */
+.about-title-line {
+  width: 60px;
+  height: 1px;
+  background-color: var(--accent, #fff);
+  transform-origin: left center;
+  margin-bottom: 1.5rem;
+  opacity: 0.6;
+}
+
+.about-text-content p {
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+  line-height: 1.8;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* ══════════════════════════════════════════
+   CLIENTS SECTION — Darkroom Development Effect
+══════════════════════════════════════════ */
+.clients-section {
+  position: relative;
+  background-color: #000;
+  padding: 10vw 5vw 11vw;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Film grain overlay via SVG noise */
+.clients-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.065;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  animation: grain-flicker 0.08s steps(1) infinite;
+}
+
+@keyframes grain-flicker {
+  0%   { background-position: 0 0; }
+  10%  { background-position: -25px -40px; }
+  20%  { background-position: 35px 20px; }
+  30%  { background-position: -50px 10px; }
+  40%  { background-position: 15px -30px; }
+  50%  { background-position: -35px 50px; }
+  60%  { background-position: 40px -15px; }
+  70%  { background-position: -10px 35px; }
+  80%  { background-position: 50px 45px; }
+  90%  { background-position: -20px -20px; }
+  100% { background-position: 10px 10px; }
+}
+
+.clients-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.2);
+  margin-bottom: 5vw;
+  position: relative;
+  z-index: 3;
+}
+
+/* Names row — horizontal, centered, flex wrap on mobile */
+.darkroom-names {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2rem, 5vw, 6rem);
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 3;
+}
+
+/* Each developing name */
+.darkroom-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4.5vw, 5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #000;
+  white-space: nowrap;
+  will-change: color, filter;
+}
+
+@media (max-width: 768px) {
+  .darkroom-names {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .darkroom-name {
+    font-size: clamp(1.3rem, 7vw, 2rem);
+    white-space: normal;
+    text-align: center;
+    word-break: break-word;
+  }
+}
+
+@media (max-width: 430px) {
+  .clients-section {
+    padding: 12vw 6vw 13vw;
+  }
+  .darkroom-name {
+    font-size: clamp(1.1rem, 6vw, 1.6rem);
+  }
+}
+
+.portfolio {
+  padding: 0;
+}
+
+/* ══════════════════════════════════════════
+   PORTFOLIO ROW  (le-lab style)
+══════════════════════════════════════════ */
+.portfolio-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 90vh;
+  align-items: center;
+}
+
+/* reversed row: text left, visual right — swap column order */
+.portfolio-row--reverse {
+  direction: ltr;
+}
+
+.portfolio-row--reverse .portfolio-row__text {
+  order: -1;
+}
+
+/* ── Visual column ── */
+.portfolio-row__visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 90vh;
+  position: relative;
+  overflow: visible; /* Let the 3D images breathe */
+}
+
+/* ── Text column ── */
+.portfolio-row__text {
+  padding: 6vw 5vw 6vw 6vw;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.portfolio-row--reverse .portfolio-row__text {
+  padding: 6vw 6vw 6vw 5vw;
+}
+
+.portfolio-row__num {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+}
+
+.portfolio-row__title {
+  font-size: clamp(3.5rem, 6vw, 7rem);
+  text-transform: uppercase;
+  line-height: 0.9;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.portfolio-row__desc {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+  line-height: 1.8;
+  color: var(--text-muted);
+  max-width: 420px;
+  margin-top: 0.5rem;
+  letter-spacing: 0.04em;
+}
+
+.portfolio-row__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: #000;
+  padding: 0.9rem 2rem;
+  border-radius: 50px;
+  width: fit-content;
+  font-weight: 700;
+  transition: background 0.3s ease, transform 0.3s ease, gap 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-row__cta:hover {
+    background: #fff;
+    gap: 1.2rem;
+  }
+}
+
+.portfolio-row__arrow {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-row__cta:hover .portfolio-row__arrow {
+    transform: translateX(4px);
+  }
+}
+
+/* Divider line between rows */
+.portfolio-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ══════════════════════════════════════════
+   IMAGE PLACEHOLDERS (Floating 3D Objects)
+══════════════════════════════════════════ */
+.portfolio-image-placeholder {
+  width: 85%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portfolio-image-placeholder img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(-20px 20px 30px rgba(0,0,0,0.8));
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), filter 0.9s ease;
+  will-change: transform, filter;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-row:hover .portfolio-image-placeholder img {
+    transform: scale(1.05) translateY(-10px);
+    filter: drop-shadow(-30px 30px 40px rgba(0,0,0,0.95));
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .portfolio-row {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .portfolio-row--reverse {
+    direction: ltr;
+  }
+
+  .portfolio-row__visual {
+    min-height: 50vh;
+  }
+
+  .portfolio-image-placeholder {
+    width: 85%;
+    height: 80%;
+  }
+
+  .portfolio-row__text,
+  .portfolio-row--reverse .portfolio-row__text {
+    padding: 3rem 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio-row__title {
+    font-size: clamp(2.5rem, 12vw, 4rem);
+  }
+}
+
+@media (max-width: 1024px) {
+  .about-grid {
+    grid-template-columns: 1fr 1.5fr;
+    gap: 3vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .about {
+    padding: 14vw 0;
+  }
+
+  .about-text-content h2 {
+    font-size: clamp(1.8rem, 8vw, 2.4rem);
+  }
+
+  .about-text-content p {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-text-content h2 {
+    font-size: clamp(1.5rem, 7.5vw, 2rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio-row__title {
+    font-size: clamp(2.5rem, 12vw, 4rem);
+  }
+}
+
+/* Horizontal Film Machine Mechanics — LEGACY, not rendered */
+
+/* Horizontal Film Machine Mechanics — KEPT for reference only, not rendered */
+/* These rules are legacy and safe to remove in a future cleanup */

@@ -1,0 +1,559 @@
+.project-detail {
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-bottom: 0;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PROJECT COVER HERO — Monumental Editorial Header (LIKE NY)
+   ════════════════════════════════════════════════════════════════ */
+.project-cover-hero {
+  position: relative;
+  width: 100%;
+  height: clamp(620px, 86vh, 940px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  user-select: none;
+}
+
+.project-cover-header {
+  position: absolute;
+  top: clamp(3.8rem, 6.5vh, 5.5rem);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.project-cover-header.static-header {
+  position: relative;
+  top: auto;
+  margin-top: 5rem;
+  margin-bottom: 2rem;
+}
+
+.project-title-mask {
+  overflow: hidden;
+  display: block;
+  line-height: 1;
+  padding: 0.05em 0.5em;
+}
+
+.project-brand-name {
+  font-family: var(--font-display, 'Barlow', sans-serif);
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.7);
+}
+
+.project-monumental-title {
+  font-family: var(--font-display, 'Barlow', sans-serif);
+  font-size: clamp(2.6rem, 7.2vw, 7rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+  color: #ffffff;
+  margin: 0.25rem 0 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+.project-cover-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: default;
+}
+
+.project-cover-canvas picture,
+.project-cover-canvas .prog-img-wrapper,
+.project-cover-canvas img,
+.project-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--cover-pos, center);
+  display: block;
+}
+
+.project-cover-vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 80%,
+    rgba(5, 5, 5, 0.35) 90%,
+    rgba(5, 5, 5, 0.92) 100%
+  );
+  pointer-events: none;
+}
+
+.project-badge-row {
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 clamp(1.5rem, 4vw, 3.5rem);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.project-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+}
+
+.project-badge-center {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+}
+
+.project-hint {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.75);
+  text-transform: uppercase;
+}
+
+.project-video-hero-wrap {
+  width: 100%;
+  padding-top: clamp(5.5rem, 9.5vh, 7.5rem);
+  padding-bottom: 2rem;
+  overflow: visible;
+}
+
+.project-detail-video-wrap {
+  padding-top: 1rem;
+  padding-bottom: 3.5rem;
+  max-width: 1300px;
+  overflow: visible;
+  position: relative;
+}
+
+
+.video-stills-header {
+  margin: 5rem 0 3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 3.5rem;
+}
+
+.video-stills-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.8rem;
+}
+
+.video-stills-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.video-stills-header p {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 1.05rem;
+}
+
+.project-editorial-divider-wrap {
+  width: 100%;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.project-editorial-divider {
+  width: 100%;
+  height: 1px;
+  background-color: #ffffff;
+  transform-origin: left;
+}
+
+.project-detail-header {
+  padding: 5vw 0 6vw;
+  max-width: 860px;
+}
+
+.project-detail-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.project-detail-subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 1.25rem;
+}
+
+.project-detail-meta {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.meta-sep {
+  opacity: 0.4;
+}
+
+.project-detail-desc {
+  font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 300;
+}
+
+.project-gallery-columns {
+  display: flex;
+  gap: clamp(1.5rem, 4.5vw, 4rem);
+  width: 100%;
+  margin-bottom: 10vw;
+  align-items: flex-start;
+}
+
+.gallery-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4.5vw, 4rem);
+  min-width: 0;
+}
+
+.gallery-item-wrapper {
+  width: 100%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 2px;
+}
+
+.gallery-item {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: pointer;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gallery-item:hover {
+    transform: scale(1.02);
+  }
+}
+
+@media (max-width: 640px) {
+  /* Single column on phones: flatten both columns and restore the original
+     photo sequence through each wrapper's inline `order` */
+  .project-gallery-columns {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .gallery-col {
+    display: contents;
+  }
+}
+
+.instagram-section {
+  padding-top: 5vw;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 10vw;
+}
+
+.instagram-section h2 {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.instagram-grid {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.instagram-grid iframe {
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .instagram-grid iframe:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6);
+  }
+}
+
+.project-navigation {
+  margin-bottom: 10vw;
+  text-align: center;
+}
+
+.back-link {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+  color: var(--accent);
+}
+
+/* Hover underline is an SVG stroke drawn by <DrawLine trigger="hover"> */
+.back-link > .draw-line--underline {
+  bottom: 0;
+}
+
+@media (max-width: 1024px) {
+  .project-detail-header {
+    padding: 6vw 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-detail-hero {
+    height: 55vh;
+  }
+
+  .project-gallery {
+    column-count: 1;
+  }
+
+
+  .project-detail-header h1 {
+    font-size: clamp(2rem, 8vw, 4rem);
+  }
+
+  .project-detail-desc {
+    font-size: 1.1rem;
+  }
+
+  .instagram-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .back-link {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-detail-hero {
+    height: 40vh;
+  }
+
+  .project-detail-header {
+    padding: 8vw 0;
+  }
+
+  .instagram-section h2 {
+    font-size: 1.8rem;
+  }
+}
+
+/* Lightbox Styles */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background-color: rgba(0, 0, 0, 0.95);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2vw;
+}
+
+.lightbox-image {
+  max-width: 95vw;
+  max-height: 90vh;
+  max-height: 86dvh;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  /* the photo itself handles swipe gestures (change photo / close) */
+  touch-action: none;
+  cursor: grab;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: max(2rem, calc(var(--safe-top) + 0.75rem));
+  right: max(2rem, calc(var(--safe-right) + 0.75rem));
+  min-width: var(--tap);
+  min-height: var(--tap);
+  background: none;
+  border: none;
+  color: white;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  z-index: 1001;
+  text-transform: uppercase;
+}
+
+.project-3d-placeholder {
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  background: var(--bg-color);
+}
+
+/* Lightbox: safe areas, prev/next controls and counter */
+.lightbox {
+  padding: max(2vw, var(--safe-top)) max(2vw, var(--safe-right)) max(2vw, var(--safe-bottom)) max(2vw, var(--safe-left));
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--tap);
+  height: var(--tap);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.lightbox-nav--prev {
+  left: max(1rem, calc(var(--safe-left) + 0.5rem));
+}
+
+.lightbox-nav--next {
+  right: max(1rem, calc(var(--safe-right) + 0.5rem));
+}
+
+.lightbox-counter {
+  position: absolute;
+  left: 50%;
+  bottom: max(1.25rem, calc(var(--safe-bottom) + 0.5rem));
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.6);
+  z-index: 1001;
+  pointer-events: none;
+}
+
+/* Phones: arrows sit low so they never cover the photo; swipe is the main gesture */
+@media (max-width: 600px) {
+  .lightbox-nav {
+    top: auto;
+    transform: none;
+    bottom: max(0.75rem, var(--safe-bottom));
+  }
+
+  .lightbox-image {
+    max-width: 100%;
+    max-height: 76dvh;
+  }
+}
+
+/* Touch: comfortable targets for the project nav links */
+@media (pointer: coarse) {
+  .back-link {
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* ══ Phones ══ */
+@media (max-width: 768px) {
+  /* clear the fixed navbar (+ notch) so "IK®" never sits under it */
+  .project-cover-header {
+    top: calc(var(--safe-top) + 4.75rem);
+  }
+
+  /* category + count stack instead of colliding side by side */
+  .project-badge-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+    padding-left: var(--gutter-left);
+    padding-right: var(--gutter-right);
+    bottom: max(1.5rem, calc(var(--safe-bottom) + 1rem));
+  }
+}
+
+/* ══ Phones in landscape ══ */
+@media (orientation: landscape) and (max-height: 500px) {
+  .project-cover-header {
+    top: calc(var(--safe-top) + 3.6rem);
+  }
+
+  .project-video-hero-wrap {
+    padding-top: 4rem;
+  }
+
+  /* the whole 16:9 player, controls included, fits the short screen */
+  .project-detail-video-wrap {
+    max-width: min(1300px, calc((100svh - 5rem) * 16 / 9));
+    padding-top: 0;
+  }
+}

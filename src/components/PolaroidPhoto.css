@@ -1,0 +1,84 @@
+/* ── Outer container: defines the clipping area ── */
+.photo-parallax-outer {
+  width: 100%;
+  overflow: hidden; /* Clips the parallax overflow */
+  /* Edge fade: gradient mask blends photo into the black background */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  ),
+  linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  ),
+  linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  mask-composite: intersect;
+}
+
+/* ── Inner div: receives the parallax y transform ── */
+.photo-parallax-inner {
+  will-change: transform;
+  /* Extra height so parallax movement doesn't reveal background at edges */
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+
+/* ── The photo itself: frameless, full bleed ── */
+.about-photo-frameless {
+  width: 100%;
+  height: 75vh;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  filter: grayscale(100%) contrast(1.05);
+  transition: filter 0.7s ease;
+  will-change: filter, transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .about-photo-frameless:hover {
+    filter: grayscale(0%) contrast(1);
+  }
+}
+
+/* ── Mobile: reduce height so it doesn't dominate ── */
+@media (max-width: 768px) {
+  .photo-parallax-outer {
+    /* Disable the complex mask on mobile — just fade bottom */
+    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  }
+
+  .about-photo-frameless {
+    height: 55vw;
+    min-height: 260px;
+    max-height: 420px;
+  }
+}
+
+@media (max-width: 430px) {
+  .about-photo-frameless {
+    height: 60vw;
+    min-height: 240px;
+  }
+}

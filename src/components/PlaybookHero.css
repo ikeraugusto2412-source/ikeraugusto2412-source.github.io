@@ -1,0 +1,336 @@
+/* ════════════════════════════════════════════════════════════════
+   PLAYBOOK FULLSCREEN 3D STAGE - Motional parity with allintitarvl
+   Features:
+   - Variable card dimensions (some large, some compact)
+   - Dynamic 3D perspective rotation (rotateY in 600px perspective)
+   - Framer-style top/bottom slide-in panels on hover
+   ════════════════════════════════════════════════════════════════ */
+
+.playbook-fullscreen-stage {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--bg-color, #050505);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: clamp(4.5rem, 8.5vh, 6.5rem);
+  padding-bottom: clamp(1rem, 2.5vh, 2rem);
+  user-select: none;
+  cursor: grab;
+  touch-action: none;
+}
+
+.playbook-fullscreen-stage:active {
+  cursor: grabbing;
+}
+
+/* ── Typography Header ── */
+.playbook-top-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 1.5rem;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.playbook-brand {
+  font-family: var(--font-display, 'Barlow', sans-serif);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.playbook-main-title {
+  font-family: var(--font-display, 'Barlow', sans-serif);
+  font-size: clamp(3rem, 8.5vw, 8.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.88;
+  color: #ffffff;
+  margin: 0.25rem 0 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── Horizontal Viewport ── */
+.playbook-carousel-viewport {
+  position: relative;
+  width: 100%;
+  height: clamp(380px, 56vh, 580px);
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  padding-left: 5vw;
+}
+
+.playbook-horizontal-track {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: clamp(16px, 1.8vw, 24px);
+  will-change: transform;
+}
+
+/* ── 3D Perspective Card Wrapper ── */
+.playbook-perspective-wrapper {
+  perspective: 600px;
+  flex-shrink: 0;
+  overflow: visible;
+  contain: layout style;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Individual Dynamic Card (Varying Dimensions) ── */
+.playbook-dynamic-card {
+  position: relative;
+  overflow: hidden;
+  background-color: #0f0f0f;
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.4s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.playbook-dynamic-card.is-flagship {
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .playbook-dynamic-card:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
+  }
+}
+
+.card-image-wrap {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.card-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .playbook-dynamic-card:hover .card-image-wrap img {
+    transform: scale(1.05);
+  }
+}
+
+/* ── Top Slide-In Tab (Framer Style) ── */
+.card-slide-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  color: #000000;
+  padding: 8px 12px;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transform: translateY(-100%);
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-tag-num {
+  color: #000000;
+}
+
+.card-flagship-badge {
+  background: #000000;
+  color: #ffffff;
+  padding: 2px 6px;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .playbook-dynamic-card:hover .card-slide-top {
+    transform: translateY(0%);
+  }
+}
+
+/* ── Bottom Slide-In Tab (Framer Style) ── */
+.card-slide-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  color: #000000;
+  padding: 10px 12px;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  transform: translateY(100%);
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card-title-line {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+.card-field-line {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #666666;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .playbook-dynamic-card:hover .card-slide-bottom {
+    transform: translateY(0%);
+  }
+}
+
+/* ── Bottom Editorial Bar ── */
+.playbook-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.playbook-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.playbook-scroll-indicator {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+}
+
+/* ── Responsive adjustments ── */
+@media (max-width: 768px) {
+  .playbook-fullscreen-stage {
+    padding-top: 5rem;
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+  }
+
+  .playbook-main-title {
+    font-size: clamp(2.6rem, 13vw, 4rem);
+  }
+
+  /* Fill the screen with the carousel instead of leaving a blank band */
+  .playbook-carousel-viewport {
+    flex: 1;
+    height: auto;
+    min-height: 0;
+    padding-left: 0;
+  }
+
+  .playbook-dynamic-card {
+    width: min(74vw, 320px) !important;
+    height: min(58dvh, 470px) !important;
+  }
+
+  .playbook-status-badge {
+    font-size: 0.6rem;
+  }
+
+  .playbook-scroll-indicator {
+    display: none;
+  }
+
+  .card-slide-top,
+  .card-slide-bottom {
+    transform: translateY(0%);
+  }
+}
+
+/* Phones in landscape (~375–440 px tall): compact title, cards sized to the height */
+@media (orientation: landscape) and (max-height: 500px) {
+  .playbook-fullscreen-stage {
+    padding-top: max(3.6rem, calc(var(--safe-top) + 3rem));
+    padding-bottom: max(0.75rem, var(--safe-bottom));
+  }
+
+  .playbook-brand {
+    font-size: 1.1rem;
+  }
+
+  .playbook-main-title {
+    font-size: clamp(1.6rem, 9svh, 2.6rem);
+  }
+
+  .playbook-carousel-viewport {
+    flex: 1;
+    height: auto;
+    min-height: 0;
+    padding-left: var(--safe-left);
+  }
+
+  .playbook-dynamic-card {
+    height: 56svh !important;
+    width: calc(56svh * 0.74) !important;
+  }
+
+  .playbook-bottom-bar {
+    padding-left: max(1.5rem, var(--safe-left));
+    padding-right: max(1.5rem, var(--safe-right));
+  }
+}
+
+/* Touch screens have no hover: show the card labels permanently */
+@media (hover: none), (pointer: coarse) {
+  .card-slide-top,
+  .card-slide-bottom {
+    transform: translateY(0);
+  }
+}

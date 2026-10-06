@@ -1,0 +1,878 @@
+/* ============================================================
+   YOUTUBE VIDEO AMBIENT PLAYER
+   Pixel-perfect YouTube Dark Mode Player with Real-Time Ambient Glow
+   ============================================================ */
+
+.yt-ambient-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: max-width 0.3s ease;
+}
+
+.yt-ambient-wrapper.theater-mode {
+  max-width: 100%;
+}
+
+/* Ambient Glow Canvas — YouTube ambient mode.
+   Samples 64x36 frame colors in real time and upscales with heavy CSS blur. */
+.yt-ambient-glow-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 80vh;
+  transform: scale(1.12);
+  pointer-events: none;
+  border-radius: 20px;
+  z-index: 0;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+  will-change: filter, transform, opacity;
+}
+
+/* Toast feedback (e.g. "Modo ambiente activado") */
+.yt-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(18, 18, 18, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  font-size: 0.85rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  z-index: 9999;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+/* Player Box */
+.yt-player-box {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 80vh;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.85);
+  user-select: none;
+}
+
+.yt-player-box.fullscreen {
+  max-height: none;
+  border-radius: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.yt-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+}
+
+/* Big YouTube Red Play Button Overlay */
+.yt-big-play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  z-index: 5;
+}
+
+.yt-big-play-button {
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.6));
+}
+
+.yt-big-play-bg {
+  fill: rgba(33, 33, 33, 0.85);
+  transition: fill 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-player-box:hover .yt-big-play-bg,
+.yt-big-play-button:hover .yt-big-play-bg {
+    fill: #ff0000; /* Signature YouTube Red */
+  }
+
+  .yt-big-play-button:hover {
+    transform: scale(1.1);
+  }
+}
+
+/* Top Title Bar */
+.yt-player-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 10;
+}
+
+.yt-player-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.yt-top-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 70%;
+}
+
+.yt-top-channel-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.yt-top-video-title {
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.yt-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.yt-top-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-top-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+}
+
+.yt-brand-pill {
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.65rem;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.yt-red-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff0000;
+  box-shadow: 0 0 6px #ff0000;
+}
+
+/* Bottom Controls Bar */
+.yt-player-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0 1rem 0.6rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.4) 65%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 10;
+}
+
+.yt-player-controls.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Scrubber / Progress Bar */
+.yt-scrubber-container {
+  position: relative;
+  width: 100%;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.yt-scrubber-tooltip {
+  position: absolute;
+  top: -24px;
+  transform: translateX(-50%);
+  background: rgba(28, 28, 28, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.yt-scrubber-track {
+  position: relative;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: height 0.15s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-scrubber-container:hover .yt-scrubber-track {
+    height: 5px;
+  }
+}
+
+.yt-scrubber-buffer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.yt-scrubber-hover-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.yt-scrubber-played {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: #ff0000; /* Exact YouTube Red */
+}
+
+.yt-scrubber-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #ff0000;
+  transition: transform 0.15s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-scrubber-container:hover .yt-scrubber-thumb {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Controls Row */
+.yt-controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
+
+.yt-controls-left,
+.yt-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.yt-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: transform 0.12s ease, opacity 0.15s ease;
+  opacity: 0.9;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-btn:hover {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+/* Volume Slider in YouTube style */
+.yt-volume-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.yt-volume-slider {
+  width: 0;
+  opacity: 0;
+  height: 4px;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 2px;
+  cursor: pointer;
+  outline: none;
+  transition: width 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-volume-wrapper:hover .yt-volume-slider {
+    width: 60px;
+    opacity: 1;
+  }
+}
+
+.yt-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* Time Display */
+.yt-time-display {
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 0.78rem;
+  color: #ddd;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 0.4rem;
+  user-select: none;
+}
+
+.yt-time-sep {
+  color: #888;
+}
+
+/* Autoplay toggle pill */
+.yt-autoplay-pill {
+  width: 34px;
+  height: 18px;
+  border-radius: 10px;
+  background: #272727;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.yt-autoplay-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translateX(14px);
+}
+
+/* Settings button and popup */
+.yt-settings-wrapper {
+  position: relative;
+}
+
+.yt-settings-btn.open svg {
+  transform: rotate(45deg);
+  transition: transform 0.25s ease;
+}
+
+.yt-menu-popup {
+  position: absolute;
+  bottom: 46px;
+  right: 0;
+  width: 240px;
+  background: rgba(24, 24, 24, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  padding: 0.4rem 0;
+  z-index: 50;
+}
+
+.yt-menu-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.yt-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #fff;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-menu-header:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.yt-arrow-back {
+  font-size: 1.2rem;
+}
+
+.yt-menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 0.9rem;
+  cursor: pointer;
+  color: #f1f1f1;
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 0.8rem;
+  transition: background 0.15s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-menu-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.yt-menu-item.selected {
+  font-weight: 600;
+  color: #fff;
+}
+
+.yt-menu-item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.yt-menu-item-right {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #aaa;
+}
+
+.yt-menu-value {
+  font-size: 0.75rem;
+}
+
+.yt-badge-4k {
+  background: #ff0000;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.yt-arrow {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.yt-check {
+  width: 14px;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Switch Toggle inside Settings */
+.yt-toggle-switch {
+  width: 32px;
+  height: 18px;
+  border-radius: 10px;
+  background: #444;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  transition: background 0.2s ease;
+}
+
+.yt-toggle-switch.active {
+  background: #3ea6ff; /* YouTube Blue */
+}
+
+.yt-toggle-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.yt-toggle-switch.active .yt-toggle-thumb {
+  transform: translateX(14px);
+}
+
+/* ============================================================
+   YOUTUBE DETAILS CARD (Below Video)
+   ============================================================ */
+
+.yt-details-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.yt-video-heading {
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f1f1f1;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin: 0;
+  text-transform: none;
+}
+
+/* Channel & Actions row */
+.yt-channel-action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.yt-channel-info-left {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.yt-channel-pfp {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.yt-channel-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.yt-channel-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.yt-channel-name {
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f1f1f1;
+}
+
+.yt-verified-badge {
+  display: flex;
+  align-items: center;
+}
+
+.yt-channel-subs {
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+/* Subscribe button */
+.yt-subscribe-btn {
+  margin-left: 0.6rem;
+  padding: 0.5rem 1rem;
+  background: #f1f1f1;
+  color: #0f0f0f;
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-subscribe-btn:hover {
+    background: #d9d9d9;
+  }
+}
+
+.yt-subscribe-btn.subscribed {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f1f1f1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-subscribe-btn.subscribed:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Action buttons on the right */
+.yt-action-buttons-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.yt-action-pill-group {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.yt-action-btn {
+  background: transparent;
+  border: none;
+  color: #f1f1f1;
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.48rem 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: background 0.15s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-action-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+}
+
+.yt-like-btn.active {
+  color: #3ea6ff;
+}
+
+.yt-dislike-btn.active {
+  color: #3ea6ff;
+}
+
+.yt-pill-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.yt-pill-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 0.48rem 0.9rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-pill-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+}
+
+.yt-pill-circle {
+  padding: 0.48rem 0.55rem;
+}
+
+/* Description Card */
+.yt-description-box {
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yt-description-box:hover {
+    background: rgba(255, 255, 255, 0.11);
+  }
+}
+
+.yt-desc-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #f1f1f1;
+  flex-wrap: wrap;
+}
+
+.yt-desc-views {
+  color: #f1f1f1;
+}
+
+.yt-desc-date {
+  color: #aaa;
+}
+
+.yt-desc-tag {
+  color: #3ea6ff;
+}
+
+.yt-desc-body {
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 0.85rem;
+  color: #e1e1e1;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.yt-desc-extra {
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 0.82rem;
+  color: #bbb;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+}
+
+.yt-desc-toggle {
+  font-family: var(--font-sans, Roboto, sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #aaa;
+  align-self: flex-start;
+  margin-top: 0.2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .yt-top-video-title {
+    font-size: 0.9rem;
+  }
+  .yt-video-heading {
+    font-size: 1.1rem;
+  }
+  .yt-channel-action-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .yt-action-buttons-right {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .hide-on-mobile {
+    display: none;
+  }
+
+  /* Declutter the overlay chrome on touch screens */
+  .yt-brand-pill,
+  .yt-autoplay-pill,
+  .yt-btn-cc,
+  .yt-volume-slider {
+    display: none;
+  }
+
+  .yt-controls-row {
+    gap: 0.25rem;
+  }
+
+  .yt-time-display {
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+}
+
+/* The ambient glow canvas bleeds a few px past the player: keep the vertical bloom,
+   clip it sideways so it can never create horizontal scroll on phones */
+.yt-ambient-wrapper {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+/* Small phones: the full title is printed right under the player, so the truncated
+   overlay copy is dropped instead of being cut off */
+@media (max-width: 480px), (orientation: landscape) and (max-height: 500px) {
+  .yt-top-video-title {
+    display: none;
+  }
+}
+
+/* Touch screens: comfortable hit areas for the player controls */
+@media (pointer: coarse) {
+  .yt-btn,
+  .yt-top-btn {
+    min-width: var(--tap);
+    min-height: var(--tap);
+  }
+}

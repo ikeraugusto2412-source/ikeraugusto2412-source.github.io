@@ -1,0 +1,281 @@
+/* ════════════════════════════════════════════════════════════════
+   FOLDER COMPONENT (Rare UI Replica & Refinement)
+   Interactive 3D Animated Folder with Fanning Cards & Tilted Flap
+   ════════════════════════════════════════════════════════════════ */
+
+.rare-folder-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  user-select: none;
+  padding: 40px 20px 20px;
+}
+
+.rare-folder-interactive {
+  position: relative;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.rare-folder-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+}
+
+.rare-folder-back {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.rare-folder-back-body {
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+}
+
+.rare-folder-cards-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+.rare-folder-card-motion {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  will-change: transform;
+  transform-origin: bottom center;
+}
+
+.rare-folder-card {
+  position: relative;
+  width: 164px;
+  height: 214px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Archival Photo Cards (for Working Archive / On-Field dossier) ─── */
+.rare-folder-photo-card {
+  width: 172px;
+  height: 226px;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  background-color: #121212;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s ease,
+              box-shadow 0.28s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rare-folder-photo-card.is-interactive:hover {
+    transform: translateY(-8px) scale(1.03);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 22px 48px rgba(0, 0, 0, 0.85), 0 0 16px rgba(255, 255, 255, 0.15);
+  }
+}
+
+.rare-folder-photo-frame {
+  position: relative;
+  width: 100%;
+  /* photo takes whatever the caption leaves, so wrapped captions never get cut */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  background: #000000;
+}
+
+.rare-folder-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rare-folder-photo-card.is-interactive:hover .rare-folder-photo-img {
+    transform: scale(1.05);
+  }
+}
+
+.rare-folder-photo-overlay-glass {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.2) 100%);
+  pointer-events: none;
+}
+
+.rare-folder-photo-info {
+  flex: 0 0 auto;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  background: #161616;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rare-folder-photo-tag {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #888888;
+  text-transform: uppercase;
+}
+
+.rare-folder-photo-title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  text-transform: uppercase;
+  line-height: 1.1;
+  /* wrap instead of truncating: the whole caption stays readable */
+  overflow-wrap: anywhere;
+}
+
+.rare-folder-photo-desc {
+  font-family: var(--font-sans);
+  font-size: 8.5px;
+  color: #aaaaaa;
+  line-height: 1.2;
+}
+
+.rare-folder-card-inspect-hint {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rare-folder-photo-card.is-interactive:hover .rare-folder-card-inspect-hint {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── 3D Flap Isolated Anchor ─── */
+.rare-folder-flap-anchor {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 321px;
+  height: 241px;
+  transform: translate(-50%, -50%);
+  margin-top: 16px;
+  pointer-events: none;
+  z-index: 10;
+  transform-style: preserve-3d;
+}
+
+.rare-folder-flap-motion {
+  position: absolute;
+  inset: 0;
+  transform-origin: bottom center;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.rare-folder-flap-glass {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
+}
+
+.rare-folder-flap-svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/* ─── Status Pill Indicator ─── */
+.rare-folder-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #cccccc;
+  text-transform: uppercase;
+  transition: all 0.25s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rare-folder-interactive:hover + .rare-folder-status-pill,
+.rare-folder-status-pill:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.rare-folder-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #666666;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.rare-folder-status-dot.is-active {
+  background: #00ff88;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+  transform: scale(1.2);
+}

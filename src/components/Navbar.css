@@ -1,0 +1,592 @@
+/* ══════════════════════════════════════════
+   NAVBAR — Editorial top bar
+══════════════════════════════════════════ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem 0;
+  z-index: 200;
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+
+.navbar-container {
+  width: 100%;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  pointer-events: none;
+}
+
+.navbar-container > * {
+  pointer-events: all;
+}
+
+/* ── Brand ── */
+.brand {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.brand .logo-text {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* ── Clock ── */
+.navbar-clock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.clock-tz {
+  opacity: 0.65;
+}
+
+/* ── Right ── */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.5rem;
+}
+
+.nav-cta {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+  padding: 0;
+  white-space: nowrap;
+}
+/* Hover lift/fade comes from Motion (pressable); the underline from <DrawLine> */
+
+/* ── Apple Switch Language Toggle in Navbar ── */
+.navbar-apple-switch-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 3px 9px;
+  border-radius: 9999px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  user-select: none;
+  -webkit-user-select: none;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navbar-apple-switch-wrap:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.navbar-apple-switch-wrap.in-menu {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+  padding: 4px 12px;
+}
+
+.bignav-lang-toggle-box {
+  display: flex;
+  align-items: center;
+}
+
+.nav-switch-lang-label {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: color 0.2s ease, text-shadow 0.2s ease, transform 0.2s ease;
+  line-height: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-switch-lang-label:hover {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.nav-switch-lang-label.is-active {
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.55);
+}
+
+/* Fallback legacy lang switch */
+.navbar-lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.lang-btn {
+  background: none;
+  border: none;
+  padding: 0 3px;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lang-btn:hover {
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
+
+.lang-btn.active {
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+}
+
+.lang-divider {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 0.68rem;
+  user-select: none;
+}
+
+/* ── Menu toggle button ── */
+.menu-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #ffffff;
+}
+
+.menu-toggle-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .menu-toggle:hover .menu-toggle-label { opacity: 0.6;
+  }
+}
+
+.menu-toggle-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 4px;
+  width: 22px;
+}
+
+.menu-toggle-icon span {
+  display: block;
+  height: 1px;
+  background-color: #ffffff;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.menu-toggle-icon span:nth-child(1) { width: 22px; }
+.menu-toggle-icon span:nth-child(2) { width: 14px; }
+.menu-toggle-icon span:nth-child(3) { width: 18px; }
+
+.menu-toggle.open .menu-toggle-icon span:nth-child(1) {
+  width: 20px;
+  transform: translateY(5px) rotate(45deg);
+}
+.menu-toggle.open .menu-toggle-icon span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.menu-toggle.open .menu-toggle-icon span:nth-child(3) {
+  width: 20px;
+  transform: translateY(-5px) rotate(-45deg);
+}
+
+/* ══════════════════════════════════════════
+   BIGNAV OVERLAY
+══════════════════════════════════════════ */
+.bignav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  background: radial-gradient(
+    ellipse 75% 65% at 50% 42%,
+    #4a3520 0%,
+    #2c1f10 22%,
+    #1a1208 48%,
+    #0d0b07 72%,
+    #080806 100%
+  );
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Atmospheric glow */
+.bignav-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 40%,
+    rgba(180, 130, 70, 0.22) 0%,
+    rgba(120, 85, 40, 0.1) 40%,
+    transparent 72%
+  );
+}
+
+/* Film grain */
+.bignav-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  animation: grain-flicker 0.08s steps(1) infinite;
+}
+
+@keyframes grain-flicker {
+  0%   { background-position: 0 0; }
+  10%  { background-position: -25px -40px; }
+  20%  { background-position: 35px 20px; }
+  30%  { background-position: -50px 10px; }
+  40%  { background-position: 15px -30px; }
+  50%  { background-position: -35px 50px; }
+  60%  { background-position: 40px -15px; }
+  70%  { background-position: -10px 35px; }
+  80%  { background-position: 50px 45px; }
+  90%  { background-position: -20px -20px; }
+  100% { background-position: 10px 10px; }
+}
+
+/* ── Side arrows — vertical position controlled by framer-motion ── */
+.bignav-arrow {
+  position: absolute;
+  /* top is set via framer-motion style prop */
+  z-index: 10;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  padding: 1rem 1.2rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bignav-arrow:hover {
+    color: #ffffff;
+  }
+}
+
+/* Left: ▶ points right toward center */
+.bignav-arrow--left  { left:  0.5rem; }
+
+/* Right: ◀ points left toward center */
+.bignav-arrow--right { right: 0.5rem; }
+
+/* ── Nav inner — centered ── */
+.bignav-inner {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5vw;
+}
+
+.bignav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.bignav-item {
+  /* each item clips from below */
+}
+
+/* Clip mask — overflow hidden so item slides up */
+.bignav-clip {
+  overflow: hidden;
+  padding-bottom: 0.04em;
+}
+
+.bignav-link {
+  display: flex;
+  align-items: baseline;
+  /* CENTER each [num]+label pair horizontally */
+  justify-content: center;
+  gap: clamp(0.8rem, 1.5vw, 2rem);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+  transition: opacity 0.3s ease;
+}
+
+/* Dimmed siblings */
+.bignav-link.is-dimmed {
+  opacity: 0.13;
+}
+
+.bignav-num {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 0.85vw, 0.85rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  /* align with baseline of the big text */
+  align-self: flex-end;
+  padding-bottom: 0.55em;
+  transition: opacity 0.3s ease;
+}
+
+.bignav-link.is-dimmed .bignav-num {
+  opacity: 0.5;
+}
+
+.bignav-label {
+  font-family: var(--font-display);
+  /* ALL items same size — no change on hover */
+  font-size: clamp(4rem, 13vw, 17rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  color: rgba(255, 255, 255, 0.88);
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+/* .bignav-clip hides overflow, so keep the hover underline inside the line box */
+.bignav-label > .draw-line--underline {
+  bottom: 0.04em;
+}
+
+/* Hovered item label goes full white */
+.bignav-link:not(.is-dimmed) .bignav-label {
+  color: #ffffff;
+}
+
+/* ── Overlay footer bar ── */
+.bignav-footer {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 7vw 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.lang-toggle-overlay {
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lang-toggle-overlay:hover { color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+.lang-toggle-overlay .active { color: rgba(255, 255, 255, 0.7); }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* On small screens content scrolls right under the bar, so swap the
+     difference blend (which tints the switch) for a legible dark fade */
+  .navbar {
+    padding: 1rem 0 1.6rem;
+    padding-top: max(1rem, env(safe-area-inset-top));
+    mix-blend-mode: normal;
+    background: linear-gradient(to bottom, rgba(5, 5, 5, 0.92) 0%, rgba(5, 5, 5, 0.6) 60%, rgba(5, 5, 5, 0) 100%);
+  }
+
+  .navbar-container {
+    grid-template-columns: 1fr auto;
+    padding: 0 1.5rem;
+  }
+
+  .navbar-clock {
+    display: none;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  .bignav-inner {
+    padding: 0 6vw;
+  }
+
+  .bignav-label {
+    font-size: clamp(3rem, 17vw, 6rem);
+  }
+
+  .bignav-num {
+    font-size: 0.6rem;
+    width: 2.2rem;
+    padding-bottom: 0.5em;
+  }
+
+  .bignav-link {
+    gap: 0.8rem;
+  }
+
+  .bignav-arrow {
+    font-size: 0.7rem;
+    padding: 0.8rem;
+  }
+}
+
+@media (max-width: 430px) {
+  .bignav-label {
+    font-size: clamp(2.6rem, 18vw, 4.5rem);
+  }
+}
+
+/* ══════════════════════════════════════════
+   SAFE AREAS · TOUCH TARGETS · LANDSCAPE
+══════════════════════════════════════════ */
+/* Keep the bar clear of the notch / Dynamic Island, in portrait and landscape */
+.navbar {
+  padding-top: max(1.5rem, var(--safe-top));
+}
+
+.navbar-container {
+  padding-left: max(2rem, var(--safe-left));
+  padding-right: max(2rem, var(--safe-right));
+}
+
+.bignav-overlay {
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding-top: max(1rem, var(--safe-top));
+  }
+
+  .navbar-container {
+    padding-left: max(1.25rem, var(--safe-left));
+    padding-right: max(1.25rem, var(--safe-right));
+  }
+}
+
+/* Touch screens: every control gets a ≥44 px hit area without changing how it looks */
+@media (pointer: coarse) {
+  .brand,
+  .menu-toggle {
+    min-height: var(--tap);
+    min-width: var(--tap);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* wider gap so the enlarged ES/EN hit areas never cover the switch */
+  .navbar-apple-switch-wrap {
+    gap: 14px;
+  }
+
+  .nav-switch-lang-label {
+    position: relative;
+  }
+
+  .nav-switch-lang-label::after {
+    content: '';
+    position: absolute;
+    inset: -18px -15px;
+  }
+
+  .nav-cta {
+    min-height: var(--tap);
+  }
+
+  .bignav-arrow {
+    min-width: var(--tap);
+    min-height: var(--tap);
+  }
+}
+
+/* Phones in landscape: the four big labels must fit the short height */
+@media (orientation: landscape) and (max-height: 500px) {
+  .navbar {
+    padding-top: max(0.75rem, var(--safe-top));
+    padding-bottom: 0.75rem;
+  }
+
+  .bignav-label {
+    font-size: 17vh;
+    font-size: min(13vw, 17svh);
+  }
+}

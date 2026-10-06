@@ -1,0 +1,275 @@
+.filmstrip-demo-card {
+  background: #0d0d0f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+  transition: all 0.4s ease;
+}
+
+.new-badge {
+  color: #30d158 !important;
+  background: rgba(48, 209, 88, 0.12) !important;
+  border-color: rgba(48, 209, 88, 0.3) !important;
+}
+
+.filmstrip-demo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.filmstrip-title-wrap {
+  max-width: 580px;
+}
+
+.filmstrip-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filmstrip-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #cccccc;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filmstrip-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.filmstrip-btn.active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  font-weight: 600;
+}
+
+/* Lightbox Surface */
+.lightbox-surface {
+  position: relative;
+  background: #08080a;
+  border-radius: 14px;
+  padding: 30px 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* When Lightbox is LIT */
+.lightbox-lit .lightbox-surface {
+  background: radial-gradient(circle at 50% 30%, #1a1a24 0%, #0c0c10 100%);
+  box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.05), 0 0 40px rgba(255, 255, 255, 0.02);
+}
+
+.lightbox-grid-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: 30px 30px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  pointer-events: none;
+}
+
+/* 35mm Film Roll Strip */
+.film-strip-scrollable {
+  background: #020202;
+  border-radius: 8px;
+  padding: 12px 16px;
+  border-top: 2px solid #ff9f0a;
+  border-bottom: 2px solid #ff9f0a;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.film-strip-scrollable::-webkit-scrollbar {
+  height: 6px;
+}
+.film-strip-scrollable::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.film-edge-top,
+.film-edge-bottom {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #ff9f0a;
+  user-select: none;
+  padding: 2px 8px;
+}
+
+.film-frames-track {
+  display: flex;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.film-frame-item {
+  flex: 0 0 190px;
+  background: #060608;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px;
+  position: relative;
+}
+
+.film-frame-item:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.film-frame-item.selected {
+  border-color: #30d158;
+  box-shadow: 0 0 15px rgba(48, 209, 88, 0.3);
+}
+
+/* Sprockets */
+.sprocket-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 6px;
+}
+
+.sprocket-hole {
+  width: 14px;
+  height: 9px;
+  background: #111114;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.frame-image-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #000000;
+}
+
+.frame-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.3s ease;
+}
+
+.frame-meta-tag {
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  font-family: monospace;
+  font-size: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ff9f0a;
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.frame-exp-number {
+  display: block;
+  text-align: center;
+  font-family: monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: #ff9f0a;
+  margin-top: 4px;
+}
+
+/* Negative celluloid look */
+.film-negative-mode .frame-thumbnail,
+.film-negative-mode .preview-img {
+  filter: invert(0.92) hue-rotate(180deg) sepia(0.25) contrast(1.15);
+}
+
+/* Lightbox Preview Card */
+.lightbox-preview-card {
+  margin-top: 24px;
+  background: rgba(10, 10, 12, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+
+.preview-label {
+  color: #888890;
+}
+
+.preview-label strong {
+  color: #30d158;
+}
+
+.preview-title {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.preview-img-wrap {
+  width: 100%;
+  height: 380px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000000;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.filmstrip-footer-note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: #888890;
+}
+
+@media (max-width: 768px) {
+  .filmstrip-demo-card {
+    padding: 20px;
+  }
+  .preview-img-wrap {
+    height: 240px;
+  }
+}

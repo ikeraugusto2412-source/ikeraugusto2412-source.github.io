@@ -1,0 +1,32 @@
+.draw-line {
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+  /* Hidden until Anime.js has collapsed the stroke, so it never flashes fully drawn */
+  visibility: hidden;
+}
+
+.draw-line--underline {
+  width: 100%;
+  height: 2px;
+  margin-top: 0.35em;
+}
+
+/* Short accent rule under section headings */
+.draw-line--underline.draw-line--accent {
+  width: 72px;
+  margin-top: 0.45em;
+}
+
+/* Hover underline under an inline link/button: add `has-draw-line` to the host */
+.has-draw-line {
+  position: relative;
+}
+
+.has-draw-line > .draw-line--underline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.3em;
+  margin-top: 0;
+}

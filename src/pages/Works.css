@@ -1,0 +1,519 @@
+/* ════════════════════════════════════════════════════════════════
+   WORKS PAGE — Exact replica of https://swagg.framer.website/works
+   Pitch Black Editorial Architecture with Switzer Typography
+   ════════════════════════════════════════════════════════════════ */
+
+.swagg-works-page {
+  background-color: #000000;
+  color: #ffffff;
+  min-height: 100vh;
+  min-height: 100svh;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Swagg Edge-to-edge container: 10px horizontal padding */
+.swagg-container {
+  width: 100%;
+  max-width: 3840px;
+  margin: 0 auto;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   1. SECTION - HERO
+   ════════════════════════════════════════════════════════════════ */
+.swagg-hero-section {
+  width: 100%;
+  padding-top: clamp(100px, 14vh, 160px);
+  padding-bottom: 30px;
+  background-color: #000000;
+  box-sizing: border-box;
+}
+
+.swagg-headline {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.swagg-work-group {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(14px, 2vw, 30px);
+}
+
+.swagg-title-wrap {
+  display: inline-block;
+  line-height: 0.8em;
+}
+
+.swagg-main-title {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 11.5vw, 160px);
+  font-weight: 900;
+  line-height: 0.8em;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+/* Swagg Square Indicator Toggle: ■ GRID / ■ LIST */
+.swagg-type-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: flex-start;
+  padding-bottom: clamp(6px, 1vw, 14px);
+}
+
+.swagg-type-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 7px;
+  opacity: 0.35;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.swagg-type-btn.active {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .swagg-type-btn:hover {
+    opacity: 0.85;
+  }
+}
+
+.swagg-type-square {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #ffffff;
+  opacity: 0;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease;
+}
+
+.swagg-type-btn.active .swagg-type-square {
+  opacity: 1;
+}
+
+.swagg-type-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  line-height: 1.2em;
+  text-transform: uppercase;
+}
+
+/* Count Numeral on far right */
+.swagg-count-num {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 11.5vw, 160px);
+  font-weight: 800;
+  line-height: 0.8em;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+  text-align: right;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   2. SECTION - WORK (GRID OR INTERACTIVE LIST)
+   ════════════════════════════════════════════════════════════════ */
+.swagg-works-section {
+  width: 100%;
+  padding-top: 30px;
+  padding-bottom: 160px;
+  box-sizing: border-box;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   GRID VIEW — 4-Column Editorial Rhythm
+   ──────────────────────────────────────────────────────────────── */
+.swagg-works-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(50px, 1fr));
+  gap: 28px 10px;
+  width: 100%;
+  align-items: start;
+}
+
+/* Blank Cell for editorial asymmetry */
+.swagg-grid-blank {
+  width: 100%;
+  height: 100%;
+  min-height: 20px;
+  pointer-events: none;
+}
+
+/* Card Wrappers */
+.swagg-grid-card-wrap {
+  width: 100%;
+}
+
+.swagg-grid-card-wrap.span-1 {
+  grid-column: span 1;
+}
+
+.swagg-grid-card-wrap.span-2 {
+  grid-column: span 2;
+}
+
+/* Card Link Container */
+.swagg-grid-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Card Header: Slides smoothly up on card hover */
+.swagg-card-header {
+  height: 18px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.swagg-card-header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .swagg-grid-card:hover .swagg-card-header-inner {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.swagg-card-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swagg-card-field {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: #888888;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding-left: 8px;
+  transition: color 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .swagg-grid-card:hover .swagg-card-field {
+    color: #cccccc;
+  }
+}
+
+/* Card Image Wrapper */
+.swagg-card-media-wrap {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #0c0c0c;
+}
+
+.swagg-card-media-wrap.span-1 {
+  aspect-ratio: 0.912 / 1;
+}
+
+.swagg-card-media-wrap.span-2 {
+  aspect-ratio: 1.85 / 1;
+}
+
+.swagg-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transform: scale(1.001);
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .swagg-grid-card:hover .swagg-card-img {
+    transform: scale(1.038);
+  }
+}
+
+/* Center [VIEW] Badge on Hover */
+.swagg-card-hover-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .swagg-grid-card:hover .swagg-card-hover-overlay {
+    opacity: 1;
+  }
+}
+
+.swagg-card-view-badge {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+  user-select: none;
+}
+
+/* ────────────────────────────────────────────────────────────────
+   LIST VIEW — Minimal Editorial Table with Floating Center Reveal
+   ──────────────────────────────────────────────────────────────── */
+.swagg-works-list-wrapper {
+  width: 100%;
+  position: relative;
+  min-height: 480px;
+  padding-top: 10px;
+  padding-bottom: 80px;
+}
+
+/* Centered Floating Preview Cover Image Overlay */
+.swagg-list-floating-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.swagg-list-floating-center {
+  width: clamp(340px, 27vw, 430px);
+  aspect-ratio: 0.912 / 1;
+  pointer-events: none;
+  overflow: hidden;
+  background-color: #0c0c0c;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.9);
+}
+
+.swagg-list-floating-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Editorial Table */
+.swagg-list-table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  position: relative;
+}
+
+/* Row: 5 Columns with Large Breathing Empty Center */
+.swagg-list-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 80px minmax(200px, 1.2fr) 2fr minmax(200px, 1.2fr) 80px;
+  align-items: center;
+  padding: 12px 10px;
+  text-decoration: none;
+  color: #ffffff;
+  background-color: transparent;
+  cursor: pointer;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
+
+/* Inverted White Full-width Highlight Banner on Hover */
+.swagg-list-row.active-hover {
+  z-index: 3;
+}
+
+/* Hover fill: white bar scaled from the left (Motion drives scaleX) */
+.swagg-list-row {
+  isolation: isolate;
+}
+
+.swagg-list-row-fill {
+  position: absolute;
+  inset: 0;
+  background-color: #ffffff;
+  transform-origin: left center;
+  transform: scaleX(0);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* White text + difference blend = black exactly where the bar has passed */
+.swagg-list-row > div {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  mix-blend-mode: difference;
+}
+
+.swagg-list-col-num {
+  grid-column: 1;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: inherit;
+  user-select: none;
+}
+
+.swagg-list-col-title {
+  grid-column: 2;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.swagg-list-col-field {
+  grid-column: 4;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.swagg-list-col-year {
+  grid-column: 5;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: inherit;
+  text-align: right;
+  white-space: nowrap;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN
+   ════════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .swagg-works-grid {
+    grid-template-columns: repeat(2, minmax(50px, 1fr));
+    gap: 24px 10px;
+  }
+  
+  .swagg-grid-card-wrap.span-2 {
+    grid-column: span 2;
+  }
+
+  .swagg-grid-blank {
+    display: none;
+  }
+
+  .swagg-card-media-wrap.span-2 {
+    aspect-ratio: 1.4 / 1;
+  }
+
+  .swagg-list-row {
+    grid-template-columns: 60px 1.2fr 1fr 60px;
+  }
+
+  .swagg-list-col-field {
+    grid-column: 3;
+  }
+
+  .swagg-list-col-year {
+    grid-column: 4;
+  }
+}
+
+@media (max-width: 810px) {
+  .swagg-works-grid {
+    grid-template-columns: 1fr;
+    gap: 20px 0;
+  }
+
+  .swagg-grid-card-wrap.span-1,
+  .swagg-grid-card-wrap.span-2 {
+    grid-column: span 1;
+  }
+
+  .swagg-card-media-wrap.span-1,
+  .swagg-card-media-wrap.span-2 {
+    aspect-ratio: 0.912 / 1;
+  }
+
+  .swagg-grid-blank {
+    display: none;
+  }
+
+  .swagg-list-row {
+    grid-template-columns: 35px 1fr auto;
+    padding: 14px 10px;
+  }
+
+  .swagg-list-col-field {
+    display: none;
+  }
+
+  .swagg-list-col-year {
+    grid-column: 3;
+  }
+
+  .swagg-list-floating-center,
+  .swagg-list-floating-overlay {
+    display: none;
+  }
+}

@@ -1,0 +1,303 @@
+.loupe-demo-card {
+  background: #0d0d0f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+.loupe-demo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.loupe-title-wrap {
+  max-width: 580px;
+}
+
+.demo-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #ff3b30;
+  background: rgba(255, 59, 48, 0.12);
+  border: 1px solid rgba(255, 59, 48, 0.25);
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.demo-module-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px 0;
+}
+
+.demo-module-desc {
+  font-size: 14px;
+  color: #888890;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.loupe-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.loupe-btn-group {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.loupe-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #cccccc;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.loupe-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.loupe-btn.active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  font-weight: 600;
+}
+
+/* Viewport */
+.loupe-viewport {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #050505;
+  cursor: crosshair;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  user-select: none;
+}
+
+.loupe-base-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.3s ease;
+}
+
+.celluloid-negative .loupe-base-img {
+  filter: invert(0.92) hue-rotate(180deg) sepia(0.2) contrast(1.1);
+}
+
+/* 35mm Sprocket Border Effect */
+.film-sprocket-top,
+.film-sprocket-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.85) 4px, transparent 4.5px);
+  background-size: 24px 16px;
+  background-repeat: repeat-x;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0.6;
+}
+
+.film-sprocket-top { top: 0; }
+.film-sprocket-bottom { bottom: 0; }
+
+/* Magnifier Glass */
+.loupe-glass {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 20;
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.7),
+    0 0 0 5px rgba(0, 0, 0, 0.6),
+    0 20px 40px rgba(0, 0, 0, 0.8),
+    inset 0 0 25px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  will-change: transform;
+}
+
+.loupe-magnified-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+}
+
+.loupe-reticle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.reticle-cross-h {
+  position: absolute;
+  width: 40px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.reticle-cross-v {
+  position: absolute;
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.reticle-circle {
+  width: 70px;
+  height: 70px;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+}
+
+.reticle-zoom-tag {
+  position: absolute;
+  bottom: 18px;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  font-family: monospace;
+  color: #ff3b30;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.loupe-bezel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 15px rgba(0, 200, 255, 0.15), inset 0 0 30px rgba(255, 50, 0, 0.1);
+}
+
+/* EXIF HUD Overlay */
+.loupe-exif-hud {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  background: rgba(10, 10, 12, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+  font-size: 11px;
+  color: #dddddd;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  min-width: 280px;
+}
+
+.exif-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.exif-row.highlight {
+  color: #30d158;
+}
+
+.exif-label {
+  color: #66666c;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  width: 32px;
+}
+
+.exif-val {
+  color: #eeeeee;
+  font-weight: 500;
+}
+
+.exif-footer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  color: #888890;
+}
+
+.exif-hint {
+  color: #ff9f0a;
+}
+
+.loupe-footer-note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: #888890;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .loupe-viewport {
+    height: 380px;
+  }
+  .loupe-demo-card {
+    padding: 20px;
+  }
+  .loupe-exif-hud {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    min-width: auto;
+  }
+}

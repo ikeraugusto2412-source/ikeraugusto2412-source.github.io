@@ -1,0 +1,142 @@
+/* ════════════════════════════════════════════════════════════════
+   APPLE SWITCH COMPONENT (iOS Native Animated Toggle)
+   Spring physics, draggable thumb & liquid grab feedback
+   ════════════════════════════════════════════════════════════════ */
+
+.apple-switch-track {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  border-radius: 9999px;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  padding: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .apple-switch-track:hover {
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+}
+
+.apple-switch-track:active {
+  cursor: grabbing;
+}
+
+.apple-switch-track.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* Atmospheric Glow */
+.apple-switch-glow {
+  pointer-events: none;
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  filter: blur(8px);
+}
+
+/* Track Base & Fill */
+.apple-switch-track-inner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 9999px;
+}
+
+.apple-switch-track-off {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), inset 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.apple-switch-track-on {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), inset 0 -1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Liquid Blur Distortion Layer during Grab/Press */
+.apple-switch-liquid-blur {
+  pointer-events: none;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.7);
+  filter: blur(7px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9;
+}
+
+/* Physical Thumb - Drop shadows and reflections matching Apple iOS */
+.apple-switch-thumb {
+  pointer-events: none;
+  z-index: 10;
+  border-radius: 9999px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35),
+              0 1px 2px rgba(0, 0, 0, 0.2),
+              inset 0 1px 1px rgba(255, 255, 255, 0.95),
+              inset 0 -1px 1px rgba(0, 0, 0, 0.05);
+}
+
+/* Label & Typography */
+.apple-switch-label-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.apple-switch-label-wrap.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.apple-switch-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.apple-switch-text-col.is-left {
+  text-align: right;
+}
+
+.apple-switch-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.apple-switch-description {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.3;
+}
+
+/* Touch screens: 44 px tall hit area around the 32 px track, same look */
+@media (pointer: coarse) {
+  .apple-switch-track::after {
+    content: '';
+    position: absolute;
+    inset: -6px -2px;
+  }
+}

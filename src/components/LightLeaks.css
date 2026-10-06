@@ -1,0 +1,38 @@
+.light-leaks-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  mix-blend-mode: screen;
+}
+
+.leak {
+  position: absolute;
+  filter: blur(80px);
+  border-radius: 50%;
+}
+
+.leak-1 {
+  width: 60vw;
+  height: 60vw;
+  top: -20%;
+  right: -10%;
+  background: radial-gradient(circle, rgba(255, 100, 0, 0.4) 0%, transparent 70%);
+}
+
+.leak-2 {
+  width: 40vw;
+  height: 40vw;
+  bottom: -10%;
+  left: -5%;
+  background: radial-gradient(circle, rgba(255, 50, 0, 0.3) 0%, transparent 70%);
+}
+
+.leak-3 {
+  width: 50vw;
+  height: 50vw;
+  top: 40%;
+  left: 30%;
+  background: radial-gradient(circle, rgba(255, 200, 50, 0.1) 0%, transparent 70%);
+}

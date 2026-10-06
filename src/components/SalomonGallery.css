@@ -1,0 +1,142 @@
+/* ════════════════════════════════════════════════════════════════
+   SALOMON 3D GALLERY — Shared Styles for all 4 variants
+   ════════════════════════════════════════════════════════════════ */
+
+.salgal-wrapper {
+  position: relative;
+  width: 100%;
+  height: clamp(650px, 88vh, 950px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+  background: transparent;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.salgal-header {
+  position: absolute;
+  top: clamp(4rem, 7.5vh, 5.5rem);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.salgal-title-mask {
+  overflow: hidden;
+  display: block;
+  line-height: 1;
+  padding: 0.05em 0.5em;
+}
+
+.salgal-brand {
+  font-family: var(--font-display, 'Barlow', sans-serif);
+  font-size: clamp(1.2rem, 2.8vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #ffffff;
+  display: block;
+}
+
+.salgal-title {
+  font-family: var(--font-display, 'Barlow', sans-serif);
+  font-size: clamp(2.4rem, 6.5vw, 6.2rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+  color: #ffffff;
+  margin: 0.2rem 0 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── Badge Row ───────────────────────────────────────────────── */
+.salgal-badge-row {
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.salgal-badge {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.38rem 0.8rem;
+  border-radius: 4px;
+}
+
+.salgal-hint {
+  font-family: var(--font-mono, 'Space Mono', monospace);
+  font-size: 0.63rem;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.38);
+  text-transform: uppercase;
+}
+
+/* ── 3D Stage ────────────────────────────────────────────────── */
+.salgal-stage {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: grab;
+  touch-action: none;
+}
+
+.salgal-stage.is-interacting,
+.salgal-stage.is-cursor-grab:active {
+  cursor: grabbing;
+}
+
+.salgal-stage canvas {
+  pointer-events: none;
+}
+
+/* ── Bottom vignette ─────────────────────────────────────────── */
+.salgal-bottom-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background: linear-gradient(to top, var(--bg-color, #050505) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ── Mobile ──────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .salgal-wrapper {
+    height: 580px;
+  }
+
+  .salgal-badge-row {
+    flex-direction: column;
+    gap: 0.45rem;
+    align-items: center;
+    padding: 0 1rem;
+  }
+
+  .salgal-hint {
+    display: none;
+  }
+}

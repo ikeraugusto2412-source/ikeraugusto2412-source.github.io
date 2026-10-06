@@ -1,0 +1,172 @@
+.flare-demo-card {
+  background: #0d0d0f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+.flare-demo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.flare-title-wrap {
+  max-width: 580px;
+}
+
+.flare-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.flare-btn-group {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.flare-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #cccccc;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.flare-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.flare-btn.active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  font-weight: 600;
+}
+
+/* Viewport */
+.flare-viewport {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: crosshair;
+}
+
+.flare-base-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Anamorphic Horizontal Streak Flare Line */
+.flare-streak-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  filter: blur(0.5px);
+  transition: top 0.08s ease-out;
+  box-shadow: 0 0 20px rgba(0, 160, 255, 0.6);
+}
+
+/* Flare Core Light Point */
+.flare-core-dot {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  transition: left 0.08s ease-out, top 0.08s ease-out;
+}
+
+/* Organic Bleed Diffuse Glow */
+.flare-bleed-glow {
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  filter: blur(35px);
+  transition: left 0.08s ease-out, top 0.08s ease-out;
+}
+
+/* Telemetry HUD */
+.flare-telemetry-hud {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  background: rgba(10, 10, 12, 0.85);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 12px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+.hud-lens {
+  font-size: 9px;
+  font-family: monospace;
+  letter-spacing: 0.12em;
+  color: #00b4ff;
+  font-weight: 700;
+}
+
+.hud-flare-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.hud-pos {
+  font-size: 10px;
+  font-family: monospace;
+  color: #888890;
+}
+
+.flare-footer-note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: #888890;
+}
+
+@media (max-width: 768px) {
+  .flare-viewport {
+    height: 320px;
+  }
+}

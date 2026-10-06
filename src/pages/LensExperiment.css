@@ -1,0 +1,361 @@
+.lens-container {
+  height: 400vh;
+  background: #000;
+  position: relative;
+}
+
+.lens-sticky-wrapper {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #050505;
+  z-index: 10; /* Mantener por debajo del Navbar (z-index 100) */
+}
+
+/* Layer Base */
+.fuji-layer {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* =========================================
+   LAYER 0: FUJIFILM CAMERA BODY (FLAT TOP)
+   ========================================= */
+.fuji-body-layer {
+  z-index: 10;
+}
+
+.fuji-camera-body {
+  width: 60vw;
+  height: 38vw; /* Proportions matching an X100V (approx 128x74.8mm) */
+  min-width: 320px;
+  min-height: 202px;
+  max-width: 700px;
+  max-height: 440px;
+  border-radius: 6px;
+  position: relative;
+  box-shadow: 0 50px 100px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.1);
+  background: #111; /* Fallback */
+}
+
+/* The sleek silver top plate */
+.fuji-top-plate {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 28%;
+  background: 
+    linear-gradient(to bottom, #f2f2f2 0%, #dedede 20%, #c4c4c4 50%, #999 90%, #666 100%);
+  border-radius: 6px 6px 0 0;
+  border-bottom: 2px solid #555;
+  box-shadow: inset 0 2px 2px rgba(255,255,255,0.9);
+}
+
+/* Hot shoe centered */
+.fuji-hotshoe {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12%;
+  height: 80%;
+  background: linear-gradient(0deg, #b0b0b0, #ddd);
+  border: 1px solid #777;
+  border-bottom: none;
+}
+
+.fuji-hotshoe::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  width: 70%;
+  height: 80%;
+  background: #111; /* Actual shoe mount interior */
+  box-shadow: inset 0 0 5px #000;
+}
+
+/* Classic Fujifilm Dials */
+.fuji-dial {
+  position: absolute;
+  bottom: 100%; /* Sits natively on top of the plate */
+  width: 45px;
+  height: 12px;
+  background: repeating-linear-gradient(90deg, #555, #999 2px, #333 3px, #222 4px);
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.5), inset 0 2px 2px rgba(255,255,255,0.6);
+  border: 1px solid #333;
+  border-bottom: none;
+}
+.dial-top {
+  position: absolute;
+  top: -8px;
+  left: 5%;
+  width: 90%;
+  height: 8px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(to right, #ccc, #fff, #aaa);
+  border: 1px solid #888;
+}
+
+/* Dial Placements */
+.iso-dial { left: 15%; width: 50px; }
+.shutter-dial { right: 28%; width: 55px; }
+.exp-dial { right: 10%; width: 40px; height: 10px; }
+.exp-dial .dial-top { top: -6px; height: 6px; }
+
+/* Mechanical Shutter Button (Silver with thread inside) */
+.fuji-shutter-button {
+  position: absolute;
+  top: 10%;
+  right: 18%;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, #bbb, #555);
+  box-shadow: 0 4px 5px rgba(0,0,0,0.5), inset 0 -2px 3px rgba(0,0,0,0.5);
+}
+.shutter-thread {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #000 30%, #333 100%);
+  border: 1px solid #777;
+}
+
+/* Lower Body: Faux Leather */
+.fuji-leather-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 72%;
+  background-color: #161616;
+  border-radius: 0 0 6px 6px;
+  /* Super fine grained leather pattern */
+  background-image: 
+    radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.9) 1px, transparent 1px);
+  background-size: 2px 2px;
+  background-position: 0 0, 1px 1px;
+  box-shadow: inset 0 -20px 40px rgba(0,0,0,0.8), inset 15px 0 30px rgba(0,0,0,0.6);
+}
+
+/* Front viewfinder glass box (rangefinder style) */
+.fuji-viewfinder-front {
+  position: absolute;
+  top: -20px; /* Cuts into silver plate slightly */
+  left: 8%;
+  width: 10%;
+  height: 35px;
+  background: linear-gradient(135deg, #111, #333);
+  border: 2px solid #555;
+  border-radius: 2px;
+  box-shadow: inset 0 0 10px #000, 0 5px 10px rgba(0,0,0,0.5);
+}
+.fuji-viewfinder-front::after {
+  content: '';
+  position: absolute;
+  top: 10%; left: 10%; width: 80%; height: 80%;
+  background: radial-gradient(ellipse at center, rgba(50, 150, 255, 0.4) 0%, rgba(0,0,0,1) 100%);
+}
+
+/* Focus assist lamp */
+.fuji-focus-assist {
+  position: absolute;
+  top: -10px;
+  right: 25%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff, rgba(200,200,200,0.5) 40%, rgba(0,0,0,1));
+  border: 2px solid #444;
+}
+
+/* =========================================
+   LAYER 1: LENS BARREL (Focus Rings)
+   ========================================= */
+.fuji-barrel-layer {
+  z-index: 20; 
+}
+.fuji-outer-barrel {
+  width: 28vw;
+  height: 28vw;
+  min-width: 160px;
+  min-height: 160px;
+  max-width: 360px;
+  max-height: 360px;
+  border-radius: 50%;
+  /* Fuji metal/grip barrel */
+  border: 15px solid #1a1a1a;
+  background: #111;
+  box-shadow: 
+    0 30px 60px rgba(0,0,0,0.9), 
+    inset 0 0 40px #000, 
+    0 0 0 4px #444; /* Silver highlight ring */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.fuji-outer-barrel::before {
+  /* Grooves for focus ring */
+  content: '';
+  position: absolute;
+  top: -15px; left: -15px; right: -15px; bottom: -15px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, transparent 0deg 2deg, rgba(0,0,0,0.5) 2deg 4deg);
+  pointer-events: none;
+}
+
+/* Engraved Text on the inner rim */
+.fuji-barrel-text {
+  position: absolute;
+  top: -25px; /* Floats inside over the glass rim */
+  width: 100%;
+  text-align: center;
+  color: #c4cdc4;
+  font-family: var(--font-sans);
+  font-size: clamp(5px, 0.8vw, 10px);
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+/* =========================================
+   LAYER 2: OPTICAL GLASS & APERTURE
+   ========================================= */
+.fuji-glass-layer {
+  z-index: 30;
+}
+.fuji-glass-element {
+  width: 20vw;
+  height: 20vw;
+  min-width: 110px;
+  min-height: 110px;
+  max-width: 250px;
+  max-height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 35% 35%, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.95) 100%);
+  box-shadow: inset 0 0 50px rgba(0,0,0,1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Fujinon Super EBC distinct reflection (Cyan/Magenta) */
+.fuji-front-glass-reflection {
+  position: absolute;
+  width: 20vw;
+  height: 20vw;
+  min-width: 110px;
+  min-height: 110px;
+  max-width: 250px;
+  max-height: 250px;
+  border-radius: 50%;
+  background: 
+    radial-gradient(ellipse at 70% 30%, rgba(255, 50, 150, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 30% 70%, rgba(50, 255, 200, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Metal Aperture Blades */
+.fuji-aperture-blades {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.f-blade {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, #151515 0%, #222 95%, #444 100%);
+  transform-origin: 100% 50%;
+}
+.f-b1 { transform: rotate(0deg) skewX(30deg); }
+.f-b2 { transform: rotate(60deg) skewX(30deg); }
+.f-b3 { transform: rotate(120deg) skewX(30deg); }
+.f-b4 { transform: rotate(180deg) skewX(30deg); }
+.f-b5 { transform: rotate(240deg) skewX(30deg); }
+.f-b6 { transform: rotate(300deg) skewX(30deg); }
+
+/* =========================================
+   LAYER 3: DEEP SENSOR MATRIX
+   ========================================= */
+.fuji-sensor-layer {
+  z-index: 40; /* Outermost conceptually but scaled deep */
+}
+.fuji-sensor-chamber {
+  width: 8vw;
+  height: 8vw;
+  min-width: 50px;
+  min-height: 50px;
+  max-width: 100px;
+  max-height: 100px;
+  background: radial-gradient(circle, #08122a 0%, #000 80%);
+  border: 2px solid #000;
+  box-shadow: inset 0 0 15px rgba(0, 150, 255, 0.3), 0 0 40px #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fuji-sensor-grid {
+  width: 60%;
+  height: 60%;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  background-color: rgba(0, 255, 255, 0.05);
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 2px 2px;
+}
+
+/* =========================================
+   DESTINATION TEXT
+   ========================================= */
+.fuji-destination-text {
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  pointer-events: none;
+}
+.fuji-destination-text h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  text-transform: uppercase;
+  line-height: 0.9;
+  text-shadow: 0 10px 40px rgba(0,0,0,1);
+  margin: 0;
+}
+.fuji-subtitle {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #888;
+  margin-top: 1rem;
+}

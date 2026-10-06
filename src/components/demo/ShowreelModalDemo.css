@@ -1,0 +1,308 @@
+.showreel-demo-card {
+  background: #0d0d0f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+.showreel-demo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.showreel-title-wrap {
+  max-width: 580px;
+}
+
+.showreel-action-bar {
+  display: flex;
+  align-items: center;
+}
+
+.showreel-launch-btn {
+  background: linear-gradient(135deg, #ff3b30, #ff9f0a);
+  color: #ffffff;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 12px 24px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(255, 59, 48, 0.35);
+  transition: box-shadow 0.2s ease;
+}
+
+.showreel-launch-btn:hover {
+  box-shadow: 0 14px 35px rgba(255, 59, 48, 0.55);
+}
+
+.launch-icon {
+  font-size: 12px;
+}
+
+/* Teaser preview */
+.showreel-teaser-preview {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.teaser-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.6) contrast(1.1);
+  transition: transform 0.5s ease;
+}
+
+.showreel-teaser-preview:hover .teaser-img {
+  transform: scale(1.02);
+}
+
+.teaser-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.teaser-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.teaser-meta {
+  font-size: 11px;
+  font-family: monospace;
+  color: #cccccc;
+  letter-spacing: 0.08em;
+}
+
+/* Fullscreen Modal Backdrop */
+.showreel-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000000;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.showreel-close-btn {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.showreel-close-btn:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+/* Cinema Viewport 2.39:1 scope */
+.showreel-cinema-viewport {
+  position: relative;
+  width: 100%;
+  max-width: 1300px;
+  aspect-ratio: 2.39 / 1;
+  max-height: 80vh;
+  background: #050505;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.showreel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Retro Countdown Film Leader */
+.showreel-countdown-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #08080a;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.countdown-ring {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.countdown-number {
+  font-size: 80px;
+  font-weight: 900;
+  color: #ffffff;
+  font-family: 'SF Mono', monospace;
+  line-height: 1;
+}
+
+.countdown-scanner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border-top: 3px solid #ff3b30;
+  animation: spinScanner 0.7s linear infinite;
+}
+
+@keyframes spinScanner {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.countdown-tag {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #888890;
+  font-family: monospace;
+}
+
+/* Floating HUD on Cinema Player */
+.showreel-floating-hud {
+  position: absolute;
+  bottom: 24px;
+  left: 30px;
+  right: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 20;
+  background: rgba(10, 10, 12, 0.75);
+  backdrop-filter: blur(12px);
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hud-title-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hud-brand {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: #ff3b30;
+  font-weight: 700;
+}
+
+.hud-film {
+  font-size: 12px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.hud-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hud-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.hud-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.showreel-footer-note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: #888890;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .showreel-modal-backdrop {
+    padding: 16px;
+  }
+  .showreel-cinema-viewport {
+    aspect-ratio: 16 / 9;
+  }
+  .showreel-demo-card {
+    padding: 20px;
+  }
+  .showreel-close-btn {
+    top: 16px;
+    right: 16px;
+  }
+}

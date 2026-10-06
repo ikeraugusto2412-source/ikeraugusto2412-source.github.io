@@ -1,0 +1,117 @@
+.project-card {
+  margin-bottom: 15vw;
+}
+
+.project-link {
+  display: block;
+  overflow: hidden;
+}
+
+.project-image-container {
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  position: relative;
+}
+
+.project-image {
+  width: 100%;
+  height: 120%; /* Extra height for parallax */
+  object-fit: cover;
+  transform-origin: center;
+}
+
+.project-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.project-overlay span {
+  background: var(--accent);
+  color: var(--bg-color);
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+  transform: translateY(20px);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-link:hover .project-overlay {
+    opacity: 1;
+  }
+
+  .project-link:hover .project-overlay span {
+    transform: translateY(0);
+  }
+}
+
+.project-info {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 1vw;
+}
+
+.project-info h3 {
+  font-size: 2.5rem;
+  text-transform: uppercase;
+}
+
+.project-info p {
+  font-family: var(--font-sans);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 1024px) {
+  .project-info h3 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-card {
+    margin-bottom: 20vw;
+  }
+
+  .project-image-container {
+    aspect-ratio: 4/5;
+  }
+
+  .project-info h3 {
+    font-size: 1.6rem;
+  }
+
+  .project-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-info h3 {
+    font-size: 1.3rem;
+  }
+
+  .project-overlay span {
+    font-size: 0.75rem;
+    padding: 0.7rem 1.5rem;
+  }
+}

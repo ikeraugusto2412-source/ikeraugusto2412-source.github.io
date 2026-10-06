@@ -1,0 +1,5 @@
+/* ProgressiveImage: picture element wrapper styles */
+picture {
+  display: block;
+  width: 100%;
+}

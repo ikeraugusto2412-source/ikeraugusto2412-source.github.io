@@ -1,0 +1,23 @@
+import React from 'react';
+import './MarqueeStrip.css';
+
+const WORDS = [
+  'PHOTOGRAPHY', 'FILMMAKER', 'ANALOG', 'IKER AUGUSTO',
+  'PORTRAIT', '35MM', 'DOCUMENTARY', 'CINEMATIC',
+  'PHOTOGRAPHY', 'FILMMAKER', 'ANALOG', 'IKER AUGUSTO',
+  'PORTRAIT', '35MM', 'DOCUMENTARY', 'CINEMATIC',
+];
+
+export default function MarqueeStrip() {
+  return (
+    <div className="marquee-strip" aria-hidden="true">
+      <div className="marquee-track">
+        {WORDS.map((word, i) => (
+          <span key={i} className="marquee-word">
+            {word} <span className="marquee-dot">·</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
