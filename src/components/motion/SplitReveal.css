@@ -1,0 +1,16 @@
+.split-reveal-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* The mask is a clip-path, not overflow: it keeps the text baseline untouched and
+   leaves room for glyphs that poke out of tight line-heights */
+.split-reveal-mask {
+  display: inline-block;
+  clip-path: inset(-0.12em -0.1em);
+}
+
+.split-reveal-char {
+  display: inline-block;
+  will-change: transform;
+}

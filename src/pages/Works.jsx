@@ -8,6 +8,7 @@ import PageTransition from '../components/PageTransition';
 import { EASE, EASE_EXIT, DUR, RISE } from '../components/motion/tokens';
 import { lift, MotionLink } from '../components/motion/pressable';
 import DrawLine from '../components/DrawLine';
+import SplitReveal from '../components/motion/SplitReveal';
 import { sileo } from 'sileo';
 import './Works.css';
 
@@ -106,7 +107,9 @@ export default function Works() {
             <div className="swagg-headline">
               <div className="swagg-work-group">
                 <div className="swagg-title-wrap">
-                  <h1 className="swagg-main-title">WORK</h1>
+                  <h1 className="swagg-main-title">
+                    <SplitReveal text="WORK" delay={0.1} />
+                  </h1>
                   <DrawLine trigger="inView" duration={550} delay={250} className="draw-line--accent" />
                 </div>
 

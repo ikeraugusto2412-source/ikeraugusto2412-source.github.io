@@ -5,6 +5,7 @@ import { useLanguage } from '../context/LanguageContext';
 import useIntroReady from '../lib/introGate';
 import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
 import { EASE, DUR, RISE } from './motion/tokens';
+import SplitReveal from './motion/SplitReveal';
 import './PlaybookHero.css';
 
 /*
@@ -351,13 +352,9 @@ export default function PlaybookHero() {
           IK®
         </motion.h1>
 
-        <motion.h2
-          className="playbook-main-title"
-          variants={titleVariants}
-          custom={1}
-        >
-          {dict.playbook.title}
-        </motion.h2>
+        <h2 className="playbook-main-title">
+          <SplitReveal text={dict.playbook.title} play={introReady} delay={0.08} />
+        </h2>
       </div>
 
       {/* Horizontal Carousel Viewport */}
