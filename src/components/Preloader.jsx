@@ -141,8 +141,9 @@ export default function Preloader({ onComplete }) {
         // Spin finished: brief hold on the target language, then launch curtain exit
         setTimeout(() => {
           setExiting(true);
-          // Hand over to the page: its entrance overlaps the curtain lift
-          markIntroReady();
+          // Hand over to the page once the curtain is partly up, so its entrance
+          // overlaps the lift instead of playing behind it
+          setTimeout(markIntroReady, 300);
           setTimeout(() => {
             setVisible(false);
             root.classList.remove('is-preloading');
