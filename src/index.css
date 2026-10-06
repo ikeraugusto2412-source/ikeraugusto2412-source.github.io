@@ -28,6 +28,14 @@
 
   /* Minimum comfortable touch target (Apple HIG) */
   --tap: 44px;
+
+  /* Motion identity (mirrors components/motion/tokens.js) */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);   /* entrances, reveals */
+  --ease-exit: cubic-bezier(0.7, 0, 1, 1);     /* exits */
+  --ease-state: cubic-bezier(0.4, 0, 0.2, 1);  /* hover / on-screen changes */
+  --dur-quick: 350ms;
+  --dur-standard: 500ms;
+  --dur-slow: 800ms;
 }
 
 html {
