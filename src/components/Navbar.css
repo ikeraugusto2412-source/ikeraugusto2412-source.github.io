@@ -224,7 +224,9 @@
   display: block;
   height: 1px;
   background-color: #ffffff;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--dur-quick) var(--ease-state),
+    width var(--dur-quick) var(--ease-state),
+    opacity 200ms var(--ease-state);
 }
 
 .menu-toggle-icon span:nth-child(1) { width: 22px; }
@@ -372,12 +374,14 @@
   padding: 0;
   width: 100%;
   text-align: left;
-  transition: opacity 0.3s ease;
+  /* Staging: siblings step back quickly, come back a little slower */
+  transition: opacity var(--dur-standard) var(--ease-state);
 }
 
 /* Dimmed siblings */
 .bignav-link.is-dimmed {
   opacity: 0.13;
+  transition-duration: 250ms;
 }
 
 .bignav-num {

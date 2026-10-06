@@ -25,11 +25,17 @@ function useLiveClock() {
   return time;
 }
 
-/* ── Overlay fade ── */
+/*
+ * Menu choreography. Open: backdrop first, then the four labels rise through their
+ * masks 60 ms apart, the footer line settles last. Close: the same in reverse,
+ * accelerating, in about two thirds of the time.
+ */
+const ITEMS = 4;
+
 const overlayVariants = {
   hidden:  { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
-  exit:    { opacity: 0, transition: { duration: 0.3, ease: [0.7, 0, 1, 1] } },
+  visible: { opacity: 1, transition: { duration: DUR.quick, ease: EASE } },
+  exit:    { opacity: 0, transition: { duration: 0.3, ease: EASE_EXIT, delay: 0.15 } },
 };
 
 /* ── Each item clips up from below ── */
@@ -37,12 +43,18 @@ const clipVariants = {
   hidden:  { y: '110%' },
   visible: (i) => ({
     y: '0%',
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.05 + i * 0.08 },
+    transition: { duration: DUR.slow, ease: EASE, delay: 0.08 + i * 0.06 },
   }),
   exit: (i) => ({
     y: '110%',
-    transition: { duration: 0.4, ease: [0.7, 0, 1, 1], delay: (4 - 1 - i) * 0.04 },
+    transition: { duration: 0.36, ease: EASE_EXIT, delay: (ITEMS - 1 - i) * 0.03 },
   }),
+};
+
+const footerVariants = {
+  hidden:  { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: DUR.standard, ease: EASE, delay: 0.45 } },
+  exit:    { opacity: 0, transition: { duration: 0.2, ease: EASE_EXIT } },
 };
 
 export default function Navbar() {
@@ -91,7 +103,7 @@ export default function Navbar() {
 
     animate(arrowY, `${pct}%`, {
       duration: 0.45,
-      ease: [0.16, 1, 0.3, 1],
+      ease: EASE,
     });
   }, [hoveredIdx, arrowY]);
 
@@ -233,7 +245,7 @@ export default function Navbar() {
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -30 }}
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.3, ease: EASE }}
                   onClick={handleArrowClick}
                   aria-label="Navegar"
                 >
@@ -252,7 +264,7 @@ export default function Navbar() {
                   initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 30 }}
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.3, ease: EASE }}
                   onClick={handleArrowClick}
                   aria-label="Navegar"
                 >
@@ -304,9 +316,9 @@ export default function Navbar() {
             </nav>
 
             {/* Footer */}
-            <div className="bignav-footer">
+            <motion.div className="bignav-footer" variants={footerVariants}>
               <span>{dict.nav.location}</span>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
