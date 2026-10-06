@@ -7,6 +7,8 @@ import { sileo } from 'sileo';
 import DrawLine from './DrawLine';
 import useScrollLock from '../hooks/useScrollLock';
 import { pressable } from './motion/pressable';
+import { EASE, EASE_EXIT, DUR } from './motion/tokens';
+import useIntroReady from '../lib/introGate';
 import './Navbar.css';
 
 /* ── Live clock ── */
@@ -49,6 +51,7 @@ export default function Navbar() {
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const clock    = useLiveClock();
   const navigate = useNavigate();
+  const introReady = useIntroReady();
 
   const navItems = [
     { num: '01', label: dict.nav.home,    href: '/'        },
@@ -124,8 +127,8 @@ export default function Navbar() {
       <motion.nav
         className="navbar"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        animate={{ opacity: introReady ? 1 : 0 }}
+        transition={{ duration: DUR.slow, ease: EASE, delay: 0.3 }}
       >
         <div className="navbar-container">
           <motion.button className="brand" onClick={() => handleNavClick('/')} {...pressable}>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { playSound } from '../audio/sound';
+import { hasSeenPreloader, markPreloaderSeen, markIntroReady } from '../lib/introGate';
 import './Preloader.css';
 
 const GREETINGS = [
@@ -31,17 +32,6 @@ function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-const SEEN_KEY = 'ik-preloader-seen';
-
-/** Only play the intro once per browser session */
-function hasSeenPreloader() {
-  try {
-    return sessionStorage.getItem(SEEN_KEY) === '1';
-  } catch {
-    return false;
-  }
-}
-
 export default function Preloader({ onComplete }) {
   const [visible, setVisible] = useState(() => !hasSeenPreloader());
   const [exiting, setExiting] = useState(false);
@@ -70,11 +60,7 @@ export default function Preloader({ onComplete }) {
     // Lock scroll during preloader (class-based so page-level locks are left untouched)
     const root = document.documentElement;
     root.classList.add('is-preloading');
-    try {
-      sessionStorage.setItem(SEEN_KEY, '1');
-    } catch {
-      /* storage unavailable: intro simply plays again next time */
-    }
+    markPreloaderSeen();
 
     // Word spacing follows the rendered font size, so the drum scales on every screen
     const fontPx = parseFloat(getComputedStyle(itemRefs.current[0]).fontSize) || 20;
@@ -155,6 +141,8 @@ export default function Preloader({ onComplete }) {
         // Spin finished: brief hold on the target language, then launch curtain exit
         setTimeout(() => {
           setExiting(true);
+          // Hand over to the page: its entrance overlaps the curtain lift
+          markIntroReady();
           setTimeout(() => {
             setVisible(false);
             root.classList.remove('is-preloading');

@@ -2,7 +2,37 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import useIntroReady from '../lib/introGate';
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
+import { EASE, DUR, RISE } from './motion/tokens';
 import './PlaybookHero.css';
+
+/*
+ * Entrance choreography, played once the preloader curtain starts lifting:
+ * title leads, the cards in view follow left → right, the editorial bar settles last.
+ * Everything rises from below; only the start time varies, never the curve.
+ */
+const FIRST_VISIBLE = 6; // the track starts one full set in, so cards 6+ are the ones on screen
+const titleVariants = {
+  hidden: { opacity: 0, y: RISE * 1.5 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: DUR.slow, delay: i * 0.08, ease: EASE },
+  }),
+};
+const cardVariants = {
+  hidden: { opacity: 0, y: RISE },
+  visible: (order) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: DUR.slow, delay: 0.2 + order * 0.06, ease: EASE },
+  }),
+};
+const barVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: DUR.standard, delay: 0.7, ease: EASE } },
+};
 
 // Curated galleries with diverse aspect ratios & dimensions (like in allintitarvl.framer.website)
 const GALLERIES = [
@@ -105,6 +135,12 @@ export default function PlaybookHero() {
   const trackRef = useRef(null);
   const cardRefs = useRef([]);
   const navigate = useNavigate();
+  const introReady = useIntroReady();
+  const reduceMotion = usePrefersReducedMotion();
+  const reduceMotionRef = useRef(reduceMotion);
+  useEffect(() => {
+    reduceMotionRef.current = reduceMotion;
+  }, [reduceMotion]);
 
   // Tripled array for seamless infinite loop
   const loopedGalleries = [...GALLERIES, ...GALLERIES, ...GALLERIES];
@@ -209,7 +245,10 @@ export default function PlaybookHero() {
       const velocity = p.x - p.prevX;
 
       // Dynamic tilt based on velocity
-      if (Math.abs(velocity) > 0.05) {
+      // Reduced motion: the carousel still scrolls, but the cards stay flat (no 3D swing)
+      if (reduceMotionRef.current) {
+        p.targetTilt = 0;
+      } else if (Math.abs(velocity) > 0.05) {
         p.targetTilt = Math.max(-maxTilt, Math.min(maxTilt, velocity * speedScale * 1.5));
       } else {
         p.targetTilt = 0;
@@ -294,28 +333,28 @@ export default function PlaybookHero() {
   };
 
   return (
-    <div
+    <motion.div
       ref={containerRef}
       className="playbook-fullscreen-stage"
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
+      initial="hidden"
+      animate={introReady ? 'visible' : 'hidden'}
     >
       {/* Title Header */}
       <div className="playbook-top-hero">
         <motion.h1
           className="playbook-brand"
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          variants={titleVariants}
+          custom={0}
         >
           IK®
         </motion.h1>
 
         <motion.h2
           className="playbook-main-title"
-          initial={{ opacity: 0, y: 35 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+          variants={titleVariants}
+          custom={1}
         >
           {dict.playbook.title}
         </motion.h2>
@@ -327,9 +366,11 @@ export default function PlaybookHero() {
           {loopedGalleries.map((item, idx) => {
             const cardNum = String((idx % GALLERIES.length) + 1).padStart(3, '0');
             return (
-              <div
+              <motion.div
                 key={`${item.id}-${idx}`}
                 className="playbook-perspective-wrapper"
+                variants={cardVariants}
+                custom={Math.min(Math.max(idx - FIRST_VISIBLE, 0), 6)}
               >
                 <div
                   ref={(el) => (cardRefs.current[idx] = el)}
@@ -365,14 +406,14 @@ export default function PlaybookHero() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
       </div>
 
       {/* Bottom Editorial Bar */}
-      <div className="playbook-bottom-bar">
+      <motion.div className="playbook-bottom-bar" variants={barVariants}>
         <div className="playbook-status-badge">
           <span className="badge-dot" />
           <span>{dict.playbook.statusBadge}</span>
@@ -381,7 +422,7 @@ export default function PlaybookHero() {
         <div className="playbook-scroll-indicator">
           <span>{dict.playbook.scrollHint}</span>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
