@@ -633,3 +633,18 @@
   opacity: 0.6;
   cursor: progress;
 }
+
+/* Touch: the email link and its two actions get full-size tap targets */
+@media (pointer: coarse) {
+  .contact-info-email {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+  }
+  .contact-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--tap);
+  }
+}
