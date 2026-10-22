@@ -10,7 +10,7 @@ import useUiSounds from './audio/useUiSounds'
 import ErrorBoundary from './components/ErrorBoundary'
 import Seo from './components/Seo'
 import { splitLang } from './lib/i18nPath'
-import { trackPageView } from './lib/analytics'
+import './lib/analytics'
 
 // Secondary routes are code-split so the home page only ships what it needs
 const About = lazy(() => import('./pages/About'))
@@ -32,11 +32,6 @@ function App() {
   const location = useLocation();
   const lenisRef = useRef(null);
   useUiSounds();
-
-  // One visit per page (the /es prefix counts as its own page; ?foto=… does not)
-  useEffect(() => {
-    trackPageView(location.pathname);
-  }, [location.pathname]);
 
   useEffect(() => {
     const lenis = new Lenis({

@@ -1,6 +1,6 @@
 # Publishes the site to GitHub Pages (https://ikeraugusto2412-source.github.io) on every push to main.
 # Optional settings live in Settings › Secrets and variables › Actions › Variables:
-#   VITE_WEB3FORMS_KEY (contact form) and VITE_GOATCOUNTER_CODE (visit statistics).
+#   VITE_WEB3FORMS_KEY (contact form) and VITE_UMAMI_WEBSITE_ID (visit statistics).
 name: Deploy to GitHub Pages
 
 on:
@@ -41,7 +41,7 @@ jobs:
         env:
           VITE_SITE_URL: https://ikeraugusto2412-source.github.io
           VITE_WEB3FORMS_KEY: ${{ vars.VITE_WEB3FORMS_KEY }}
-          VITE_GOATCOUNTER_CODE: ${{ vars.VITE_GOATCOUNTER_CODE }}
+          VITE_UMAMI_WEBSITE_ID: ${{ vars.VITE_UMAMI_WEBSITE_ID }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
