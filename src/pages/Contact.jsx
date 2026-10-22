@@ -85,22 +85,22 @@ export default function Contact() {
 
     setSending(true);
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          access_key: FORM_KEY,
-          subject: `Consulta Web — ${formData.name || 'Mensaje de contacto'}`,
-          from_name: formData.name,
-          replyto: formData.email,
-          name: formData.name,
-          email: formData.email,
-          company: formData.company,
-          timeline: formData.timeline,
-          source: dict.contact.sourceOptions[formData.sourceIdx],
-          message: formData.message,
-        }),
-      });
+      // Sent as FormData (like a plain HTML form): a "simple" request, so the browser doesn't need
+      // a CORS preflight that blockers or proxies could break
+      const body = new FormData();
+      Object.entries({
+        access_key: FORM_KEY,
+        subject: `Consulta Web — ${formData.name || 'Mensaje de contacto'}`,
+        from_name: formData.name,
+        replyto: formData.email,
+        name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        timeline: formData.timeline,
+        source: dict.contact.sourceOptions[formData.sourceIdx],
+        message: formData.message,
+      }).forEach(([key, value]) => body.append(key, value ?? ''));
+      const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.success) throw new Error(data.message || `HTTP ${res.status}`);
       sileo.success({ title: dict.contact.toastSentTitle, description: dict.contact.toastSentDesc });
