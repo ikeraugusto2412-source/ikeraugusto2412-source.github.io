@@ -7,24 +7,36 @@ import Navbar from './components/Navbar'
 import Preloader from './components/Preloader'
 import { Toaster } from 'sileo'
 import useUiSounds from './audio/useUiSounds'
+import ErrorBoundary from './components/ErrorBoundary'
+import Seo from './components/Seo'
+import { splitLang } from './lib/i18nPath'
+import { trackPageView } from './lib/analytics'
 
 // Secondary routes are code-split so the home page only ships what it needs
 const About = lazy(() => import('./pages/About'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
-const LensExperiment = lazy(() => import('./pages/LensExperiment'))
-const PortfolioCategory = lazy(() => import('./pages/PortfolioCategory'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Works = lazy(() => import('./pages/Works'))
-const FolderShowcase = lazy(() => import('./pages/FolderShowcase'))
-const AppleSwitchShowcase = lazy(() => import('./pages/AppleSwitchShowcase'))
-const LabShowcase = lazy(() => import('./pages/LabShowcase'))
-const AvatarPage = lazy(() => import('./pages/AvatarPage'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+
+// Experiments and component showcases: only in `npm run dev`, never shipped in the build
+const DEV = import.meta.env.DEV
+const LensExperiment = DEV ? lazy(() => import('./pages/LensExperiment')) : null
+const PortfolioCategory = DEV ? lazy(() => import('./pages/PortfolioCategory')) : null
+const FolderShowcase = DEV ? lazy(() => import('./pages/FolderShowcase')) : null
+const AppleSwitchShowcase = DEV ? lazy(() => import('./pages/AppleSwitchShowcase')) : null
+const LabShowcase = DEV ? lazy(() => import('./pages/LabShowcase')) : null
+const AvatarPage = DEV ? lazy(() => import('./pages/AvatarPage')) : null
 
 function App() {
   const location = useLocation();
   const lenisRef = useRef(null);
   useUiSounds();
+
+  // One visit per page (the /es prefix counts as its own page; ?foto=… does not)
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location.pathname]);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -50,13 +62,14 @@ function App() {
       
       const href = target.getAttribute('href');
       
-      if (href === '/' && window.location.pathname === '/') {
+      const isHome = (p) => p != null && splitLang(p).path === '/';
+      if (href && !href.startsWith('/#') && isHome(href) && isHome(window.location.pathname)) {
         e.preventDefault();
         lenis.scrollTo(0, { duration: 1.2 });
         return;
       }
 
-      if (href && href.startsWith('/#') && window.location.pathname === '/') {
+      if (href && href.startsWith('/#') && isHome(window.location.pathname)) {
         const id = href.substring(2);
         const element = document.getElementById(id);
         if (element) {
@@ -97,27 +110,34 @@ function App() {
           },
         }}
       />
+      <Seo />
       <Preloader />
       <Navbar />
+      <ErrorBoundary resetKey={location.pathname}>
       <Suspense fallback={null}>
       <AnimatePresence mode="wait" onExitComplete={resetScroll}>
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Home />} />
-          <Route path="/works" element={<Works />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/project/:id" element={<ProjectDetail />} />
-          <Route path="/lens" element={<LensExperiment />} />
-          <Route path="/portfolio/:type" element={<PortfolioCategory />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/folder" element={<FolderShowcase />} />
-          <Route path="/switch" element={<AppleSwitchShowcase />} />
-          <Route path="/lab" element={<LabShowcase />} />
-          <Route path="/demo" element={<LabShowcase />} />
-          <Route path="/avatar" element={<AvatarPage />} />
+        {/* Keyed without the language prefix: switching EN/ES swaps the texts in place
+            instead of replaying the page transition */}
+        <Routes location={location} key={splitLang(location.pathname).path}>
+          {['', '/es'].flatMap((prefix) => [
+            <Route key={`${prefix}home`} path={prefix || '/'} element={<Home />} />,
+            <Route key={`${prefix}works`} path={`${prefix}/works`} element={<Works />} />,
+            <Route key={`${prefix}about`} path={`${prefix}/about`} element={<About />} />,
+            <Route key={`${prefix}project`} path={`${prefix}/project/:id`} element={<ProjectDetail />} />,
+            <Route key={`${prefix}contact`} path={`${prefix}/contact`} element={<Contact />} />,
+          ])}
+          {DEV && <Route path="/lens" element={<LensExperiment />} />}
+          {DEV && <Route path="/portfolio/:type" element={<PortfolioCategory />} />}
+          {DEV && <Route path="/folder" element={<FolderShowcase />} />}
+          {DEV && <Route path="/switch" element={<AppleSwitchShowcase />} />}
+          {DEV && <Route path="/lab" element={<LabShowcase />} />}
+          {DEV && <Route path="/demo" element={<LabShowcase />} />}
+          {DEV && <Route path="/avatar" element={<AvatarPage />} />}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AnimatePresence>
       </Suspense>
+      </ErrorBoundary>
     </MotionConfig>
   )
 }

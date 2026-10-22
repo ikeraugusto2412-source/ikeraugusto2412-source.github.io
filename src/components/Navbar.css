@@ -594,3 +594,102 @@
     font-size: min(13vw, 17svh);
   }
 }
+
+/* ── UI SOUND TOGGLE ─────────────────────────────────────────────────────── */
+/* Desktop: four equaliser bars that dance while sounds are on, flat when muted */
+.nav-sound {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.25s ease;
+}
+
+.nav-sound.is-on {
+  opacity: 0.9;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-sound:hover {
+    opacity: 1;
+  }
+}
+
+.nav-sound-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.nav-sound-bars span {
+  width: 2px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  transition: height 0.3s ease;
+}
+
+.nav-sound.is-on .nav-sound-bars span {
+  animation: navSoundBar 1.1s ease-in-out infinite alternate;
+}
+.nav-sound.is-on .nav-sound-bars span:nth-child(2) { animation-delay: -0.4s; }
+.nav-sound.is-on .nav-sound-bars span:nth-child(3) { animation-delay: -0.75s; }
+.nav-sound.is-on .nav-sound-bars span:nth-child(4) { animation-delay: -0.2s; }
+
+@keyframes navSoundBar {
+  0%   { height: 3px; }
+  50%  { height: 12px; }
+  100% { height: 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-sound.is-on .nav-sound-bars span {
+    animation: none;
+    height: 8px;
+  }
+}
+
+/* Menu footer: text toggle, available on every device */
+.bignav-sound {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+
+.bignav-sound.is-on {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bignav-sound:hover {
+    color: #fff;
+  }
+}
+
+@media (pointer: coarse) {
+  .bignav-sound {
+    min-height: var(--tap);
+    padding: 0 0 0 1rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .nav-sound {
+    width: var(--tap);
+    height: var(--tap);
+  }
+}

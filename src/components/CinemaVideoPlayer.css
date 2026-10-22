@@ -876,3 +876,11 @@
     min-height: var(--tap);
   }
 }
+
+/* Quality submenu: 4K / HD tag next to each resolution */
+.yt-quality-sup {
+  margin-left: 0.2em;
+  font-size: 0.6em;
+  font-weight: 700;
+  vertical-align: super;
+}

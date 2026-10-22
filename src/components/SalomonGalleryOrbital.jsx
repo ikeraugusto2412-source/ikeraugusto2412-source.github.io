@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 import { createRenderGate, isLowPowerViewport } from '../lib/renderGate';
+import { sizedSrc } from '../lib/images';
 import './SalomonGallery.css';
 
 /**
@@ -68,7 +69,8 @@ export default function SalomonGalleryOrbital({
     const totalImgs = Math.min(images.length, 13);
 
     const textures = images.slice(0, totalImgs).map(src => {
-      const t = loader.load(src);
+      // Full-size photos would cost ~29 MB of GPU memory each; cards never need more than this
+      const t = loader.load(sizedSrc(src, lowPower ? 640 : 1280));
       // ⚠️ Sin mipmaps para evitar artefactos de color en bordes
       t.minFilter   = THREE.LinearFilter;
       t.magFilter   = THREE.LinearFilter;

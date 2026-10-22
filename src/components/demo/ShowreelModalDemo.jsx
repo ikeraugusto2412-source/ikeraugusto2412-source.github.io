@@ -129,7 +129,7 @@ export default function ShowreelModalDemo() {
             <div className="showreel-cinema-viewport">
               <video
                 ref={videoRef}
-                src="/assets/Noruega/Video/Secuencia 01_2.mp4"
+                src="/assets/Noruega/Video/norway-1080p.mp4"
                 playsInline
                 muted={isMuted}
                 loop

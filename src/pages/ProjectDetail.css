@@ -557,3 +557,24 @@
     padding-top: 0;
   }
 }
+
+/* Lightbox zoom: the enlarged photo may grow past the screen edges, never the page */
+.lightbox {
+  overflow: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lightbox-image {
+    cursor: zoom-in;
+  }
+  .lightbox-image.is-zoomed {
+    cursor: grab;
+  }
+}
+
+/* Keep the controls above a zoomed photo */
+.lightbox-nav,
+.lightbox-counter,
+.lightbox-close {
+  z-index: 2;
+}

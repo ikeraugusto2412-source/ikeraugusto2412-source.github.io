@@ -9,6 +9,10 @@ import DrawLine from '../components/DrawLine';
 import { pressable, lift } from '../components/motion/pressable';
 import './Contact.css';
 
+const CONTACT_EMAIL = 'ikeraugusto2412@gmail.com';
+// Web3Forms access key (public by design). Without it the form falls back to the visitor's email app.
+const FORM_KEY = import.meta.env.VITE_WEB3FORMS_KEY;
+
 /* ─── Shared Animated Divider ─── */
 function Line({ delay = 0 }) {
   return (
@@ -35,7 +39,8 @@ export default function Contact() {
     message: '',
     sourceIdx: 0,
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(false); // false | 'sent' | 'mailto'
+  const [sending, setSending] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
   const [typingTick, setTypingTick] = useState(0);
 
@@ -44,17 +49,14 @@ export default function Contact() {
   }, []);
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText('ikeraugusto2412@gmail.com').then(() => {
-      sileo.success({
-        title: '¡Email copiado!',
-        description: 'ikeraugusto2412@gmail.com',
+    Promise.resolve(navigator.clipboard?.writeText(CONTACT_EMAIL))
+      .then(() => {
+        if (!navigator.clipboard) throw new Error('no clipboard');
+        sileo.success({ title: dict.contact.toastEmailCopied, description: CONTACT_EMAIL });
+      })
+      .catch(() => {
+        sileo.error({ title: dict.contact.toastCopyFailed, description: dict.contact.toastCopyFailedDesc });
       });
-    }).catch(() => {
-      sileo.error({
-        title: 'No se pudo copiar',
-        description: 'Cópialo manualmente.',
-      });
-    });
   };
 
   const handleInputChange = (e) => {
@@ -63,15 +65,51 @@ export default function Contact() {
     setTypingTick((t) => t + 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Open mailto and show success toast
-    window.location.assign(generateMailto());
-    sileo.success({
-      title: '¡Mensaje listo!',
-      description: 'Se ha abierto tu cliente de correo.',
-    });
-    setSubmitted(true);
+    if (sending) return;
+
+    if (!FORM_KEY) {
+      // No form service configured: hand the message to the visitor's email app
+      window.location.assign(generateMailto());
+      sileo.info({ title: dict.contact.toastMailtoTitle, description: dict.contact.toastMailtoDesc });
+      setSubmitted('mailto');
+      return;
+    }
+
+    // Honeypot: bots tick the hidden checkbox, people never see it
+    if (e.currentTarget.elements.botcheck?.checked) {
+      setSubmitted('sent');
+      return;
+    }
+
+    setSending(true);
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: FORM_KEY,
+          subject: `Consulta Web — ${formData.name || 'Mensaje de contacto'}`,
+          from_name: formData.name,
+          replyto: formData.email,
+          name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          timeline: formData.timeline,
+          source: dict.contact.sourceOptions[formData.sourceIdx],
+          message: formData.message,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success) throw new Error(data.message || `HTTP ${res.status}`);
+      sileo.success({ title: dict.contact.toastSentTitle, description: dict.contact.toastSentDesc });
+      setSubmitted('sent');
+    } catch {
+      sileo.error({ title: dict.contact.toastSendErrorTitle, description: dict.contact.toastSendErrorDesc });
+    } finally {
+      setSending(false);
+    }
   };
 
   const generateMailto = () => {
@@ -89,7 +127,7 @@ export default function Contact() {
       `\nMensaje / Message:\n${formData.message}\n\n` +
       `Un saludo / Best regards!`
     );
-    return `mailto:ikeraugusto2412@gmail.com?subject=${subject}&body=${body}`;
+    return `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -178,7 +216,7 @@ export default function Contact() {
                   <motion.button
                     onClick={handleCopyEmail}
                     className="contact-btn-ghost"
-                    title="Copiar email al portapapeles"
+                    title={dict.contact.copyEmailTitle}
                     {...pressable}
                   >
                     {dict.contact.copyEmail}
@@ -234,10 +272,12 @@ export default function Contact() {
                   {/* Input Fields */}
                   <div className="form-input-grid">
                     <div className="form-field">
-                      <label className="form-label">{dict.contact.nameLabel}</label>
+                      <label className="form-label" htmlFor="contact-name">{dict.contact.nameLabel}</label>
                       <input
+                        id="contact-name"
                         type="text"
                         name="name"
+                        autoComplete="name"
                         required
                         value={formData.name}
                         onChange={handleInputChange}
@@ -248,10 +288,12 @@ export default function Contact() {
                       />
                     </div>
                     <div className="form-field">
-                      <label className="form-label">{dict.contact.emailLabel}</label>
+                      <label className="form-label" htmlFor="contact-email">{dict.contact.emailLabel}</label>
                       <input
+                        id="contact-email"
                         type="email"
                         name="email"
+                        autoComplete="email"
                         required
                         value={formData.email}
                         onChange={handleInputChange}
@@ -265,10 +307,12 @@ export default function Contact() {
 
                   <div className="form-input-grid">
                     <div className="form-field">
-                      <label className="form-label">{dict.contact.companyLabel}</label>
+                      <label className="form-label" htmlFor="contact-company">{dict.contact.companyLabel}</label>
                       <input
+                        id="contact-company"
                         type="text"
                         name="company"
+                        autoComplete="organization"
                         value={formData.company}
                         onChange={handleInputChange}
                         onFocus={() => setFocusedField('company')}
@@ -278,8 +322,9 @@ export default function Contact() {
                       />
                     </div>
                     <div className="form-field">
-                      <label className="form-label">{dict.contact.timelineLabel}</label>
+                      <label className="form-label" htmlFor="contact-timeline">{dict.contact.timelineLabel}</label>
                       <input
+                        id="contact-timeline"
                         type="text"
                         name="timeline"
                         value={formData.timeline}
@@ -293,8 +338,9 @@ export default function Contact() {
                   </div>
 
                   <div className="form-field full-width">
-                    <label className="form-label">{dict.contact.messageLabel}</label>
+                    <label className="form-label" htmlFor="contact-message">{dict.contact.messageLabel}</label>
                     <textarea
+                      id="contact-message"
                       name="message"
                       required
                       value={formData.message}
@@ -307,8 +353,9 @@ export default function Contact() {
                   </div>
 
                   <div className="form-field full-width">
-                    <label className="form-label">{dict.contact.sourceLabel}</label>
+                    <label className="form-label" htmlFor="contact-source">{dict.contact.sourceLabel}</label>
                     <select
+                      id="contact-source"
                       name="sourceIdx"
                       value={formData.sourceIdx}
                       onChange={handleInputChange}
@@ -324,14 +371,18 @@ export default function Contact() {
                     </select>
                   </div>
 
+                  <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ display: 'none' }} />
+
                   <motion.button
                     type="submit"
                     className="form-submit-btn"
+                    disabled={sending}
+                    aria-busy={sending}
                     onMouseEnter={() => setFocusedField('submit')}
                     onMouseLeave={() => setFocusedField(null)}
                     {...lift}
                   >
-                    <span>{dict.contact.submitBtn}</span>
+                    <span>{sending ? dict.contact.sending : dict.contact.submitBtn}</span>
                     <span className="form-submit-arrow">→</span>
                   </motion.button>
                 </form>
@@ -343,9 +394,13 @@ export default function Contact() {
                   transition={{ duration: 0.5 }}
                 >
                   <div className="contact-success-icon">✓</div>
-                  <h3 className="contact-success-title">{dict.contact.successTitle}</h3>
+                  <h3 className="contact-success-title">
+                    {submitted === 'sent' ? dict.contact.sentTitle : dict.contact.successTitle}
+                  </h3>
                   <p className="contact-success-desc">
-                    {dict.contact.successDesc.replace('{name}', formData.name)}
+                    {(submitted === 'sent' ? dict.contact.sentDesc : dict.contact.successDesc)
+                      .replace('{name}', formData.name)
+                      .replace('{email}', formData.email)}
                   </p>
 
                   <div className="contact-success-brief">
@@ -365,6 +420,7 @@ export default function Contact() {
                     )}
                   </div>
 
+                  {submitted === 'mailto' && (
                   <div className="contact-actions-row" style={{ marginTop: '1rem', width: '100%', justifyContent: 'center' }}>
                     <motion.a
                       href={generateMailto()}
@@ -375,6 +431,7 @@ export default function Contact() {
                       <span>{dict.contact.confirmEmailBtn}</span>
                     </motion.a>
                   </div>
+                  )}
 
                   <motion.button
                     onClick={() => setSubmitted(false)}

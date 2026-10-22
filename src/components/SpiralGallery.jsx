@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 import { createRenderGate, isLowPowerViewport } from '../lib/renderGate';
+import { sizedSrc } from '../lib/images';
 import './SpiralGallery.css';
 
 const vertexShader = `
@@ -86,7 +87,8 @@ export default function SpiralGallery({ images = [], title = 'New York', onSelec
     const totalTiles = Math.min(images.length, lowPower ? 28 : 50);
     const uniqueImages = images.slice(0, totalTiles);
     const textures = uniqueImages.map((src) => {
-      const tex = textureLoader.load(src);
+      // Tiles are small: a 640 px copy is plenty and keeps GPU memory low on phones
+      const tex = textureLoader.load(sizedSrc(src, 640));
       tex.minFilter = THREE.LinearFilter;
       tex.magFilter = THREE.LinearFilter;
       tex.generateMipmaps = false;

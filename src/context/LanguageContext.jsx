@@ -1,21 +1,40 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { translations } from '../data/translations';
+import { splitLang, localize } from '../lib/i18nPath';
 
 const LanguageContext = createContext();
+export const LANGUAGE_PREF_KEY = 'language';
 
+/**
+ * The language comes from the URL (/es/... is Spanish, everything else English), so a shared
+ * link always opens in the language it was copied in. Switching language swaps the URL prefix
+ * and keeps the rest (page, ?foto=…, #anchor). The last choice is remembered for visits to "/".
+ */
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState(() => {
-    // Default to 'en' (English) as requested, unless user previously set a preference
-    return localStorage.getItem('language') || 'en';
-  });
+  const { pathname, search, hash } = useLocation();
+  const navigate = useNavigate();
+  const { lang: language, path } = splitLang(pathname);
 
   useEffect(() => {
-    localStorage.setItem('language', language);
+    try {
+      localStorage.setItem(LANGUAGE_PREF_KEY, language);
+    } catch {
+      /* storage blocked (private mode): the choice just isn't remembered */
+    }
+    // Screen readers and translators read the page in the language it is shown in
+    document.documentElement.lang = language;
   }, [language]);
 
-  const toggleLanguage = () => {
-    setLanguage(prev => (prev === 'en' ? 'es' : 'en'));
+  const setLanguage = (next) => {
+    if (next === language) return;
+    navigate(localize(path, next) + search + hash);
   };
+
+  const toggleLanguage = () => setLanguage(language === 'en' ? 'es' : 'en');
+
+  /** Internal link in the current language: localePath('/works') → '/es/works' in Spanish */
+  const localePath = (to) => localize(to, language);
 
   const t = (section, key) => {
     try {
@@ -24,7 +43,7 @@ export const LanguageProvider = ({ children }) => {
         return activeDict[section];
       }
       return activeDict[section]?.[key] ?? translations.en[section]?.[key] ?? '';
-    } catch (e) {
+    } catch {
       return '';
     }
   };
@@ -37,6 +56,7 @@ export const LanguageProvider = ({ children }) => {
         language,
         setLanguage,
         toggleLanguage,
+        localePath,
         t,
         dict,
         isEn: language === 'en',

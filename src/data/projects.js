@@ -282,7 +282,13 @@ export const projects = [
       en: 'A cinematic video blog capturing the raw scale of Norwegian fjords, winding northern highways, and quiet moments in the Scandinavian wilderness. Accompanied by the complete photographic collection.',
       es: 'Un video blog cinematográfico que captura la escala de los fiordos noruegos, carreteras del norte y momentos de calma en la naturaleza escandinava. Acompañado de la serie fotográfica completa.'
     },
-    videoUrl: '/assets/Noruega/Video/Secuencia 01_2.mp4',
+    // Web encodes of the 4K master (kept outside public/, see originals/README.md): the player
+    // starts at the level that suits the screen and the viewer can switch in Settings › Quality
+    videoUrl: '/assets/Noruega/Video/norway-1080p.mp4',
+    videoSources: [
+      { src: '/assets/Noruega/Video/norway-2160p.mp4', label: '2160p', badge: '4K', height: 2160 },
+      { src: '/assets/Noruega/Video/norway-1080p.mp4', label: '1080p', badge: 'HD', height: 1080 },
+    ],
     coverImage: '/assets/Noruega/webp/_6M25407.webp',
     gridImages: norwayGridImages,
     location: 'Norway / Scandinavia',

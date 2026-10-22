@@ -25,3 +25,8 @@ dist-ssr
 
 # Responsive check output
 screenshots-responsive/
+
+# Photo/video masters and old files kept out of the build (see originals/README.md)
+originals/
+.env.local
+.claude/settings.local.json

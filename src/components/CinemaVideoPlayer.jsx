@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
+import { sizedSrc } from '../lib/images';
 import './CinemaVideoPlayer.css';
 
 // 64x36 px canvas sampling frame colors with requestAnimationFrame
@@ -8,8 +9,24 @@ import './CinemaVideoPlayer.css';
 const CANVAS_W = 64;
 const CANVAS_H = 36;
 
+/**
+ * Starting quality: 4K only where it shows (big, dense screens on a mouse-driven device) and the
+ * connection is not flagged as slow or data-saving; phones and tablets start at 1080p.
+ */
+function pickInitialQuality(sources) {
+  if (sources.length < 2 || typeof window === 'undefined') return 0;
+  const conn = navigator.connection;
+  const slow = conn?.saveData || /(^|-)(2g|3g)$/.test(conn?.effectiveType ?? '');
+  const touch = window.matchMedia('(pointer: coarse)').matches;
+  const screenPx = Math.max(window.screen.width, window.screen.height) * (window.devicePixelRatio || 1);
+  const want4k = !slow && !touch && screenPx >= 2200;
+  const idx = sources.findIndex((s) => (want4k ? s.height >= 2160 : s.height < 2160));
+  return idx === -1 ? 0 : idx;
+}
+
 export default function CinemaVideoPlayer({
   src,
+  sources: sourcesProp,
   poster,
   title,
   blurAmount = 65,
@@ -41,7 +58,12 @@ export default function CinemaVideoPlayer({
   const [showControls, setShowControls] = useState(true);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isSpeedMenuOpen, setIsSpeedMenuOpen] = useState(false);
+  const [submenu, setSubmenu] = useState(null); // null | 'speed' | 'quality'
+
+  // Quality levels (largest first). A plain `src` behaves as a single level.
+  const sources = sourcesProp?.length ? sourcesProp : [{ src, label: '', height: 0 }];
+  const [qualityIdx, setQualityIdx] = useState(() => pickInitialQuality(sources));
+  const pendingResume = useRef(null); // { time, play } carried across a quality switch
 
   // Scrubber hover state
   const [hoverTime, setHoverTime] = useState(null);
@@ -91,8 +113,27 @@ export default function CinemaVideoPlayer({
   };
 
   const handleLoadedMetadata = () => {
-    if (!videoRef.current) return;
-    setDuration(videoRef.current.duration);
+    const video = videoRef.current;
+    if (!video) return;
+    setDuration(video.duration);
+    // After a quality switch, continue from the same moment
+    const resume = pendingResume.current;
+    if (resume) {
+      pendingResume.current = null;
+      video.currentTime = resume.time;
+      video.playbackRate = playbackRate;
+      if (resume.play) video.play().catch(() => setIsPlaying(false));
+    }
+  };
+
+  const changeQuality = (idx) => {
+    setSubmenu(null);
+    setIsSettingsOpen(false);
+    if (idx === qualityIdx) return;
+    const video = videoRef.current;
+    pendingResume.current = video ? { time: video.currentTime, play: !video.paused } : null;
+    setQualityIdx(idx);
+    triggerToast(`${yt.quality || 'Calidad'}: ${sources[idx].label}`);
   };
 
   const handleSeek = (e) => {
@@ -138,7 +179,7 @@ export default function CinemaVideoPlayer({
     if (videoRef.current) {
       videoRef.current.playbackRate = speed;
     }
-    setIsSpeedMenuOpen(false);
+    setSubmenu(null);
     setIsSettingsOpen(false);
     triggerToast(`${yt.speed || 'Velocidad'}: ${speed === 1 ? (yt.normal || 'Normal') : speed + 'x'}`);
   };
@@ -169,6 +210,17 @@ export default function CinemaVideoPlayer({
       if (isPlaying && !isSettingsOpen) setShowControls(false);
     }, 2800);
   };
+
+  // Duration: a cached video can load its metadata before React starts listening, which left the
+  // counter at 0:00 / 0:00 — so also read it once on mount and on every durationchange
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return undefined;
+    const sync = () => setDuration(Number.isFinite(video.duration) ? video.duration : 0);
+    video.addEventListener('durationchange', sync);
+    if (video.readyState >= 1) queueMicrotask(sync);
+    return () => video.removeEventListener('durationchange', sync);
+  }, []);
 
   useEffect(() => {
     const onFsChange = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
@@ -309,7 +361,7 @@ export default function CinemaVideoPlayer({
         {/* Video element */}
         <video
           ref={videoRef}
-          src={src}
+          src={sources[qualityIdx].src}
           poster={poster}
           preload="metadata"
           playsInline
@@ -348,7 +400,7 @@ export default function CinemaVideoPlayer({
         {/* YouTube Top Title Bar */}
         <div className={`yt-player-top ${showControls || !isPlaying ? 'visible' : ''}`}>
           <div className="yt-top-title-wrap">
-            <img src="/assets/profile/me.webp" alt="Iker Augusto" className="yt-top-channel-avatar" />
+            <img src={sizedSrc('/assets/profile/me.webp', 640)} alt="Iker Augusto" className="yt-top-channel-avatar" decoding="async" />
             <span className="yt-top-video-title">{currentTitle}</span>
           </div>
           <div className="yt-top-actions">
@@ -467,7 +519,7 @@ export default function CinemaVideoPlayer({
                   value={isMuted ? 0 : volume}
                   onChange={handleVolumeChange}
                   className="yt-volume-slider"
-                  aria-label="Volumen"
+                  aria-label={yt.volume || 'Volume'}
                 />
               </div>
 
@@ -499,13 +551,11 @@ export default function CinemaVideoPlayer({
                   type="button"
                   onClick={() => {
                     setIsSettingsOpen(!isSettingsOpen);
-                    setIsSpeedMenuOpen(false);
+                    setSubmenu(null);
                   }}
                   className={`yt-btn yt-settings-btn ${isSettingsOpen ? 'open' : ''}`}
                   title={yt.settingsTooltip || 'Settings'}
                   aria-label={yt.settingsTooltip || 'Settings'}
-                  title={yt.settingsTooltip || 'Configuración'}
-                  aria-label={yt.settingsTooltip || 'Configuración'}
                 >
                   <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                     <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
@@ -522,7 +572,7 @@ export default function CinemaVideoPlayer({
                       exit={{ opacity: 0, scale: 0.95, y: 8 }}
                       transition={{ duration: 0.15 }}
                     >
-                      {!isSpeedMenuOpen ? (
+                      {!submenu ? (
                         <div className="yt-menu-list">
                           {/* Ambient Mode Toggle Item */}
                           <div
@@ -550,7 +600,7 @@ export default function CinemaVideoPlayer({
                           </div>
 
                           {/* Speed Item */}
-                          <div className="yt-menu-item" onClick={() => setIsSpeedMenuOpen(true)}>
+                          <div className="yt-menu-item" onClick={() => setSubmenu('speed')}>
                             <div className="yt-menu-item-left">
                               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                                 <path d="M10 8v8l6-4-6-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z" />
@@ -564,7 +614,7 @@ export default function CinemaVideoPlayer({
                           </div>
 
                           {/* Quality Item */}
-                          <div className="yt-menu-item">
+                          <div className="yt-menu-item" onClick={() => sources.length > 1 && setSubmenu('quality')}>
                             <div className="yt-menu-item-left">
                               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                                 <path d="M19 4H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 11H9.5v-2h-2v2H6V9h1.5v2.5h2V9H11v6zm7-1c0 .55-.45 1-1 1h-4V9h4c.55 0 1 .45 1 1v4zm-1.5-3.5h-2v3h2v-3z" />
@@ -572,13 +622,37 @@ export default function CinemaVideoPlayer({
                               <span>{yt.quality || 'Calidad'}</span>
                             </div>
                             <div className="yt-menu-item-right">
-                              <span className="yt-menu-value yt-badge-4k">4K 2160p HDR</span>
+                              <span className={`yt-menu-value ${sources[qualityIdx].height >= 2160 ? 'yt-badge-4k' : ''}`}>
+                                {sources[qualityIdx].label}
+                                {sources[qualityIdx].badge ? ` ${sources[qualityIdx].badge}` : ''}
+                              </span>
+                              {sources.length > 1 && <span className="yt-arrow">›</span>}
                             </div>
                           </div>
                         </div>
+                      ) : submenu === 'quality' ? (
+                        <div className="yt-menu-list">
+                          <div className="yt-menu-header" onClick={() => setSubmenu(null)}>
+                            <span className="yt-arrow-back">‹</span>
+                            <span>{yt.quality || 'Calidad'}</span>
+                          </div>
+                          {sources.map((q, i) => (
+                            <div
+                              key={q.src}
+                              className={`yt-menu-item ${qualityIdx === i ? 'selected' : ''}`}
+                              onClick={() => changeQuality(i)}
+                            >
+                              <span className="yt-check">{qualityIdx === i ? '✓' : ''}</span>
+                              <span>
+                                {q.label}
+                                {q.badge && <sup className="yt-quality-sup">{q.badge}</sup>}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
                       ) : (
                         <div className="yt-menu-list">
-                          <div className="yt-menu-header" onClick={() => setIsSpeedMenuOpen(false)}>
+                          <div className="yt-menu-header" onClick={() => setSubmenu(null)}>
                             <span className="yt-arrow-back">‹</span>
                             <span>{yt.speed || 'Velocidad de reproducción'}</span>
                           </div>
@@ -652,7 +726,7 @@ export default function CinemaVideoPlayer({
           {/* Left: Channel profile */}
           <div className="yt-channel-info-left">
             <img
-              src="/assets/profile/me.webp"
+              src={sizedSrc('/assets/profile/me.webp', 640)}
               alt="Iker Augusto"
               className="yt-channel-pfp"
               loading="lazy"
@@ -661,7 +735,7 @@ export default function CinemaVideoPlayer({
             <div className="yt-channel-meta">
               <div className="yt-channel-name-row">
                 <span className="yt-channel-name">Iker Augusto</span>
-                <span className="yt-verified-badge" title="Verificado">
+                <span className="yt-verified-badge" title={yt.verified || 'Verified'}>
                   <svg viewBox="0 0 24 24" width="14" height="14" fill="#aaa">
                     <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zM9.8 17.3l-4.2-4.1 1.4-1.4 2.8 2.7 7.4-7.4 1.4 1.4-8.8 8.8z" />
                   </svg>

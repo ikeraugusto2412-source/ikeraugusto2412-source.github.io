@@ -11,6 +11,7 @@ import { pressable } from '../components/motion/pressable';
 import { useLanguage } from '../context/LanguageContext';
 import { sileo } from 'sileo';
 import { playSound } from '../audio/sound';
+import { responsiveImg } from '../lib/images';
 import './About.css';
 
 /* ─── Shared Animated Divider ─── */
@@ -66,32 +67,18 @@ function FadeIn({ children, delay = 0, className = '' }) {
 /* ─── Tools ─── */
 const TOOLS = ['Canon', 'Premiere Pro', 'Lightroom', 'Photoshop'];
 
-/* ─── Working Archive Slides (On-Field Behind the Scenes) ─── */
-const WORKING_ARCHIVE = [
-  {
-    image: '/assets/profile/working_street.webp',
-    title: 'STREET & CANDID // ON LOCATION',
-    tag: 'SLIDE 01 · 35MM LENS',
-    desc: 'Candid framing and natural light study on European streets.',
-  },
-  {
-    image: '/assets/profile/me.webp',
-    title: 'IKER AUGUSTO // CAMERA RIG',
-    tag: 'SLIDE 02 · PRODUCTION',
-    desc: 'Primary handheld gimbal and microphone rig setup.',
-  },
-  {
-    image: '/assets/profile/working_studio.webp',
-    title: 'DARKROOM // CONTACT SHEETS',
-    tag: 'SLIDE 03 · POST ARCHIVE',
-    desc: 'Negative inspection with optical loupe and analog curation.',
-  },
+/* ─── Working Archive Slides (On-Field Behind the Scenes) — captions live in translations ─── */
+const WORKING_ARCHIVE_IMAGES = [
+  '/assets/profile/working_street.webp',
+  '/assets/profile/me.webp',
+  '/assets/profile/working_studio.webp',
 ];
 
 export default function About() {
   const { dict } = useLanguage();
   const [selectedLightbox, setSelectedLightbox] = useState(null);
   const folderSize = useFolderSize();
+  const archiveSlides = dict.about.archiveSlides.map((slide, i) => ({ ...slide, image: WORKING_ARCHIVE_IMAGES[i] }));
 
   const openLightbox = (src) => {
     setSelectedLightbox(src);
@@ -300,11 +287,11 @@ export default function About() {
               transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
               onClick={() => {
                 openLightbox('/assets/profile/me.webp');
-                sileo.info({ title: 'Iker Augusto · 2024', description: 'Sitges · Haz clic o pulsa ESC para cerrar' });
+                sileo.info({ title: dict.about.portraitToastTitle, description: dict.about.portraitToastDesc });
               }}
               style={{ cursor: 'zoom-in' }}
             >
-              <img src="/assets/profile/me.webp" alt="Iker Augusto" className="about-portrait-img" loading="lazy" decoding="async" />
+              <img {...responsiveImg('/assets/profile/me.webp', '(max-width: 768px) 100vw, 40vw')} alt="Iker Augusto" className="about-portrait-img" loading="lazy" decoding="async" />
               <div className="about-portrait-caption">
                 <span className="about-mono about-muted">Sitges, 2024 · [ EXPAND ↗ ]</span>
               </div>
@@ -333,16 +320,16 @@ export default function About() {
                 </p>
                 <div className="about-dossier-meta-specs">
                   <div className="about-spec-row">
-                    <span className="about-spec-label">[ ARCHIVE FORMAT ]</span>
-                    <span className="about-spec-val">PHOTO &amp; VIDEO · 3 ARCHIVAL SLIDES</span>
+                    <span className="about-spec-label">{dict.about.specFormatLabel}</span>
+                    <span className="about-spec-val">{dict.about.specFormatVal}</span>
                   </div>
                   <div className="about-spec-row">
-                    <span className="about-spec-label">[ LOCATION DOSSIER ]</span>
-                    <span className="about-spec-val">PARIS · SITGES · STUDIO</span>
+                    <span className="about-spec-label">{dict.about.specLocationLabel}</span>
+                    <span className="about-spec-val">{dict.about.specLocationVal}</span>
                   </div>
                   <div className="about-spec-row">
-                    <span className="about-spec-label">[ INTERACTION ]</span>
-                    <span className="about-spec-val">CLICK FOLDER TO UNLOCK · CLICK SLIDE TO EXPAND</span>
+                    <span className="about-spec-label">{dict.about.specInteractionLabel}</span>
+                    <span className="about-spec-val">{dict.about.specInteractionVal}</span>
                   </div>
                 </div>
               </FadeIn>
@@ -353,7 +340,8 @@ export default function About() {
                 <Folder
                   color="black"
                   size={folderSize}
-                  items={WORKING_ARCHIVE}
+                  items={archiveSlides}
+                  toggleLabel={dict.about.folderToggle}
                   openLabel={dict.about.dossierHintOpen}
                   closeLabel={dict.about.dossierHintClose}
                   onSelectCard={(item) => openLightbox(item.image)}
@@ -452,11 +440,11 @@ export default function About() {
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <img src={selectedLightbox} alt="Archival Slide Enlarge" className="about-lightbox-img" />
+                <img src={selectedLightbox} alt={archiveSlides.find((s) => s.image === selectedLightbox)?.title ?? 'Iker Augusto'} className="about-lightbox-img" />
                 <button
                   className="about-lightbox-close"
                   onClick={() => setSelectedLightbox(null)}
-                  aria-label="Close Lightbox"
+                  aria-label={dict.about.lightboxClose}
                 >
                   ✕
                 </button>

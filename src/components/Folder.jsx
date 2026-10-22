@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { responsiveImg } from '../lib/images';
 import './Folder.css';
 
 const themes = {
@@ -63,7 +64,7 @@ const Card = ({ id, theme, item, isOpen }) => {
     return (
       <div className={`rare-folder-photo-card ${isOpen ? 'is-interactive' : ''}`} data-slot="folder-card">
         <div className="rare-folder-photo-frame">
-          <img src={item.image} alt={item.title || 'Slide'} className="rare-folder-photo-img" loading="eager" />
+          <img {...responsiveImg(item.image, '320px')} alt={item.title || ''} className="rare-folder-photo-img" loading="eager" decoding="async" />
           <div className="rare-folder-photo-overlay-glass" />
         </div>
         <div className="rare-folder-photo-info">
@@ -173,6 +174,7 @@ export default function Folder({
   items,
   openLabel,
   closeLabel,
+  toggleLabel = 'Open or close the folder',
   onSelectCard,
   className = '',
   onClick,
@@ -210,7 +212,7 @@ export default function Folder({
         onClick={handleClick}
         role="button"
         tabIndex={0}
-        aria-label="Toggle Folder"
+        aria-label={toggleLabel}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();

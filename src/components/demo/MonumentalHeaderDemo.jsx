@@ -79,7 +79,7 @@ export default function MonumentalHeaderDemo() {
         >
           {/* Looping Ambient Video Background */}
           <video
-            src="/assets/Noruega/Video/Secuencia 01_2.mp4"
+            src="/assets/Noruega/Video/norway-1080p.mp4"
             autoPlay
             loop
             muted

@@ -1,6 +1,8 @@
 import { motion, AnimatePresence, useMotionValue, animate } from 'framer-motion';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { splitLang } from '../lib/i18nPath';
+import useSoundEnabled from '../audio/useSoundEnabled';
 import { useLanguage } from '../context/LanguageContext';
 import AppleSwitch from './AppleSwitch';
 import { sileo } from 'sileo';
@@ -58,7 +60,9 @@ const footerVariants = {
 };
 
 export default function Navbar() {
-  const { language, setLanguage, dict } = useLanguage();
+  const { language, setLanguage, localePath, dict } = useLanguage();
+  const [soundOn, toggleSound] = useSoundEnabled();
+  const soundLabel = soundOn ? dict.nav.soundMute : dict.nav.soundUnmute;
   const [menuOpen, setMenuOpen]     = useState(false);
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const clock    = useLiveClock();
@@ -114,14 +118,14 @@ export default function Navbar() {
     setTimeout(() => {
       if (href.startsWith('/#')) {
         const id = href.slice(2);
-        if (window.location.pathname !== '/') {
-          navigate('/');
+        if (splitLang(window.location.pathname).path !== '/') {
+          navigate(localePath('/'));
           setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 400);
         } else {
           document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
         }
       } else {
-        navigate(href);
+        navigate(localePath(href));
       }
     }, 100);
   };
@@ -158,8 +162,23 @@ export default function Navbar() {
               <DrawLine trigger="hover" duration={320} />
             </motion.button>
 
+            {/* UI sounds on/off (desktop; phones get it in the menu footer) */}
+            <button
+              type="button"
+              className={`nav-sound desktop-only ${soundOn ? 'is-on' : ''}`}
+              data-sound="none"
+              onClick={toggleSound}
+              aria-pressed={soundOn}
+              aria-label={soundLabel}
+              title={soundLabel}
+            >
+              <span className="nav-sound-bars" aria-hidden="true">
+                <span /><span /><span /><span />
+              </span>
+            </button>
+
             {/* Apple iOS Switch (Medium · Apple Green) for Language */}
-            <div className="navbar-apple-switch-wrap" role="group" aria-label="Selector de idioma">
+            <div className="navbar-apple-switch-wrap" role="group" aria-label={dict.nav.langGroup}>
               <button
                 type="button"
                 className={`nav-switch-lang-label ${language === 'es' ? 'is-active' : ''}`}
@@ -186,7 +205,7 @@ export default function Navbar() {
                     description: next === 'en' ? 'Now browsing in English' : 'Navegando en Español',
                   });
                 }}
-                aria-label="Cambiar idioma entre español e inglés"
+                aria-label={dict.nav.langToggle}
               />
               <button
                 type="button"
@@ -247,7 +266,7 @@ export default function Navbar() {
                   exit={{ opacity: 0, x: -30 }}
                   transition={{ duration: 0.3, ease: EASE }}
                   onClick={handleArrowClick}
-                  aria-label="Navegar"
+                  aria-label={dict.nav.arrowLabel}
                 >
                   ▶
                 </motion.button>
@@ -266,7 +285,7 @@ export default function Navbar() {
                   exit={{ opacity: 0, x: 30 }}
                   transition={{ duration: 0.3, ease: EASE }}
                   onClick={handleArrowClick}
-                  aria-label="Navegar"
+                  aria-label={dict.nav.arrowLabel}
                 >
                   ◀
                 </motion.button>
@@ -318,6 +337,16 @@ export default function Navbar() {
             {/* Footer */}
             <motion.div className="bignav-footer" variants={footerVariants}>
               <span>{dict.nav.location}</span>
+              <button
+                type="button"
+                className={`bignav-sound ${soundOn ? 'is-on' : ''}`}
+                data-sound="none"
+                onClick={toggleSound}
+                aria-pressed={soundOn}
+                aria-label={soundLabel}
+              >
+                {dict.nav.soundLabel}: {soundOn ? 'ON' : 'OFF'}
+              </button>
             </motion.div>
           </motion.div>
         )}

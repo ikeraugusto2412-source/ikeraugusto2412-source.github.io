@@ -10,6 +10,8 @@ import { lift, MotionLink } from '../components/motion/pressable';
 import DrawLine from '../components/DrawLine';
 import SplitReveal from '../components/motion/SplitReveal';
 import { sileo } from 'sileo';
+import { responsiveImg } from '../lib/images';
+import Photo from '../components/Photo';
 import './Works.css';
 
 /**
@@ -84,7 +86,7 @@ const rowVariants = {
 };
 
 export default function Works() {
-  const { language } = useLanguage();
+  const { language, dict, localePath } = useLanguage();
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
   const [hoveredProject, setHoveredProject] = useState(null);
 
@@ -122,7 +124,7 @@ export default function Works() {
                     onClick={() => {
                       setViewMode('grid');
                       setHoveredProject(null);
-                      sileo.info({ title: 'Vista en cuadrícula', description: 'Mostrando proyectos en grid editorial' });
+                      sileo.info({ title: dict.works.gridToastTitle, description: dict.works.gridToastDesc });
                     }}
                   >
                     <span className="swagg-type-square" />
@@ -134,7 +136,7 @@ export default function Works() {
                     className={`swagg-type-btn ${viewMode === 'list' ? 'active' : ''}`}
                     onClick={() => {
                       setViewMode('list');
-                      sileo.info({ title: 'Vista en lista', description: 'Mostrando proyectos en modo lista' });
+                      sileo.info({ title: dict.works.listToastTitle, description: dict.works.listToastDesc });
                     }}
                   >
                     <span className="swagg-type-square" />
@@ -187,7 +189,7 @@ export default function Works() {
                         custom={idx}
                       >
                         <Link
-                          to={`/project/${item.id}`}
+                          to={localePath(`/project/${item.id}`)}
                           className="swagg-grid-card"
                           data-cursor-text="VIEW"
                         >
@@ -200,8 +202,10 @@ export default function Works() {
                           </div>
 
                           <div className={`swagg-card-media-wrap span-${cell.span}`}>
-                            <img
+                            <Photo
                               src={item.coverImage}
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                              blur
                               alt={item.title}
                               loading="lazy"
                               decoding="async"
@@ -240,7 +244,7 @@ export default function Works() {
                         >
                           <motion.img
                             key={hoveredProject.id}
-                            src={hoveredProject.coverImage}
+                            {...responsiveImg(hoveredProject.coverImage, '480px')}
                             alt={hoveredProject.title}
                             className="swagg-list-floating-img"
                             initial={{ opacity: 0.7 }}
@@ -264,7 +268,7 @@ export default function Works() {
                       return (
                         <MotionLink
                           key={item.id}
-                          to={`/project/${item.id}`}
+                          to={localePath(`/project/${item.id}`)}
                           className={`swagg-list-row ${isHovered ? 'active-hover' : ''}`}
                           variants={rowVariants}
                           custom={idx}

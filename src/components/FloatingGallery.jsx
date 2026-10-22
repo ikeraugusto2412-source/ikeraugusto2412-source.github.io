@@ -3,6 +3,7 @@ import { useSprings, animated, to, easings } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import { useLanguage } from '../context/LanguageContext';
 import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
+import Photo from './Photo';
 import './FloatingGallery.css';
 
 /*
@@ -229,7 +230,7 @@ export default function FloatingGallery({ images = [], title = 'London', onSelec
               ),
             }}
           >
-            <img src={item.src} alt={`${title} — ${i + 1}`} draggable={false} loading={i < 6 ? 'eager' : 'lazy'} decoding="async" />
+            <Photo src={item.src} sizes="240px" alt={`${title} — ${i + 1}`} draggable={false} loading={i < 6 ? 'eager' : 'lazy'} decoding="async" />
           </animated.div>
         );
       })}

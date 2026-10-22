@@ -1,16 +1,19 @@
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import React, { useEffect, useRef, useState, lazy, Suspense } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
+import { useParams, useSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { projects } from '../data/projects';
 import Footer from '../components/Footer';
 import PageTransition from '../components/PageTransition';
+import ErrorBoundary from '../components/ErrorBoundary';
 import { pageVariants, pageFadeVariants } from '../components/motion/tokens';
 import { Reveal, RevealItem } from '../components/motion/Reveal';
 import { pressable, MotionLink } from '../components/motion/pressable';
 import DrawLine from '../components/DrawLine';
 import useScrollLock from '../hooks/useScrollLock';
 import ProgressiveImage from '../components/ProgressiveImage';
+import LightboxPhoto from '../components/LightboxPhoto';
+import { sizedSrc } from '../lib/images';
 import CinemaVideoPlayer from '../components/CinemaVideoPlayer';
 import GalleryIntroTransition from '../components/GalleryIntroTransition';
 import NotFound from './NotFound';
@@ -36,34 +39,60 @@ const lightboxSlide = {
 };
 
 export default function ProjectDetail() {
-  const { language, dict } = useLanguage();
+  const { language, dict, localePath } = useLanguage();
   const { id } = useParams();
   const project = projects.find(p => p.id === id);
-  const [selectedImage, setSelectedImage] = useState(null);
   const reduceMotion = useReducedMotion();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  /*
+   * The open photo lives in the URL (?foto=12, 1-based), so any photo can be shared as a link.
+   * Opening adds a history entry — the phone's back gesture closes the lightbox instead of
+   * leaving the page — while moving between photos replaces it.
+   */
+  const [searchParams, setSearchParams] = useSearchParams();
+  const galleryImages = project?.gridImages ?? [];
+  const fotoParam = Number(searchParams.get('foto'));
+  const selectedImage =
+    Number.isInteger(fotoParam) && fotoParam >= 1 && fotoParam <= galleryImages.length ? galleryImages[fotoParam - 1] : null;
+  const galleryIndex = Math.max(0, galleryImages.indexOf(selectedImage));
+  const [slideDir, setSlideDir] = useState(0);
+
+  const showImage = (img, { replace }) => {
+    const index = galleryImages.indexOf(img);
+    if (index === -1) return;
+    setSearchParams({ foto: String(index + 1) }, { replace, state: { lightbox: true }, preventScrollReset: true });
+  };
 
   const openLightbox = (img) => {
-    setSelectedImage(img);
+    showImage(img, { replace: false });
     playSound('shutter');
-    sileo.info({ title: 'Pantalla completa', description: 'Pulsa ESC o haz clic para cerrar' });
+    sileo.info({ title: dict.projectDetail.fullscreenToastTitle, description: dict.projectDetail.fullscreenToastDesc });
+  };
+
+  const closeLightbox = () => {
+    if (!selectedImage) return;
+    // Opened from this page: step back. Opened from a shared link: just drop the parameter.
+    if (location.state?.lightbox) navigate(-1);
+    else setSearchParams({}, { replace: true, preventScrollReset: true });
   };
 
   // Lightbox navigation across the project's photos (buttons, arrow keys, swipe)
-  const galleryImages = project?.gridImages ?? [];
-  const galleryIndex = Math.max(0, galleryImages.indexOf(selectedImage));
-  const [slideDir, setSlideDir] = useState(0);
-  const lightboxDragged = useRef(false);
   const stepLightbox = (dir) => {
-    if (galleryImages.length < 2) return;
+    if (galleryImages.length < 2 || !selectedImage) return;
     setSlideDir(dir);
-    setSelectedImage(neighbourImage(galleryImages, selectedImage, dir));
+    showImage(neighbourImage(galleryImages, selectedImage, dir), { replace: true });
     playSound('click');
   };
 
   const handleShareProject = () => {
-    navigator.clipboard?.writeText(window.location.href).then(() => {
-      sileo.success({ title: 'Enlace copiado', description: 'Compártelo donde quieras 📷' });
-    });
+    Promise.resolve(navigator.clipboard?.writeText(window.location.href))
+      .then(() => {
+        if (!navigator.clipboard) throw new Error('no clipboard');
+        sileo.success({ title: dict.projectDetail.linkCopiedTitle, description: dict.projectDetail.linkCopiedDesc });
+      })
+      .catch(() => sileo.error({ title: dict.projectDetail.linkCopyFailed, description: window.location.href }));
   };
 
   useEffect(() => {
@@ -73,19 +102,16 @@ export default function ProjectDetail() {
   useScrollLock(Boolean(selectedImage));
 
   useEffect(() => {
-    // Allow ESC key to close the lightbox
+    if (!selectedImage) return undefined;
+    // ESC closes the lightbox, ← → move between photos
     const handleKey = (e) => {
-      if (e.key === 'Escape') setSelectedImage(null);
+      if (e.key === 'Escape') closeLightbox();
       const dir = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
-      const images = project?.gridImages ?? [];
-      if (selectedImage && dir && images.length > 1) {
-        setSlideDir(dir);
-        setSelectedImage(neighbourImage(images, selectedImage, dir));
-      }
+      if (dir) stepLightbox(dir);
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [selectedImage, project]);
+  });
 
   if (!project) return <NotFound message={dict.projectDetail.notFound} />;
 
@@ -103,11 +129,11 @@ export default function ProjectDetail() {
           key={project.id}
           brand="IK®"
           title={project.title.toUpperCase()}
-          subtitle={`${project.gridImages ? project.gridImages.length : '30'} ${dict.projectDetail?.photographs || 'PHOTOGRAPHS'} · ARCHIVAL SERIES`}
+          subtitle={`${project.gridImages ? project.gridImages.length : '30'} ${dict.projectDetail.photographs} · ${dict.projectDetail.archivalSeries}`}
           previewImages={
             project.gridImages && project.gridImages.length > 0
-              ? project.gridImages.slice(0, 8)
-              : [project.coverImage]
+              ? project.gridImages.slice(0, 8).map((src) => sizedSrc(src, 640))
+              : [sizedSrc(project.coverImage, 640)]
           }
         />
       {/* Top Hero: Video Player for Norway, 3D Spiral Helix on New York, or Monumental Static Cover Hero on London/Salomon/Tour */}
@@ -116,11 +142,13 @@ export default function ProjectDetail() {
           <div className="project-detail-video-wrap container">
             <CinemaVideoPlayer
               src={project.videoUrl}
-              poster={project.coverImage}
+              sources={project.videoSources}
+              poster={sizedSrc(project.coverImage, window.innerWidth * (window.devicePixelRatio || 1))}
             />
           </div>
         </div>
       ) : project.id === 'huck-knife-pro' && project.gridImages && project.gridImages.length > 0 ? (
+        <ErrorBoundary inline>
         <Suspense fallback={<div className="project-3d-placeholder" />}>
           <SalomonGalleryOrbital
             images={project.gridImages}
@@ -128,7 +156,9 @@ export default function ProjectDetail() {
             isReady={true}
           />
         </Suspense>
+        </ErrorBoundary>
       ) : project.id === 'new-york' && project.gridImages && project.gridImages.length > 0 ? (
+        <ErrorBoundary inline>
         <Suspense fallback={<div className="project-3d-placeholder" />}>
           <SpiralGallery
             images={project.gridImages}
@@ -137,7 +167,9 @@ export default function ProjectDetail() {
             isReady={true}
           />
         </Suspense>
+        </ErrorBoundary>
       ) : project.id === 'london' && project.gridImages && project.gridImages.length > 0 ? (
+        <ErrorBoundary inline>
         <Suspense fallback={<div className="project-3d-placeholder" />}>
           <FloatingGallery
             images={project.gridImages}
@@ -146,6 +178,7 @@ export default function ProjectDetail() {
             isReady={true}
           />
         </Suspense>
+        </ErrorBoundary>
       ) : (
         <div className="project-cover-hero">
           {/* Monumental Static Header */}
@@ -170,6 +203,7 @@ export default function ProjectDetail() {
               src={project.coverImage}
               alt={project.title}
               className="project-cover-img"
+              priority
               style={{ objectPosition: project.coverPosition || 'center' }}
             />
             {/* Clean Gradient Vignette so the photo is seen clearly */}
@@ -239,8 +273,9 @@ export default function ProjectDetail() {
               <div key={img} className="gallery-item-wrapper" style={{ order: i * 2 }}>
                 <ProgressiveImage
                   src={img}
-                  alt={`${project.title} - photo ${i * 2 + 1}`}
+                  alt={`${project.title} — ${dict.projectDetail.photo} ${i * 2 + 1}`}
                   className="gallery-item"
+                  sizes="(max-width: 640px) 100vw, 50vw"
                   onClick={() => openLightbox(img)}
                 />
               </div>
@@ -251,8 +286,9 @@ export default function ProjectDetail() {
               <div key={img} className="gallery-item-wrapper" style={{ order: i * 2 + 1 }}>
                 <ProgressiveImage
                   src={img}
-                  alt={`${project.title} - photo ${i * 2 + 2}`}
+                  alt={`${project.title} — ${dict.projectDetail.photo} ${i * 2 + 2}`}
                   className="gallery-item"
+                  sizes="(max-width: 640px) 100vw, 50vw"
                   onClick={() => openLightbox(img)}
                 />
               </div>
@@ -267,9 +303,11 @@ export default function ProjectDetail() {
               {project.instagramPosts.map((postUrl, idx) => {
                 const embedUrl = postUrl.split('?')[0].replace(/\/$/, '') + '/embed';
                 return (
-                  <iframe 
+                  <iframe
                     key={idx}
                     src={embedUrl}
+                    title={`${dict.projectDetail.relatedIg} ${idx + 1}`}
+                    loading="lazy"
                     width="340" 
                     height="480" 
                     frameBorder="0" 
@@ -284,7 +322,7 @@ export default function ProjectDetail() {
         )}
 
         <div className="project-navigation">
-          <MotionLink to="/" className="back-link has-draw-line" {...pressable}>
+          <MotionLink to={localePath('/')} className="back-link has-draw-line" {...pressable}>
             {dict.projectDetail.backToPortfolio}
             <DrawLine trigger="hover" duration={350} strokeWidth={2} />
           </MotionLink>
@@ -312,38 +350,18 @@ export default function ProjectDetail() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelectedImage(null)}
+            onClick={closeLightbox}
           >
-            {/* Swipe ← → to change photo, swipe ↓ to close; a tap (no drag) closes as before */}
+            {/* Swipe ← → to change photo, swipe ↓ or tap to close, pinch / double-tap to zoom */}
             <AnimatePresence initial={false} custom={slideDir} mode="popLayout">
-              <motion.img
+              <LightboxPhoto
                 key={selectedImage}
                 src={selectedImage}
                 alt={`${project.title} — ${galleryIndex + 1} / ${galleryImages.length}`}
-                className="lightbox-image"
-                custom={slideDir}
+                dir={slideDir}
                 variants={lightboxSlide}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                drag
-                dragDirectionLock
-                dragSnapToOrigin
-                dragElastic={0.45}
-                onDragStart={() => { lightboxDragged.current = true; }}
-                onDragEnd={(e, info) => {
-                  const { offset, velocity } = info;
-                  if (Math.abs(offset.x) > 70 || Math.abs(velocity.x) > 500) stepLightbox(offset.x < 0 ? 1 : -1);
-                  else if (offset.y > 110 || velocity.y > 600) setSelectedImage(null);
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (lightboxDragged.current) {
-                    lightboxDragged.current = false;
-                    return;
-                  }
-                  setSelectedImage(null);
-                }}
+                onStep={stepLightbox}
+                onClose={closeLightbox}
               />
             </AnimatePresence>
             {galleryImages.length > 1 && (
@@ -369,7 +387,7 @@ export default function ProjectDetail() {
                 </span>
               </>
             )}
-            <button className="lightbox-close" onClick={() => setSelectedImage(null)}>
+            <button className="lightbox-close" onClick={(e) => { e.stopPropagation(); closeLightbox(); }}>
               {dict.projectDetail.close}
             </button>
           </motion.div>

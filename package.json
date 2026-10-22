@@ -9,6 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "optimize": "node scripts/optimize-images.cjs",
+    "images": "node scripts/build-images.mjs",
+    "check:assets": "node scripts/check-assets.mjs",
     "check:responsive": "node scripts/check-responsive.mjs",
     "check:responsive:prod": "node scripts/check-responsive.mjs --prod"
   },
@@ -24,7 +26,8 @@
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.14.0",
     "sileo": "^0.1.5",
-    "three": "^0.186.0"
+    "three": "^0.186.0",
+    "thumbhash": "^0.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

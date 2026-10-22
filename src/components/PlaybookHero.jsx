@@ -6,6 +6,7 @@ import useIntroReady from '../lib/introGate';
 import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
 import { EASE, DUR, RISE } from './motion/tokens';
 import SplitReveal from './motion/SplitReveal';
+import Photo from './Photo';
 import './PlaybookHero.css';
 
 /*
@@ -131,7 +132,7 @@ const GALLERIES = [
 ];
 
 export default function PlaybookHero() {
-  const { dict } = useLanguage();
+  const { dict, localePath } = useLanguage();
   const containerRef = useRef(null);
   const trackRef = useRef(null);
   const cardRefs = useRef([]);
@@ -330,7 +331,7 @@ export default function PlaybookHero() {
 
   const handleCardClick = (item) => {
     if (hasMoved.current) return;
-    if (item.link) navigate(item.link);
+    if (item.link) navigate(localePath(item.link));
   };
 
   return (
@@ -381,11 +382,13 @@ export default function PlaybookHero() {
                 >
                   {/* Image */}
                   <div className="card-image-wrap">
-                    <img
+                    <Photo
                       src={item.image}
+                      sizes={`${item.width}px`}
                       alt={item.title}
                       draggable="false"
                       loading={idx < 8 ? 'eager' : 'lazy'}
+                      decoding="async"
                     />
                   </div>
 

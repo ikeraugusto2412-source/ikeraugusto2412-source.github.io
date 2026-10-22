@@ -255,7 +255,9 @@ async function runJob({ m, orient, w, h, lang, route }) {
   let checks = null;
   let error = null;
   try {
-    await page.goto(BASE + route, { waitUntil: 'load', timeout: 45000 });
+    // The language lives in the URL: Spanish pages are under /es
+    const localized = lang === 'es' ? (route === '/' ? '/es' : `/es${route}`) : route;
+    await page.goto(BASE + localized, { waitUntil: 'load', timeout: 45000 });
     // project pages open with a ~3 s intro overlay
     await page
       .waitForFunction(() => !document.querySelector('.gallery-intro-overlay'), null, { timeout: 7000 })

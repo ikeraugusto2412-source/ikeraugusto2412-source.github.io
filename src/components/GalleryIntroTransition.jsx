@@ -29,7 +29,8 @@ const CyclingCard = memo(function CyclingCard({ previewImages = [] }) {
     <div className="gallery-intro-card">
       <img
         src={previewImages[index]}
-        alt="Preview"
+        alt=""
+        aria-hidden="true"
         className="gallery-intro-card-img"
       />
       <div className="gallery-intro-card-badge">

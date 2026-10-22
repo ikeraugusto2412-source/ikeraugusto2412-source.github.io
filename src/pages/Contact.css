@@ -627,3 +627,9 @@
     padding: 1.75rem 1.25rem;
   }
 }
+
+/* While the message is being sent */
+.form-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}

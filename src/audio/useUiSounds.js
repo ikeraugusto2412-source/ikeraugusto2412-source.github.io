@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { prefetchSounds, unlockSounds, playSound } from './sound';
+import { splitLang } from '../lib/i18nPath';
 
 /*
  * Site-wide sound wiring, mounted once in <App>.
@@ -14,7 +15,8 @@ const HOVER_TARGETS = 'a[href], button:not(:disabled), [role="button"], [data-so
 const CLICK_TARGETS = 'a[href], button:not(:disabled), [role="button"], [data-sound]';
 
 export default function useUiSounds() {
-  const { pathname } = useLocation();
+  // Ignore the /es prefix: switching language is not a page change
+  const { path: pathname } = splitLang(useLocation().pathname);
   const firstPath = useRef(true);
 
   useEffect(() => {

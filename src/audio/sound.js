@@ -12,6 +12,35 @@ import { soundMap } from './soundMap';
  * silent — nothing to handle here. Failures are always silent: a broken file is just skipped.
  */
 
+const MUTE_KEY = 'ik-sound';
+const listeners = new Set();
+let muted = (() => {
+  try {
+    return localStorage.getItem(MUTE_KEY) === 'off';
+  } catch {
+    return false;
+  }
+})();
+
+/** Whether the visitor switched UI sounds off (remembered across visits). */
+export const isMuted = () => muted;
+
+export function setMuted(next) {
+  muted = Boolean(next);
+  try {
+    localStorage.setItem(MUTE_KEY, muted ? 'off' : 'on');
+  } catch {
+    /* storage blocked: the choice lasts until the tab closes */
+  }
+  listeners.forEach((fn) => fn());
+}
+
+/** For useSyncExternalStore: notify React components when the setting changes. */
+export function subscribeMuted(fn) {
+  listeners.add(fn);
+  return () => listeners.delete(fn);
+}
+
 const howls = {};
 const broken = new Set();
 let mod = null; // the howler module once fetched
@@ -58,6 +87,7 @@ export function unlockSounds() {
 }
 
 export function playSound(name) {
+  if (muted) return;
   const howl = howls[name];
   const cfg = soundMap[name];
   if (!howl || !cfg || broken.has(name) || howl.state() !== 'loaded') return;
