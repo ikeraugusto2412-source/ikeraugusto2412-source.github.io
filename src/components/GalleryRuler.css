@@ -1,0 +1,124 @@
+/* ── Gallery ruler: pinned scrubber for a project's photos ───────────────── */
+.gallery-ruler {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--safe-bottom) + 1.25rem);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: min(560px, calc(100vw - var(--gutter-left) - var(--gutter-right)));
+  padding: 0.55rem 0.9rem 0.55rem 1rem;
+  background: rgba(14, 14, 14, 0.78);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  transform: translate(-50%, 16px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.35s ease,
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-ruler.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+.gallery-ruler-count {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
+  font-variant-numeric: tabular-nums;
+}
+
+.gallery-ruler-count strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.gallery-ruler-sep {
+  margin: 0 0.3em;
+}
+
+.gallery-ruler-track {
+  position: relative;
+  flex: 1 1 auto;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.gallery-ruler-tick {
+  width: 1px;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.22);
+  transition:
+    background 0.2s ease,
+    height 0.2s ease;
+}
+
+.gallery-ruler-tick.is-major {
+  height: 12px;
+}
+
+.gallery-ruler-tick.is-past {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* The needle: a thin red line with a generous invisible grab area */
+.gallery-ruler-needle {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 18px;
+  height: calc(100% + 8px);
+  margin-left: -8px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: grab;
+  touch-action: none;
+}
+
+.gallery-ruler-needle::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: #ff4d3d;
+  box-shadow: 0 0 10px rgba(255, 77, 61, 0.55);
+}
+
+.gallery-ruler-needle:focus-visible {
+  outline-offset: 0;
+}
+
+@media (pointer: coarse) {
+  .gallery-ruler-track {
+    height: 40px;
+  }
+  .gallery-ruler-needle {
+    width: 44px;
+    margin-left: -21px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-ruler {
+    transition: opacity 0.2s ease;
+    transform: translate(-50%, 0);
+  }
+}

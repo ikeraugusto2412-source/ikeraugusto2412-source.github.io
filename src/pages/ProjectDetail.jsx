@@ -1,5 +1,5 @@
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import React, { useEffect, useState, lazy, Suspense } from 'react';
+import React, { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useParams, useSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { projects } from '../data/projects';
@@ -13,6 +13,7 @@ import DrawLine from '../components/DrawLine';
 import useScrollLock from '../hooks/useScrollLock';
 import ProgressiveImage from '../components/ProgressiveImage';
 import LightboxPhoto from '../components/LightboxPhoto';
+import GalleryRuler from '../components/GalleryRuler';
 import { sizedSrc } from '../lib/images';
 import CinemaVideoPlayer from '../components/CinemaVideoPlayer';
 import GalleryIntroTransition from '../components/GalleryIntroTransition';
@@ -43,6 +44,7 @@ export default function ProjectDetail() {
   const { id } = useParams();
   const project = projects.find(p => p.id === id);
   const reduceMotion = useReducedMotion();
+  const galleryRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -267,10 +269,10 @@ export default function ProjectDetail() {
         )}
 
         {/* Static Two-Column Gallery Layout: zero jumping, zero re-balancing, zero duplicates */}
-        <div className="project-gallery-columns">
+        <div className="project-gallery-columns" ref={galleryRef}>
           <div className="gallery-col">
             {project.gridImages && project.gridImages.filter((_, idx) => idx % 2 === 0).map((img, i) => (
-              <div key={img} className="gallery-item-wrapper" style={{ order: i * 2 }}>
+              <div key={img} className="gallery-item-wrapper" style={{ order: i * 2 }} data-photo={i * 2}>
                 <ProgressiveImage
                   src={img}
                   alt={`${project.title} — ${dict.projectDetail.photo} ${i * 2 + 1}`}
@@ -283,7 +285,7 @@ export default function ProjectDetail() {
           </div>
           <div className="gallery-col">
             {project.gridImages && project.gridImages.filter((_, idx) => idx % 2 === 1).map((img, i) => (
-              <div key={img} className="gallery-item-wrapper" style={{ order: i * 2 + 1 }}>
+              <div key={img} className="gallery-item-wrapper" style={{ order: i * 2 + 1 }} data-photo={i * 2 + 1}>
                 <ProgressiveImage
                   src={img}
                   alt={`${project.title} — ${dict.projectDetail.photo} ${i * 2 + 2}`}
@@ -393,6 +395,10 @@ export default function ProjectDetail() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {galleryImages.length > 1 && (
+        <GalleryRuler count={galleryImages.length} galleryRef={galleryRef} hidden={Boolean(selectedImage)} />
+      )}
       </div>
     </motion.div>
   );

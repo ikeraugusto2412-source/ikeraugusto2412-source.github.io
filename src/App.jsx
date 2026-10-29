@@ -80,9 +80,18 @@ function App() {
     const onScrollLock = (e) => (e.detail.locked ? lenis.stop() : lenis.start());
     window.addEventListener('scrolllockchange', onScrollLock);
 
+    // Components ask for a scroll (e.g. the gallery ruler jumping to a photo) through an event,
+    // so it goes through Lenis instead of fighting it. detail: { target, offset, immediate }
+    const onScrollRequest = (e) => {
+      const { target, offset = 0, immediate = false } = e.detail ?? {};
+      if (target != null) lenis.scrollTo(target, { offset, immediate, duration: 0.9 });
+    };
+    window.addEventListener('scrollrequest', onScrollRequest);
+
     return () => {
       document.removeEventListener('click', handleAnchorClick);
       window.removeEventListener('scrolllockchange', onScrollLock);
+      window.removeEventListener('scrollrequest', onScrollRequest);
       cancelAnimationFrame(rafId);
       lenis.destroy();
       lenisRef.current = null;

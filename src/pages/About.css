@@ -6,7 +6,7 @@
 .about-page {
   background: var(--bg-color);
   color: var(--text-color);
-  overflow-x: clip; /* not hidden: that would stop the lens section from sticking */
+  overflow-x: clip;
 }
 
 /* ─── Shared utilities ─── */
