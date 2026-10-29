@@ -693,3 +693,48 @@
     height: var(--tap);
   }
 }
+
+/* ── Phones (portrait and landscape): aligned list instead of centred pairs ──
+   Centring each [num]+label pair made the numbers zig-zag with the word widths.
+   Here numbers sit in one fixed column and every label starts on the same line,
+   aligned with the logo's gutter. */
+@media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
+  .bignav-inner {
+    justify-content: flex-start;
+    padding: 0 max(1.5rem, var(--safe-right)) 0 max(1.5rem, var(--safe-left));
+  }
+
+  .bignav-link {
+    justify-content: flex-start;
+    gap: 0.9rem;
+  }
+
+  .bignav-num {
+    width: 2.4rem;
+    text-align: left;
+  }
+
+  .bignav-footer {
+    padding-left: max(1.5rem, var(--safe-left));
+    padding-right: max(1.5rem, var(--safe-right));
+  }
+}
+
+/* Sized so the longest label ("TRABAJOS", "CONTACTO") fits next to the number column */
+@media (max-width: 768px) {
+  .bignav-label {
+    font-size: clamp(2.4rem, 14.5vw, 5.5rem);
+  }
+}
+
+/* Landscape phones: keep the list between the top bar and the footer */
+@media (orientation: landscape) and (max-height: 500px) {
+  .bignav-inner {
+    padding-top: calc(var(--safe-top) + 4.25rem);
+    padding-bottom: 0.5rem;
+  }
+  .bignav-label {
+    font-size: 13svh;
+    font-size: min(10vw, 13svh);
+  }
+}
