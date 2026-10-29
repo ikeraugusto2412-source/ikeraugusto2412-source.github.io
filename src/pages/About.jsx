@@ -12,6 +12,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { sileo } from 'sileo';
 import { playSound } from '../audio/sound';
 import { responsiveImg } from '../lib/images';
+import ExplodedLens from '../components/ExplodedLens';
 import './About.css';
 
 /* ─── Shared Animated Divider ─── */
@@ -416,6 +417,9 @@ export default function About() {
             </div>
           </div>
         </section>
+
+        {/* ════════ ANATOMY OF A LENS (scroll-driven) ════════ */}
+        <ExplodedLens />
 
         <Line />
 

@@ -1,0 +1,229 @@
+/* ── Anatomy of a lens (About) ───────────────────────────────────────────────
+   Tall section: the stage sticks to the screen while the scroll drives the animation. */
+.exploded-lens {
+  position: relative;
+  height: 320vh;
+  height: 320svh;
+}
+
+.exploded-lens.is-static {
+  height: auto;
+}
+
+.exploded-lens-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(var(--safe-top) + 6.5rem);
+  padding-bottom: calc(var(--safe-bottom) + 3.5rem);
+  overflow: hidden;
+}
+
+.exploded-lens.is-static .exploded-lens-stage {
+  position: relative;
+  height: auto;
+  padding: 6rem 0;
+}
+
+.exploded-lens-copy {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+/* The drawing takes the space left under the title */
+.exploded-lens-art {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.exploded-lens.is-static .exploded-lens-copy {
+  margin-bottom: 2rem;
+}
+
+.exploded-lens-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.exploded-lens-title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.exploded-lens-svg {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow: visible;
+}
+
+.lens-fill {
+  opacity: 0;
+}
+.exploded-lens.is-static .lens-fill {
+  opacity: 1;
+}
+
+.lens-rig {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.lens-axis {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+  stroke-dasharray: 6 10;
+  fill: none;
+}
+
+.lens-stroke {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.72);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.lens-fill {
+  fill: rgba(255, 255, 255, 0.025);
+}
+
+/* The barrel hides the optical group while the lens is assembled */
+.lens-opaque {
+  fill: var(--bg-color, #050505);
+}
+
+.lens-rib {
+  stroke: rgba(255, 255, 255, 0.32);
+  stroke-width: 1;
+}
+
+.lens-glass {
+  fill: rgba(150, 190, 255, 0.05);
+  stroke: rgba(190, 215, 255, 0.85);
+}
+
+.lens-reflection {
+  stroke: rgba(255, 255, 255, 0.45);
+  stroke-width: 2;
+}
+
+.lens-accent {
+  stroke: #c8955a;
+  stroke-width: 2.4;
+}
+
+.lens-scale-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  fill: rgba(255, 255, 255, 0.55);
+}
+
+.lens-leader {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.lens-label {
+  font-family: var(--font-mono);
+  font-size: 19px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: rgba(255, 255, 255, 0.78);
+  opacity: 0;
+}
+
+.exploded-lens.is-static .lens-label {
+  opacity: 1;
+}
+
+.exploded-lens-hint {
+  position: absolute;
+  bottom: calc(var(--safe-bottom) + 2rem);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.exploded-lens.is-static .exploded-lens-hint {
+  display: none;
+}
+
+/* Optical group starts hidden inside the barrel (the timeline reveals it) */
+[data-part='group'] {
+  opacity: 0;
+}
+.exploded-lens.is-static [data-part='group'] {
+  opacity: 1;
+}
+
+/* Portrait phones: standing lens, labels left and right */
+@media (max-width: 768px) {
+  .exploded-lens {
+    height: 280vh;
+    height: 280svh;
+  }
+  .exploded-lens-stage {
+    padding-top: calc(var(--safe-top) + 5.25rem);
+    padding-bottom: calc(var(--safe-bottom) + 2.75rem);
+  }
+  .exploded-lens-title {
+    font-size: 1.9rem;
+  }
+  .exploded-lens .about-tag {
+    margin-bottom: 0.75rem;
+  }
+  .lens-scale-num {
+    display: none;
+  }
+}
+
+.exploded-lens.is-vertical .lens-label {
+  font-size: 42px;
+}
+
+.exploded-lens.is-vertical .lens-stroke,
+.exploded-lens.is-vertical .lens-leader {
+  stroke-width: 1.2;
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  /* Short screens: title in a narrow column on the left, the drawing beside it */
+  .exploded-lens-stage {
+    flex-direction: row;
+    align-items: center;
+    padding-top: calc(var(--safe-top) + 3.5rem);
+    padding-bottom: 1rem;
+  }
+  .exploded-lens-copy {
+    width: 26%;
+    padding-right: 0;
+  }
+  .exploded-lens-title {
+    font-size: 1.4rem;
+  }
+  .exploded-lens-art {
+    height: 100%;
+  }
+}
