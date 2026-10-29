@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Avatar } from '@bible-strong/avatar-react';
 import '@bible-strong/avatar-react/styles.css';
 import contactBlobDefinition from '../data/contact-blob.avatar.json';
@@ -100,6 +101,44 @@ export default function ContactSphereCompanion({
 
   useEffect(() => () => clearTimeout(quoteTimer.current), []);
 
+  /*
+   * Phones/tablets stack the sphere above the form, so while filling in the fields it is off
+   * screen. Then a mini sphere + bubble docks at the top right and keeps reacting.
+   */
+  const [sphereOffscreen, setSphereOffscreen] = useState(false);
+  const [narrow, setNarrow] = useState(false);
+  const dockRef = useRef(null);
+  useEffect(() => {
+    const el = sphereRef.current;
+    if (!el) return undefined;
+    const io = new IntersectionObserver(([entry]) => setSphereOffscreen(!entry.isIntersecting));
+    io.observe(el);
+    const mq = window.matchMedia('(max-width: 1024px)');
+    const onMq = () => setNarrow(mq.matches);
+    onMq();
+    mq.addEventListener('change', onMq);
+    return () => {
+      io.disconnect();
+      mq.removeEventListener('change', onMq);
+    };
+  }, []);
+  const docked = narrow && sphereOffscreen && focusedField !== null && !submitted;
+
+  // With the on-screen keyboard open, keep the dock at the top of what is actually visible
+  useEffect(() => {
+    const vv = window.visualViewport;
+    const dock = dockRef.current;
+    if (!docked || !vv || !dock) return undefined;
+    const place = () => dock.style.setProperty('--vv-top', `${vv.offsetTop}px`);
+    place();
+    vv.addEventListener('resize', place);
+    vv.addEventListener('scroll', place);
+    return () => {
+      vv.removeEventListener('resize', place);
+      vv.removeEventListener('scroll', place);
+    };
+  }, [docked]);
+
   // 1. Reacción al teclear (micro rebote y suave tick)
   useEffect(() => {
     const sphere = sphereRef.current;
@@ -167,6 +206,7 @@ export default function ContactSphereCompanion({
   const bubbleText = customQuote ?? reaction.text;
 
   return (
+    <>
     <div className="contact-sphere-widget">
       {/* Burbuja de pensamiento / reacción en tiempo real */}
       <div className="contact-sphere-bubble">
@@ -208,5 +248,26 @@ export default function ContactSphereCompanion({
         </div>
       </div>
     </div>
+
+    {/* Mini companion docked at the top while the big sphere is scrolled away (phones/tablets) */}
+    {createPortal(
+      <div ref={dockRef} className={`contact-sphere-dock ${docked ? 'is-docked' : ''}`} aria-hidden="true">
+        <div className="contact-sphere-dock-bubble">{bubbleText}</div>
+        <div className="contact-sphere-dock-ball">
+          {docked && (
+            <Avatar
+              definition={contactBlobDefinition}
+              animation={animation || undefined}
+              expression={expression || undefined}
+              defaultAnimation="idle"
+              size={56}
+              ariaLabel=""
+            />
+          )}
+        </div>
+      </div>,
+      document.body,
+    )}
+    </>
   );
 }
