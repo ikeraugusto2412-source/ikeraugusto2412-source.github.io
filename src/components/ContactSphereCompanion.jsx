@@ -111,7 +111,10 @@ export default function ContactSphereCompanion({
   useEffect(() => {
     const el = sphereRef.current;
     if (!el) return undefined;
-    const io = new IntersectionObserver(([entry]) => setSphereOffscreen(!entry.isIntersecting));
+    // "Off screen" = less than half of it visible (a sliver at the top, or hidden by the keyboard)
+    const io = new IntersectionObserver(([entry]) => setSphereOffscreen(entry.intersectionRatio < 0.5), {
+      threshold: [0, 0.25, 0.5, 0.75, 1],
+    });
     io.observe(el);
     const mq = window.matchMedia('(max-width: 1024px)');
     const onMq = () => setNarrow(mq.matches);
