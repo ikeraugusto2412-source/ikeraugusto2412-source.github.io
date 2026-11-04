@@ -258,58 +258,9 @@
   margin-bottom: 2rem;
 }
 
-.project-book-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  min-height: var(--tap);
-  padding: 0 1.1rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text-color);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background-color 0.3s var(--ease-state), border-color 0.3s var(--ease-state);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .project-book-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.32);
-  }
-}
-
-/* Small open-book glyph: two pages meeting at the spine */
-.project-book-icon {
-  position: relative;
-  width: 16px;
-  height: 11px;
-}
-
-.project-book-icon::before,
-.project-book-icon::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  width: 7px;
-  height: 11px;
-  border: 1.5px solid currentColor;
-}
-
-.project-book-icon::before {
-  left: 0;
-  border-radius: 2px 0 0 2px;
-  transform: skewY(8deg);
-}
-
-.project-book-icon::after {
-  right: 0;
-  border-radius: 0 2px 2px 0;
-  transform: skewY(-8deg);
+.project-book-row--end {
+  justify-content: center;
+  margin: -4vw 0 6vw;
 }
 
 .project-gallery-columns {

@@ -1,0 +1,140 @@
+/* ── Photobook teaser: a small book that invites you to open the gallery as one ── */
+.book-teaser {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.9rem 1.4rem 0.9rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-color);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.3s var(--ease-state), border-color 0.3s var(--ease-state);
+}
+
+.book-teaser-book {
+  position: relative;
+  flex: 0 0 auto;
+  width: 64px;
+  height: 86px;
+  perspective: 500px;
+  transform-style: preserve-3d;
+}
+
+/* First page, seen when the cover opens */
+.book-teaser-page {
+  position: absolute;
+  inset: 0;
+  border-radius: 0 3px 3px 0;
+  background: #f3efe6;
+  box-shadow: 2px 0 0 #d9d2c3, 3px 0 0 #f3efe6, 4px 0 0 #d9d2c3;
+  overflow: hidden;
+}
+
+.book-teaser-page img {
+  position: absolute;
+  inset: 14% 12%;
+  width: 76%;
+  height: 72%;
+  object-fit: contain;
+}
+
+.book-teaser-cover {
+  position: absolute;
+  inset: 0;
+  border-radius: 0 3px 3px 0;
+  overflow: hidden;
+  background: #141414;
+  transform-origin: left center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  transition: transform 0.6s var(--ease-out);
+}
+
+.book-teaser-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.book-teaser-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.1) 6%, transparent 14%),
+    linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.7));
+}
+
+.book-teaser-cover-title {
+  position: absolute;
+  left: 14%;
+  right: 8%;
+  bottom: 8%;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.56rem;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.book-teaser-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.book-teaser-text strong {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.book-teaser-text small {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.book-teaser-arrow {
+  margin-left: 0.5rem;
+  font-size: 1.1rem;
+  transition: transform 0.4s var(--ease-out);
+}
+
+/* Peeks open once when it scrolls into view */
+.book-teaser.is-peek .book-teaser-cover {
+  animation: book-teaser-peek 1.4s 0.2s var(--ease-state) both;
+}
+
+@keyframes book-teaser-peek {
+  0%, 100% { transform: rotateY(0); }
+  45% { transform: rotateY(-55deg); }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .book-teaser:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  .book-teaser:hover .book-teaser-cover {
+    animation: none;
+    transform: rotateY(-62deg);
+  }
+
+  .book-teaser:hover .book-teaser-arrow {
+    transform: translateX(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-teaser.is-peek .book-teaser-cover {
+    animation: none;
+  }
+}

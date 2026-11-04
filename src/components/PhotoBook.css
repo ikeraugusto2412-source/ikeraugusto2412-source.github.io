@@ -1,14 +1,40 @@
 /* ── Photobook: a project's photos as a book, pages turned by scrolling ───── */
 .photobook {
+  --paper: #f3efe6;
+  --paper-edge: #d9d2c3;
+  --board: #141414;
+  /* Faint paper grain (SVG noise), multiplied over the paper colour */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   position: fixed;
   inset: 0;
   z-index: 1200;
-  background: radial-gradient(120% 90% at 50% 40%, #1a1a1a 0%, #050505 70%);
+  background: #050505;
+  overflow: hidden;
+}
+
+/* Backdrop in the colours of the open photo */
+.photobook-ambient {
+  position: absolute;
+  inset: -10%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(60px) saturate(1.3) brightness(0.55);
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
+.photobook::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(90% 70% at 50% 45%, transparent 30%, rgba(0, 0, 0, 0.75) 100%);
+  pointer-events: none;
 }
 
 .photobook-scroll {
   position: absolute;
   inset: 0;
+  z-index: 1;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
@@ -27,24 +53,71 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 28px;
-  perspective: 2200px;
+  gap: 22px;
+  perspective: 2400px;
   overflow: hidden;
 }
 
+/* Tap the left / right half of the screen to turn back / forward */
+.photobook-turn {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 2;
+  padding: 0;
+  border: 0;
+  background: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.photobook-turn--prev {
+  left: 0;
+  cursor: w-resize;
+}
+
+.photobook-turn--next {
+  right: 0;
+  cursor: e-resize;
+}
+
+.photobook-turn:focus-visible {
+  outline: none;
+}
+
 .photobook-book {
-  --page-w: min(40vw, 54svh, 560px);
+  --page-w: min(40vw, 56svh, 600px);
   position: relative;
   width: calc(var(--page-w) * 2);
   height: calc(var(--page-w) * 4 / 3);
   transform-style: preserve-3d;
-  filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.55));
+  filter: drop-shadow(0 40px 50px rgba(0, 0, 0, 0.6));
+  pointer-events: none;
 }
 
 @media (max-width: 700px) {
   .photobook-book {
-    --page-w: min(46vw, 54svh);
+    --page-w: min(46vw, 56svh);
   }
+}
+
+/* Page block seen from the edge: thins on the right and grows on the left as you read */
+.photobook-stack {
+  position: absolute;
+  top: 1.2%;
+  bottom: 1.2%;
+  background: repeating-linear-gradient(90deg, var(--paper) 0 1px, var(--paper-edge) 1px 2px);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.15);
+}
+
+.photobook-stack--left {
+  right: 100%;
+  border-radius: 2px 0 0 2px;
+}
+
+.photobook-stack--right {
+  left: 100%;
+  border-radius: 0 2px 2px 0;
 }
 
 .photobook-leaf {
@@ -63,30 +136,87 @@
   overflow: hidden;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  background: #f4f1ea;
-  border-radius: 0 6px 6px 0;
+  background: var(--paper);
+  border-radius: 0 5px 5px 0;
 }
 
 .photobook-back {
   transform: rotateY(180deg);
-  border-radius: 6px 0 0 6px;
+  border-radius: 5px 0 0 5px;
+}
+
+/* Gutter shadow + the shadow that sweeps across a turning page */
+.photobook-face::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.05) 6%, transparent 14%);
+  pointer-events: none;
+}
+
+.photobook-back::before {
+  background: linear-gradient(270deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.05) 6%, transparent 14%);
 }
 
 .photobook-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.5), transparent 40%);
+  z-index: 3;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.55), transparent 55%);
   pointer-events: none;
 }
 
 .photobook-back .photobook-shade {
-  background: linear-gradient(270deg, rgba(0, 0, 0, 0.5), transparent 40%);
+  background: linear-gradient(270deg, rgba(0, 0, 0, 0.55), transparent 55%);
+}
+
+/* ── Paper pages ── */
+.photobook-paper {
+  position: absolute;
+  inset: 0;
+  background-color: var(--paper);
+  background-image: var(--grain);
+  color: #1a1a1a;
+}
+
+.photobook-runhead,
+.photobook-folio {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: clamp(0.4rem, 0.7vw, 0.6rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.photobook-runhead {
+  top: 4.2%;
+  left: 9%;
+  right: 9%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.photobook-back .photobook-runhead {
+  text-align: right;
+}
+
+.photobook-folio {
+  bottom: 4%;
+  right: 9%;
+}
+
+.photobook-folio.is-left {
+  right: auto;
+  left: 9%;
 }
 
 /* Photos are shown whole (no cropping) on the paper */
 .photobook-photo {
   position: absolute;
-  inset: 8%;
+  inset: 10% 9%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,25 +227,35 @@
   max-height: 100%;
   object-fit: contain;
   display: block;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
+/* ── Hard cover ── */
 .photobook-cover {
   position: absolute;
   inset: 0;
-  background: #111;
+  background: var(--board);
 }
 
 .photobook-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.78;
+}
+
+.photobook-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(255, 255, 255, 0.08) 3%, transparent 7%),
+    linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.7));
 }
 
 .photobook-cover-title {
   position: absolute;
-  inset: auto 8% 8% 8%;
+  inset: auto 9% 8% 11%;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -124,40 +264,127 @@
 
 .photobook-cover-title span {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  font-size: clamp(0.5rem, 0.8vw, 0.7rem);
+  letter-spacing: 0.14em;
 }
 
 .photobook-cover-title strong {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 4vw, 3.2rem);
-  line-height: 0.9;
+  font-size: clamp(1.6rem, 4.4vw, 3.6rem);
+  line-height: 0.88;
   text-transform: uppercase;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
 }
 
 .photobook-cover-title em {
   font-family: var(--font-serif);
-  font-size: clamp(0.65rem, 1.2vw, 0.85rem);
-  opacity: 0.8;
+  font-size: clamp(0.65rem, 1.1vw, 0.9rem);
+  opacity: 0.85;
 }
 
-.photobook-end {
+.photobook-cover-mark {
+  position: absolute;
+  top: 6%;
+  right: 8%;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.8rem, 1.4vw, 1.2rem);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.photobook-endpaper {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
+  background-color: #1c1b19;
+  background-image: var(--grain);
+}
+
+.photobook-endpaper span {
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 700;
-  color: #111;
+  font-size: clamp(1.4rem, 3vw, 2.6rem);
+  color: rgba(255, 255, 255, 0.12);
+}
+
+.photobook-backcover {
+  background-color: var(--board);
+}
+
+/* ── Title page & colophon ── */
+.photobook-titlepage,
+.photobook-colophon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 12%;
+}
+
+.photobook-titlepage-kicker,
+.photobook-titlepage-meta,
+.photobook-colophon small {
+  font-family: var(--font-mono);
+  font-size: clamp(0.42rem, 0.75vw, 0.62rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.photobook-titlepage strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4.2vw, 3.4rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.photobook-titlepage em,
+.photobook-colophon em {
+  font-family: var(--font-serif);
+  font-size: clamp(0.7rem, 1.2vw, 1rem);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.photobook-titlepage-meta {
+  margin-top: 18%;
+}
+
+.photobook-colophon {
+  align-items: center;
+  text-align: center;
+}
+
+.photobook-colophon span {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 3vw, 2.4rem);
+}
+
+/* ── Progress + hint ── */
+.photobook-progress {
+  width: min(320px, 60vw);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.photobook-progress span {
+  display: block;
+  height: 100%;
+  background: #fff;
+  transform-origin: left center;
 }
 
 .photobook-hint {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.6);
   text-align: center;
   padding: 0 16px;
 }
@@ -166,11 +393,12 @@
   position: absolute;
   top: calc(var(--safe-top) + 20px);
   right: max(20px, var(--safe-right));
+  z-index: 3;
   min-height: var(--tap);
   padding: 0 18px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(14, 14, 14, 0.7);
+  background: rgba(14, 14, 14, 0.6);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   color: #fff;
@@ -178,10 +406,4 @@
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   cursor: pointer;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .photobook-leaf {
-    transition: none;
-  }
 }

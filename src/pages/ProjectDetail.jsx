@@ -15,6 +15,7 @@ import ProgressiveImage from '../components/ProgressiveImage';
 import LightboxPhoto from '../components/LightboxPhoto';
 import GalleryRuler from '../components/GalleryRuler';
 import PhotoBook from '../components/PhotoBook';
+import PhotoBookTeaser from '../components/PhotoBookTeaser';
 import EditReveal from '../components/EditReveal';
 import { sizedSrc } from '../lib/images';
 import CinemaVideoPlayer from '../components/CinemaVideoPlayer';
@@ -273,10 +274,7 @@ export default function ProjectDetail() {
 
         {galleryImages.length > 3 && (
           <div className="project-book-row">
-            <motion.button type="button" className="project-book-btn" onClick={() => setBookOpen(true)} {...pressable}>
-              <span className="project-book-icon" aria-hidden="true" />
-              {dict.projectDetail.bookOpen}
-            </motion.button>
+            <PhotoBookTeaser project={project} count={galleryImages.length} label={dict.projectDetail.bookOpen} onOpen={() => setBookOpen(true)} />
           </div>
         )}
 
@@ -309,6 +307,12 @@ export default function ProjectDetail() {
             ))}
           </div>
         </div>
+
+        {galleryImages.length > 3 && (
+          <div className="project-book-row project-book-row--end">
+            <PhotoBookTeaser project={project} count={galleryImages.length} label={dict.projectDetail.bookEndCta} onOpen={() => setBookOpen(true)} />
+          </div>
+        )}
 
         <EditReveal pairs={project.editPairs} title={project.title} />
 
