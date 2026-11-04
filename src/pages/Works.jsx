@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useSpring } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { projects } from '../data/projects';
@@ -10,7 +10,7 @@ import { lift, MotionLink } from '../components/motion/pressable';
 import DrawLine from '../components/DrawLine';
 import SplitReveal from '../components/motion/SplitReveal';
 import { sileo } from 'sileo';
-import { responsiveImg } from '../lib/images';
+import { sizedSrc } from '../lib/images';
 import Photo from '../components/Photo';
 import './Works.css';
 
@@ -85,10 +85,95 @@ const rowVariants = {
   }),
 };
 
+/*
+ * List view: one big title per project. The active line lights up and the others fade back;
+ * with a mouse a cover preview follows the pointer, on touch screens the line in the middle
+ * of the screen is the active one.
+ */
+function ProjectList() {
+  const { language, localePath } = useLanguage();
+  const [active, setActive] = useState(0);
+  const [previewOn, setPreviewOn] = useState(false);
+  const listRef = useRef(null);
+  const px = useSpring(0, { stiffness: 320, damping: 32 });
+  const py = useSpring(0, { stiffness: 320, damping: 32 });
+
+  useEffect(() => {
+    if (!window.matchMedia('(hover: none)').matches) return undefined;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setActive(Number(e.target.dataset.row))),
+      { rootMargin: '-45% 0px -45% 0px' },
+    );
+    listRef.current.querySelectorAll('[data-row]').forEach((row) => io.observe(row));
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <motion.div
+      className="works-biglist"
+      variants={viewVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      onPointerMove={(e) => {
+        if (e.pointerType !== 'mouse') return;
+        const r = e.currentTarget.getBoundingClientRect();
+        px.set(e.clientX - r.left);
+        py.set(e.clientY - r.top);
+      }}
+      onPointerLeave={() => setPreviewOn(false)}
+    >
+      <ol ref={listRef} className="works-biglist-rows">
+        {projects.map((item, idx) => {
+          const categoryLabel = typeof item.category === 'object'
+            ? (item.category[language] || item.category.en || '')
+            : item.category;
+          return (
+            <li key={item.id} data-row={idx} className={idx === active ? 'is-active' : ''}>
+              <MotionLink
+                to={localePath(`/project/${item.id}`)}
+                className="works-biglist-row"
+                variants={rowVariants}
+                custom={idx}
+                onPointerEnter={(e) => {
+                  if (e.pointerType !== 'mouse') return;
+                  setActive(idx);
+                  setPreviewOn(true);
+                }}
+                onFocus={() => setActive(idx)}
+                data-cursor-text="VIEW"
+              >
+                <span className="works-biglist-num">({String(idx + 1).padStart(2, '0')})</span>
+                <span className="works-biglist-title">{item.title}</span>
+                <span className="works-biglist-meta">
+                  <span>{categoryLabel}</span>
+                  <span>{item.year}</span>
+                </span>
+              </MotionLink>
+            </li>
+          );
+        })}
+      </ol>
+      <motion.div className={`works-biglist-preview ${previewOn ? 'is-on' : ''}`} style={{ x: px, y: py }} aria-hidden="true">
+        {projects.map((item, idx) => (
+          <img
+            key={item.id}
+            src={sizedSrc(item.coverImage, 480)}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            style={{ objectPosition: item.coverPosition }}
+            className={idx === active ? 'is-active' : ''}
+          />
+        ))}
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function Works() {
   const { language, dict, localePath } = useLanguage();
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
-  const [hoveredProject, setHoveredProject] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -123,7 +208,6 @@ export default function Works() {
                     className={`swagg-type-btn ${viewMode === 'grid' ? 'active' : ''}`}
                     onClick={() => {
                       setViewMode('grid');
-                      setHoveredProject(null);
                       sileo.info({ title: dict.works.gridToastTitle, description: dict.works.gridToastDesc });
                     }}
                   >
@@ -221,78 +305,7 @@ export default function Works() {
                   })}
                 </motion.div>
               ) : (
-                <motion.div
-                  key="list"
-                  className="swagg-works-list-wrapper"
-                  variants={viewVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  onMouseLeave={() => setHoveredProject(null)}
-                >
-                  {/* Floating Center Cover Image that reveals on row hover */}
-                  <div className="swagg-list-floating-overlay">
-                    <AnimatePresence>
-                      {hoveredProject && (
-                        <motion.div
-                          key="floating-center-cover"
-                          className="swagg-list-floating-center"
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                          <motion.img
-                            key={hoveredProject.id}
-                            {...responsiveImg(hoveredProject.coverImage, '480px')}
-                            alt={hoveredProject.title}
-                            className="swagg-list-floating-img"
-                            initial={{ opacity: 0.7 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.15 }}
-                          />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* Editorial List Table */}
-                  <div className="swagg-list-table">
-                    {projects.map((item, idx) => {
-                      const numStr = String(idx + 1).padStart(2, '0');
-                      const categoryLabel = typeof item.category === 'object'
-                        ? (item.category[language] || item.category.en || '')
-                        : item.category;
-                      const isHovered = hoveredProject?.id === item.id;
-
-                      return (
-                        <MotionLink
-                          key={item.id}
-                          to={localePath(`/project/${item.id}`)}
-                          className={`swagg-list-row ${isHovered ? 'active-hover' : ''}`}
-                          variants={rowVariants}
-                          custom={idx}
-                          onMouseEnter={() => setHoveredProject(item)}
-                          onFocus={() => setHoveredProject(item)}
-                          data-cursor-text="VIEW"
-                        >
-                          {/* Fill bar: wipes in from the left; text inverts via blend mode as it passes */}
-                          <motion.span
-                            className="swagg-list-row-fill"
-                            aria-hidden="true"
-                            initial={false}
-                            animate={{ scaleX: isHovered ? 1 : 0 }}
-                            transition={{ duration: 0.3, ease: EASE }}
-                          />
-                          <div className="swagg-list-col-num">{numStr}</div>
-                          <div className="swagg-list-col-title">{item.title}</div>
-                          <div className="swagg-list-col-field">{categoryLabel}</div>
-                          <div className="swagg-list-col-year">{item.year}</div>
-                        </MotionLink>
-                      );
-                    })}
-                  </div>
-                </motion.div>
+                <ProjectList key="list" />
               )}
             </AnimatePresence>
           </section>

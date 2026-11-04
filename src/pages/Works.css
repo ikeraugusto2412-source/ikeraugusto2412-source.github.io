@@ -310,141 +310,124 @@
 }
 
 /* ────────────────────────────────────────────────────────────────
-   LIST VIEW — Minimal Editorial Table with Floating Center Reveal
+   LIST VIEW — Big titles, active line lit, cover preview follows the mouse
    ──────────────────────────────────────────────────────────────── */
-.swagg-works-list-wrapper {
-  width: 100%;
+.works-biglist {
   position: relative;
-  min-height: 480px;
-  padding-top: 10px;
-  padding-bottom: 80px;
+  padding: 10px 0 80px;
 }
 
-/* Centered Floating Preview Cover Image Overlay */
-.swagg-list-floating-overlay {
-  position: fixed;
+.works-biglist-rows {
+  list-style: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.works-biglist-rows li {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.works-biglist-row {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 10px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* Dim the text, not the row: the row's own opacity belongs to the entrance animation */
+.works-biglist-row > span {
+  opacity: 0.28;
+  transition: opacity 0.35s var(--ease-state), transform 0.5s var(--ease-out);
+}
+
+.works-biglist-rows li.is-active .works-biglist-row > span {
+  opacity: 1;
+}
+
+.works-biglist-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.works-biglist-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 7vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.works-biglist-rows li.is-active .works-biglist-title {
+  transform: translateX(16px);
+}
+
+.works-biglist-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.works-biglist-preview {
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
-  z-index: 30;
-}
-
-.swagg-list-floating-center {
-  width: clamp(340px, 27vw, 430px);
+  width: clamp(220px, 18vw, 300px);
   aspect-ratio: 0.912 / 1;
-  pointer-events: none;
+  margin: -140px 0 0 48px;
   overflow: hidden;
   background-color: #0c0c0c;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.85;
+  transition: opacity 0.25s ease, scale 0.4s var(--ease-out);
+  z-index: 5;
 }
 
-.swagg-list-floating-img {
+.works-biglist-preview.is-on {
+  opacity: 1;
+  scale: 1;
+}
+
+.works-biglist-preview img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-/* Editorial Table */
-.swagg-list-table {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0px;
-  position: relative;
+.works-biglist-preview img.is-active {
+  opacity: 1;
 }
 
-/* Row: 5 Columns with Large Breathing Empty Center */
-.swagg-list-row {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 80px minmax(200px, 1.2fr) 2fr minmax(200px, 1.2fr) 80px;
-  align-items: center;
-  padding: 12px 10px;
-  text-decoration: none;
-  color: #ffffff;
-  background-color: transparent;
-  cursor: pointer;
-  box-sizing: border-box;
-  position: relative;
-  z-index: 2;
+@media (hover: none) {
+  .works-biglist-preview {
+    display: none;
+  }
 }
 
-/* Inverted White Full-width Highlight Banner on Hover */
-.swagg-list-row.active-hover {
-  z-index: 3;
-}
-
-/* Hover fill: white bar scaled from the left (Motion drives scaleX) */
-.swagg-list-row {
-  isolation: isolate;
-}
-
-.swagg-list-row-fill {
-  position: absolute;
-  inset: 0;
-  background-color: #ffffff;
-  transform-origin: left center;
-  transform: scaleX(0);
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* White text + difference blend = black exactly where the bar has passed */
-.swagg-list-row > div {
-  position: relative;
-  z-index: 1;
-  color: #ffffff;
-  mix-blend-mode: difference;
-}
-
-.swagg-list-col-num {
-  grid-column: 1;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  color: inherit;
-  user-select: none;
-}
-
-.swagg-list-col-title {
-  grid-column: 2;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-  color: inherit;
-  white-space: nowrap;
-}
-
-.swagg-list-col-field {
-  grid-column: 4;
-  font-family: var(--font-sans);
-  font-size: 12.5px;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-  color: inherit;
-  white-space: nowrap;
-}
-
-.swagg-list-col-year {
-  grid-column: 5;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: inherit;
-  text-align: right;
-  white-space: nowrap;
+@media (prefers-reduced-motion: reduce) {
+  .works-biglist-title {
+    transition: none;
+  }
+  .works-biglist-rows li.is-active .works-biglist-title {
+    transform: none;
+  }
 }
 
 
@@ -468,18 +451,6 @@
   .swagg-card-media-wrap.span-2 {
     aspect-ratio: 1.4 / 1;
   }
-
-  .swagg-list-row {
-    grid-template-columns: 60px 1.2fr 1fr 60px;
-  }
-
-  .swagg-list-col-field {
-    grid-column: 3;
-  }
-
-  .swagg-list-col-year {
-    grid-column: 4;
-  }
 }
 
 @media (max-width: 810px) {
@@ -502,21 +473,22 @@
     display: none;
   }
 
-  .swagg-list-row {
-    grid-template-columns: 35px 1fr auto;
-    padding: 14px 10px;
+  .works-biglist-row {
+    grid-template-columns: 34px 1fr;
+    gap: 4px 10px;
+    padding: 12px 10px;
   }
 
-  .swagg-list-col-field {
-    display: none;
+  .works-biglist-meta {
+    grid-column: 2;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 10.5px;
+    white-space: normal;
   }
 
-  .swagg-list-col-year {
-    grid-column: 3;
-  }
-
-  .swagg-list-floating-center,
-  .swagg-list-floating-overlay {
-    display: none;
+  .works-biglist-rows li.is-active .works-biglist-title {
+    transform: translateX(8px);
   }
 }

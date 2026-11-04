@@ -14,6 +14,8 @@ import useScrollLock from '../hooks/useScrollLock';
 import ProgressiveImage from '../components/ProgressiveImage';
 import LightboxPhoto from '../components/LightboxPhoto';
 import GalleryRuler from '../components/GalleryRuler';
+import PhotoBook from '../components/PhotoBook';
+import EditReveal from '../components/EditReveal';
 import { sizedSrc } from '../lib/images';
 import CinemaVideoPlayer from '../components/CinemaVideoPlayer';
 import GalleryIntroTransition from '../components/GalleryIntroTransition';
@@ -60,6 +62,7 @@ export default function ProjectDetail() {
     Number.isInteger(fotoParam) && fotoParam >= 1 && fotoParam <= galleryImages.length ? galleryImages[fotoParam - 1] : null;
   const galleryIndex = Math.max(0, galleryImages.indexOf(selectedImage));
   const [slideDir, setSlideDir] = useState(0);
+  const [bookOpen, setBookOpen] = useState(false);
 
   const showImage = (img, { replace }) => {
     const index = galleryImages.indexOf(img);
@@ -268,6 +271,15 @@ export default function ProjectDetail() {
           </div>
         )}
 
+        {galleryImages.length > 3 && (
+          <div className="project-book-row">
+            <motion.button type="button" className="project-book-btn" onClick={() => setBookOpen(true)} {...pressable}>
+              <span className="project-book-icon" aria-hidden="true" />
+              {dict.projectDetail.bookOpen}
+            </motion.button>
+          </div>
+        )}
+
         {/* Static Two-Column Gallery Layout: zero jumping, zero re-balancing, zero duplicates */}
         <div className="project-gallery-columns" ref={galleryRef}>
           <div className="gallery-col">
@@ -297,6 +309,8 @@ export default function ProjectDetail() {
             ))}
           </div>
         </div>
+
+        <EditReveal pairs={project.editPairs} title={project.title} />
 
         {project.instagramPosts && project.instagramPosts.length > 0 && (
           <div className="instagram-section">
@@ -396,8 +410,12 @@ export default function ProjectDetail() {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {bookOpen && <PhotoBook project={project} onClose={() => setBookOpen(false)} />}
+      </AnimatePresence>
+
       {galleryImages.length > 1 && (
-        <GalleryRuler count={galleryImages.length} galleryRef={galleryRef} hidden={Boolean(selectedImage)} />
+        <GalleryRuler count={galleryImages.length} galleryRef={galleryRef} hidden={Boolean(selectedImage) || bookOpen} />
       )}
       </div>
     </motion.div>
