@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { playSound } from '../audio/sound';
+import { hasSoundChoice, playSound, setMuted, unlockSounds } from '../audio/sound';
+import { useLanguage } from '../context/LanguageContext';
 import { hasSeenPreloader, markPreloaderSeen, markIntroReady } from '../lib/introGate';
 import './Preloader.css';
 
@@ -35,7 +36,11 @@ function easeInOutCubic(t) {
 export default function Preloader({ onComplete }) {
   const [visible, setVisible] = useState(() => !hasSeenPreloader());
   const [exiting, setExiting] = useState(false);
+  // First visit only: once the wheel stops, ask whether to browse with sound
+  const [askSound, setAskSound] = useState(false);
+  const exitRef = useRef(null);
   const itemRefs = useRef([]);
+  const { dict } = useLanguage();
 
   // Build reel: other greetings spinning through, then target word, then trailing words
   const detectedCode = getDetectedLanguage();
@@ -139,7 +144,7 @@ export default function Preloader({ onComplete }) {
         animationFrameId = requestAnimationFrame(step);
       } else {
         // Spin finished: brief hold on the target language, then launch curtain exit
-        setTimeout(() => {
+        const exit = () => {
           setExiting(true);
           // Hand over to the page once the curtain is partly up, so its entrance
           // overlaps the lift instead of playing behind it
@@ -149,7 +154,12 @@ export default function Preloader({ onComplete }) {
             root.classList.remove('is-preloading');
             if (onComplete) onComplete();
           }, 750); // Matches CSS curtain exit
-        }, holdDuration);
+        };
+        if (hasSoundChoice()) setTimeout(exit, holdDuration);
+        else {
+          exitRef.current = exit;
+          setTimeout(() => setAskSound(true), holdDuration);
+        }
       }
     };
 
@@ -164,10 +174,18 @@ export default function Preloader({ onComplete }) {
 
   if (!visible) return null;
 
+  // The click is the first gesture, so it also unlocks audio for the whole visit
+  const chooseSound = (withSound) => {
+    setMuted(!withSound);
+    unlockSounds().then(() => withSound && playSound('toggle-on'));
+    setAskSound(false);
+    exitRef.current?.();
+  };
+
   return (
     <div
       className={`preloader-overlay ${exiting ? 'exiting' : ''}`}
-      aria-hidden="true"
+      aria-hidden={!askSound}
     >
       <div className="preloader-drum-stage">
         <div className="preloader-vignette preloader-vignette--top" />
@@ -184,6 +202,22 @@ export default function Preloader({ onComplete }) {
         </div>
         <div className="preloader-vignette preloader-vignette--bottom" />
       </div>
+      {askSound && (
+        <div className="preloader-sound" role="group" aria-label={dict.preloader.soundNote}>
+          <div className="preloader-sound-eq" aria-hidden="true">
+            {[0, 1, 2, 3, 4].map((i) => <span key={i} style={{ animationDelay: `${i * 0.12}s` }} />)}
+          </div>
+          <div className="preloader-sound-btns">
+            <button type="button" onClick={() => chooseSound(true)} autoFocus>
+              {dict.preloader.soundOn}
+            </button>
+            <button type="button" className="is-ghost" onClick={() => chooseSound(false)}>
+              {dict.preloader.soundOff}
+            </button>
+          </div>
+          <small>{dict.preloader.soundNote}</small>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,0 +1,112 @@
+/* ── Next project: the next cover grows to full screen, then you're taken into it ── */
+.next-project {
+  position: relative;
+  height: 240vh;
+  background: var(--bg-color);
+}
+
+.next-project-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.next-project-media {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: #0c0c0c;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.next-project-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.next-project-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, transparent 35%, rgba(0, 0, 0, 0.75) 100%);
+  pointer-events: none;
+}
+
+.next-project-title {
+  position: absolute;
+  left: var(--gutter-left);
+  right: var(--gutter-right);
+  bottom: calc(14svh + var(--safe-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  color: #fff;
+  pointer-events: none;
+}
+
+.next-project-title span {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.next-project-title strong {
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 13vw, 12rem);
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.next-project-title em {
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  opacity: 0.85;
+}
+
+.next-project-bar {
+  position: absolute;
+  left: var(--gutter-left);
+  right: var(--gutter-right);
+  bottom: calc(6svh + var(--safe-bottom));
+  height: 2px;
+  background: rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+}
+
+.next-project-bar span {
+  display: block;
+  height: 100%;
+  background: #fff;
+  transform-origin: left center;
+}
+
+.next-project-bar small {
+  position: absolute;
+  right: 0;
+  top: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.next-project-entering {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}

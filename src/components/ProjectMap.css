@@ -1,0 +1,173 @@
+/* ── Works map: one point per project ───────────────────────────── */
+.project-map {
+  padding: 6vw 0 4vw;
+}
+
+.project-map-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  padding: 0 10px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 2vw;
+}
+
+.project-map-head h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.project-map-head span {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.project-map-frame {
+  position: relative;
+}
+
+.project-map svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+#project-map-dots circle {
+  fill: rgba(255, 255, 255, 0.2);
+}
+
+.project-map-land {
+  fill: url(#project-map-dots);
+}
+
+.project-map-route {
+  fill: none;
+  stroke: rgba(255, 77, 61, 0.7);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 5;
+  transition: stroke 0.3s;
+}
+
+.project-map-route.is-on {
+  stroke: #ff4d3d;
+}
+
+.project-map-point {
+  cursor: pointer;
+  outline: none;
+}
+
+.project-map-hit {
+  fill: transparent;
+}
+
+.project-map-pin {
+  fill: #fff;
+  transition: fill 0.3s, r 0.3s;
+}
+
+.project-map-point.is-on .project-map-pin,
+.project-map-point:focus-visible .project-map-pin {
+  fill: #ff4d3d;
+  r: 8;
+}
+
+.project-map-pulse {
+  fill: rgba(255, 255, 255, 0.12);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: project-map-pulse 2.4s ease-out infinite;
+}
+
+@keyframes project-map-pulse {
+  from { transform: scale(0.3); opacity: 1; }
+  to { transform: scale(1.4); opacity: 0; }
+}
+
+.project-map-point text {
+  fill: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: fill 0.3s;
+}
+
+.project-map-point.is-on text {
+  fill: #fff;
+}
+
+.project-map-card {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+}
+
+.project-map-card a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px 8px 8px;
+  border-radius: 12px;
+  background: rgba(16, 16, 16, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  text-decoration: none;
+}
+
+.project-map-card img {
+  width: 86px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.project-map-card span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.project-map-card strong {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.project-map-card small {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.project-map-card .project-map-card-arrow {
+  margin-left: 6px;
+}
+
+@media (max-width: 700px) {
+  .project-map-point text {
+    font-size: 22px;
+  }
+  .project-map-card {
+    position: static;
+    margin-top: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-map-pulse {
+    animation: none;
+    opacity: 0;
+  }
+}

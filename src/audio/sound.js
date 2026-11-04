@@ -22,6 +22,15 @@ let muted = (() => {
   }
 })();
 
+/** Whether the visitor already chose sound on/off (the preloader asks only once). */
+export const hasSoundChoice = () => {
+  try {
+    return localStorage.getItem(MUTE_KEY) !== null;
+  } catch {
+    return true; // storage blocked: don't ask on every visit
+  }
+};
+
 /** Whether the visitor switched UI sounds off (remembered across visits). */
 export const isMuted = () => muted;
 

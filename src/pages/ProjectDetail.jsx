@@ -17,6 +17,7 @@ import GalleryRuler from '../components/GalleryRuler';
 import PhotoBook from '../components/PhotoBook';
 import PhotoBookTeaser from '../components/PhotoBookTeaser';
 import EditReveal from '../components/EditReveal';
+import NextProject from '../components/NextProject';
 import { sizedSrc } from '../lib/images';
 import CinemaVideoPlayer from '../components/CinemaVideoPlayer';
 import GalleryIntroTransition from '../components/GalleryIntroTransition';
@@ -46,6 +47,8 @@ export default function ProjectDetail() {
   const { language, dict, localePath } = useLanguage();
   const { id } = useParams();
   const project = projects.find(p => p.id === id);
+  const projectIndex = projects.indexOf(project);
+  const nextProject = projects.length > 1 && project ? projects[(projectIndex + 1) % projects.length] : null;
   const reduceMotion = useReducedMotion();
   const galleryRef = useRef(null);
   const location = useLocation();
@@ -360,6 +363,8 @@ export default function ProjectDetail() {
       </div>
       
       <Footer />
+
+      {nextProject && <NextProject key={nextProject.id} project={nextProject} />}
 
       <AnimatePresence>
         {selectedImage && (

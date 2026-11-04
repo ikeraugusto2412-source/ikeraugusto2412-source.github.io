@@ -12,6 +12,7 @@ import SplitReveal from '../components/motion/SplitReveal';
 import { sileo } from 'sileo';
 import { sizedSrc } from '../lib/images';
 import Photo from '../components/Photo';
+import ProjectMap from '../components/ProjectMap';
 import './Works.css';
 
 /**
@@ -309,6 +310,8 @@ export default function Works() {
               )}
             </AnimatePresence>
           </section>
+
+          <ProjectMap />
 
         </div>
 

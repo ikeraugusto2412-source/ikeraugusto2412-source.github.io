@@ -111,3 +111,85 @@ html.is-preloading,
 html.is-preloading body {
   overflow: hidden;
 }
+
+/* ── First visit: browse with or without sound ── */
+.preloader-sound {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(12vh + var(--safe-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 0 16px;
+  text-align: center;
+  animation: preloader-sound-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes preloader-sound-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.preloader-sound-eq {
+  display: flex;
+  gap: 4px;
+  height: 22px;
+  align-items: flex-end;
+}
+
+.preloader-sound-eq span {
+  width: 3px;
+  height: 100%;
+  background: #fff;
+  transform-origin: bottom;
+  animation: preloader-eq 1s ease-in-out infinite alternate;
+}
+
+@keyframes preloader-eq {
+  from { transform: scaleY(0.2); }
+  to { transform: scaleY(1); }
+}
+
+.preloader-sound-btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.preloader-sound button {
+  min-height: var(--tap);
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1px solid #fff;
+  background: #fff;
+  color: #000;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.preloader-sound button.is-ghost {
+  background: none;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.preloader-sound small {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader-sound,
+  .preloader-sound-eq span {
+    animation: none;
+  }
+}

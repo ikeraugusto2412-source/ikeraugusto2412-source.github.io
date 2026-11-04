@@ -17,6 +17,25 @@
   margin-left: -0.4vw;
 }
 
+/* Letters rise out of a mask as the footer scrolls in */
+.footer-title-rise,
+.footer-title-line {
+  display: block;
+}
+
+.footer-letter {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  /* room for accents and descenders inside the mask */
+  padding: 0.06em 0;
+  margin: -0.06em 0;
+}
+
+.footer-letter > span {
+  display: inline-block;
+}
+
 /* ── Typographic links ── */
 .footer-links {
   display: flex;
