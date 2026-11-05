@@ -50,18 +50,6 @@
   fill: url(#project-map-dots);
 }
 
-.project-map-route {
-  fill: none;
-  stroke: rgba(255, 77, 61, 0.7);
-  stroke-width: 1.5;
-  stroke-dasharray: 4 5;
-  transition: stroke 0.3s;
-}
-
-.project-map-route.is-on {
-  stroke: #ff4d3d;
-}
-
 .project-map-point {
   cursor: pointer;
   outline: none;

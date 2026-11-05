@@ -9,20 +9,24 @@ import './ProjectMap.css';
 
 /*
  * Where the work was made: a dotted map with one point per project. Hover (or tap) a point to
- * see the project; click it (or the card) to open it. Hugo Bravo's ride is drawn as a route.
+ * see the project; click it (or the card) to open it.
  * The land outline is pre-projected by scripts/build-map.mjs.
  */
 const PLACES = {
   'new-york': [-74.0, 40.71],
   london: [-0.13, 51.5],
   norway: [6.86, 61.7],
-  'huck-knife-pro': [9.19, 45.46],
+  'huck-knife-pro': [2.04, 42.5], // Font-Romeu, France
   'the-weeknd': [2.15, 41.36],
   'tour-de-france': [1.81, 41.24],
-  'hugo-bravo': [2.35, 48.85], // Paris, start of the Paris → Sitges ride
 };
-const ROUTES = { 'hugo-bravo': [[2.35, 48.85], [1.81, 41.24]] };
-const LABEL_BELOW = new Set(['tour-de-france']);
+// Label placement around the pin for the points that sit close together (Pyrenees / Barcelona coast)
+const LABEL_AT = {
+  'huck-knife-pro': { dx: -10, dy: -8, anchor: 'end' },
+  'the-weeknd': { dx: 12, dy: 2, anchor: 'start' },
+  'tour-de-france': { dx: -10, dy: 22, anchor: 'end' },
+};
+const LABEL_DEFAULT = { dx: 10, dy: -10, anchor: 'start' };
 
 const { lon0, lon1, lat0, lat1, width: W, height: H } = MAP_VIEW;
 const proj = ([lon, lat]) => [((lon - lon0) / (lon1 - lon0)) * W, ((lat1 - lat) / (lat1 - lat0)) * H];
@@ -55,20 +59,9 @@ export default function ProjectMap() {
             </clipPath>
           </defs>
           <path d={MAP_LAND} className="project-map-land" clipPath="url(#project-map-clip)" />
-          {Object.entries(ROUTES).map(([id, [a, b]]) => {
-            const [x0, y0] = proj(a);
-            const [x1, y1] = proj(b);
-            return (
-              <path
-                key={id}
-                d={`M${x0},${y0} Q${x0 + 30},${(y0 + y1) / 2} ${x1},${y1}`}
-                className={`project-map-route ${active === id ? 'is-on' : ''}`}
-              />
-            );
-          })}
           {points.map((p) => {
             const [x, y] = proj(PLACES[p.id]);
-            const below = LABEL_BELOW.has(p.id);
+            const label = LABEL_AT[p.id] ?? LABEL_DEFAULT;
             return (
               <g
                 key={p.id}
@@ -95,7 +88,7 @@ export default function ProjectMap() {
                 <circle cx={x} cy={y} r="22" className="project-map-hit" />
                 <circle cx={x} cy={y} r="16" className="project-map-pulse" />
                 <circle cx={x} cy={y} r="5" className="project-map-pin" />
-                <text x={below ? x - 10 : x + 10} y={below ? y + 24 : y - 10} textAnchor={below ? 'end' : 'start'}>
+                <text x={x + label.dx} y={y + label.dy} textAnchor={label.anchor}>
                   {t.places[p.id]}
                 </text>
               </g>
