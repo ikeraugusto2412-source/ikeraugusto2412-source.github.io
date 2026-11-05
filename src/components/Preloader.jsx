@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { hasSoundChoice, playSound, setMuted, unlockSounds } from '../audio/sound';
+import { hasSoundChoice, markSoundChoice, playSound, setMuted, unlockSounds } from '../audio/sound';
 import { useLanguage } from '../context/LanguageContext';
 import { hasSeenPreloader, markPreloaderSeen, markIntroReady } from '../lib/introGate';
 import './Preloader.css';
@@ -177,6 +177,7 @@ export default function Preloader({ onComplete }) {
   // The click is the first gesture, so it also unlocks audio for the whole visit
   const chooseSound = (withSound) => {
     setMuted(!withSound);
+    markSoundChoice();
     unlockSounds().then(() => withSound && playSound('toggle-on'));
     setAskSound(false);
     exitRef.current?.();
