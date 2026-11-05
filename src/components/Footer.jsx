@@ -3,7 +3,6 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion
 import { useLanguage } from '../context/LanguageContext';
 import { Reveal, RevealItem } from './motion/Reveal';
 import DrawLine from './DrawLine';
-import LiveVisitors from './LiveVisitors';
 import './Footer.css';
 
 /*
@@ -61,8 +60,6 @@ export default function Footer() {
               <span className="footer-link-arrow">→</span>
             </a>
           </RevealItem>
-
-          <LiveVisitors />
         </Reveal>
       </div>
 

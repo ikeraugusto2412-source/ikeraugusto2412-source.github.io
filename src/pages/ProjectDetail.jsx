@@ -18,6 +18,7 @@ import PhotoBook from '../components/PhotoBook';
 import PhotoBookTeaser from '../components/PhotoBookTeaser';
 import EditReveal from '../components/EditReveal';
 import NextProject from '../components/NextProject';
+import LiveVisitors from '../components/LiveVisitors';
 import { sizedSrc } from '../lib/images';
 import CinemaVideoPlayer from '../components/CinemaVideoPlayer';
 import GalleryIntroTransition from '../components/GalleryIntroTransition';
@@ -260,6 +261,10 @@ export default function ProjectDetail() {
             {project.year && <span>{project.year}</span>}
             {project.location && <span className="meta-sep"> · </span>}
             {project.location && <span>{project.location}</span>}
+          </RevealItem>
+
+          <RevealItem className="project-detail-live">
+            <LiveVisitors key={project.id} path={`/project/${project.id}`} />
           </RevealItem>
 
           <RevealItem as="p" className="project-detail-desc">

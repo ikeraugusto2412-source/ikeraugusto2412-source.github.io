@@ -1,7 +1,6 @@
 /* ── Live visitors pill (footer) ── */
 .live-visitors {
   display: inline-flex;
-  align-self: flex-start;
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
@@ -53,12 +52,12 @@
 
 @media (max-width: 480px) {
   .live-visitors {
-    border-radius: 14px;
-    row-gap: 4px;
+    gap: 7px;
+    padding: 9px 14px;
+    font-size: 0.6rem;
+    letter-spacing: 0.04em;
   }
-  .live-visitors-sep {
-    flex-basis: 100%;
-    width: 0;
-    height: 0;
+  .live-visitors strong {
+    font-size: 0.95rem;
   }
 }

@@ -251,6 +251,15 @@
   font-weight: 300;
 }
 
+/* Live "viewing now · people have seen it" pill under the project meta */
+.project-detail-live {
+  margin: -1rem 0 2.5rem;
+}
+
+.project-detail-live:empty {
+  display: none;
+}
+
 /* "View as photobook": opens the gallery as a book (PhotoBook) */
 .project-book-row {
   display: flex;
