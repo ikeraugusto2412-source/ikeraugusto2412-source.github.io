@@ -7,7 +7,7 @@ import './LiveVisitors.css';
  * "3 viewing now · 1,248 visits" (after twomuch.studio), read from Umami through the
  * website's public share link — the same read-only data anyone with that link can see, so
  * no secret key is involved. Set VITE_UMAMI_SHARE_ID to the id at the end of the share URL
- * (cloud.umami.is/analytics/eu/share/<id>). Without it, or if Umami can't be reached, the
+ * (cloud.umami.is/share/<id>). Without it, or if Umami can't be reached, the
  * counter simply isn't shown.
  */
 const SHARE_ID = import.meta.env.VITE_UMAMI_SHARE_ID;
@@ -33,7 +33,10 @@ async function getSession() {
 
 async function query(path) {
   const { websiteId, token } = await getSession();
-  const r = await fetch(`${API}/websites/${websiteId}/${path}`, { headers: { 'x-umami-share-token': token } });
+  // Umami only accepts a share token together with the share-context header
+  const r = await fetch(`${API}/websites/${websiteId}/${path}`, {
+    headers: { 'x-umami-share-token': token, 'x-umami-share-context': '1' },
+  });
   if (!r.ok) throw new Error(String(r.status));
   return r.json();
 }
