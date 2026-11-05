@@ -1,0 +1,68 @@
+/* ── Behind the scenes: draggable making-of strip ── */
+.bts {
+  margin: 4rem 0;
+}
+
+.bts-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.bts-head h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.bts-bar {
+  width: 80px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.bts-head small {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.bts-viewport {
+  overflow: hidden;
+}
+
+.bts-track {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.bts-track:active {
+  cursor: grabbing;
+}
+
+.bts-track figure {
+  width: clamp(200px, 22vw, 320px);
+  margin: 0;
+}
+
+.bts-track img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.bts-track figcaption {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-muted);
+}

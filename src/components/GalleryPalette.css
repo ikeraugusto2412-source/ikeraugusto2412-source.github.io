@@ -1,0 +1,86 @@
+/* ── Gallery palette: the gallery's own colours, tap one to filter ── */
+.gallery-palette {
+  margin: 0 0 2.5rem;
+}
+
+.gallery-palette-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gallery-palette-head span {
+  color: #fff;
+}
+
+.gallery-palette-head small {
+  font-size: inherit;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.gallery-palette-head button {
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.gallery-palette-strip {
+  display: flex;
+  height: clamp(84px, 11vw, 140px);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.gallery-palette-swatch {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
+  border: 0;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  transition: flex-grow 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s;
+}
+
+.gallery-palette-swatch small {
+  font-size: inherit;
+}
+
+.gallery-palette-swatch.is-on {
+  flex-grow: 2.2;
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.gallery-palette-swatch.is-off {
+  opacity: 0.3;
+}
+
+@media (hover: hover) {
+  .gallery-palette-swatch:not(.is-on):hover {
+    flex-grow: 1.5;
+  }
+}
+
+.gallery-palette-swatch:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}

@@ -1,0 +1,112 @@
+/* ── Floating "let's talk" button ── */
+.lets-talk {
+  position: fixed;
+  right: max(var(--gutter-right), 16px);
+  bottom: calc(var(--safe-bottom) + 1.25rem);
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  transition: bottom 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Sit above the gallery ruler when it spans the bottom of the screen */
+@media (max-width: 1024px) {
+  body:has(.gallery-ruler.is-visible) .lets-talk {
+    bottom: calc(var(--safe-bottom) + 5.2rem);
+  }
+}
+
+.lets-talk-btn {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.lets-talk-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: lets-talk-spin 14s linear infinite;
+}
+
+.lets-talk-ring text {
+  font-family: var(--font-mono);
+  font-size: 8.4px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  fill: #000;
+}
+
+.lets-talk-btn.is-open .lets-talk-ring {
+  animation-duration: 4s;
+}
+
+.lets-talk-core {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.lets-talk-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.lets-talk-menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 190px;
+  padding: 6px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  transform-origin: bottom right;
+}
+
+.lets-talk-menu a {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 14px;
+  border-radius: 9px;
+  color: #000;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.lets-talk-menu a:hover,
+.lets-talk-menu a:focus-visible {
+  background: #ececec;
+}
+
+@media (max-width: 600px) {
+  .lets-talk-btn {
+    width: 74px;
+    height: 74px;
+  }
+}
+
+@keyframes lets-talk-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lets-talk-ring {
+    animation: none;
+  }
+}

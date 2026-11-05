@@ -175,10 +175,36 @@ function ProjectList() {
 export default function Works() {
   const { language, dict, localePath } = useLanguage();
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
+  const [spot, setSpot] = useState(null);
+  const gridRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  /*
+   * Spotlight (after podium.global): once you point at a cover the others go dark. On touch
+   * screens the cover crossing the middle of the screen is the lit one.
+   */
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (viewMode !== 'grid' || !grid || !window.matchMedia('(hover: none)').matches) return undefined;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setSpot(e.target.dataset.spot)),
+      { rootMargin: '-45% 0px -45% 0px' },
+    );
+    grid.querySelectorAll('[data-spot]').forEach((el) => io.observe(el));
+    const onScroll = () => {
+      // above the first card or below the last: nothing is lit
+      const r = grid.getBoundingClientRect();
+      if (r.top > window.innerHeight / 2 || r.bottom < window.innerHeight / 2) setSpot(null);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      io.disconnect();
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [viewMode]);
 
   const gridCells = generateEditorialGrid(projects);
   const formattedCount = String(projects.length).padStart(2, '0');
@@ -244,7 +270,9 @@ export default function Works() {
               {viewMode === 'grid' ? (
                 <motion.div
                   key="grid"
-                  className="swagg-works-grid"
+                  ref={gridRef}
+                  className={`swagg-works-grid ${spot ? 'has-spot' : ''}`}
+                  onPointerLeave={(e) => e.pointerType === 'mouse' && setSpot(null)}
                   variants={viewVariants}
                   initial="hidden"
                   animate="visible"
@@ -269,9 +297,11 @@ export default function Works() {
                     return (
                       <motion.div
                         key={item.id + '-' + idx}
-                        className={`swagg-grid-card-wrap span-${cell.span}`}
+                        className={`swagg-grid-card-wrap span-${cell.span} ${spot === item.id ? 'is-spot' : ''}`}
                         variants={cardVariants}
                         custom={idx}
+                        data-spot={item.id}
+                        onPointerEnter={(e) => e.pointerType === 'mouse' && setSpot(item.id)}
                       >
                         <Link
                           to={localePath(`/project/${item.id}`)}

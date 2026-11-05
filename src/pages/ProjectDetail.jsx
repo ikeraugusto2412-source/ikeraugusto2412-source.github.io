@@ -19,6 +19,9 @@ import PhotoBookTeaser from '../components/PhotoBookTeaser';
 import EditReveal from '../components/EditReveal';
 import NextProject from '../components/NextProject';
 import LiveVisitors from '../components/LiveVisitors';
+import GalleryPalette from '../components/GalleryPalette';
+import BehindTheScenes from '../components/BehindTheScenes';
+import palettes from '../data/palettes.json';
 import { sizedSrc } from '../lib/images';
 import CinemaVideoPlayer from '../components/CinemaVideoPlayer';
 import GalleryIntroTransition from '../components/GalleryIntroTransition';
@@ -68,6 +71,11 @@ export default function ProjectDetail() {
   const galleryIndex = Math.max(0, galleryImages.indexOf(selectedImage));
   const [slideDir, setSlideDir] = useState(0);
   const [bookOpen, setBookOpen] = useState(false);
+  // Palette filter: the colour picked in this gallery (null = every photo)
+  const [toneOf, setToneOf] = useState({ id: null, tone: null });
+  const tone = toneOf.id === id ? toneOf.tone : null;
+  const palette = palettes[id];
+  const shownImages = tone === null || !palette ? galleryImages : galleryImages.filter((src) => palette.photos[src] === tone);
 
   const showImage = (img, { replace }) => {
     const index = galleryImages.indexOf(img);
@@ -286,41 +294,41 @@ export default function ProjectDetail() {
           </div>
         )}
 
+        <GalleryPalette palette={palette} tone={tone} onTone={(t) => setToneOf({ id, tone: t })} />
+
         {/* Static Two-Column Gallery Layout: zero jumping, zero re-balancing, zero duplicates */}
-        <div className="project-gallery-columns" ref={galleryRef}>
-          <div className="gallery-col">
-            {project.gridImages && project.gridImages.filter((_, idx) => idx % 2 === 0).map((img, i) => (
-              <div key={img} className="gallery-item-wrapper" style={{ order: i * 2 }} data-photo={i * 2}>
-                <ProgressiveImage
-                  src={img}
-                  alt={`${project.title} — ${dict.projectDetail.photo} ${i * 2 + 1}`}
-                  className="gallery-item"
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                  onClick={() => openLightbox(img)}
-                />
-              </div>
-            ))}
-          </div>
-          <div className="gallery-col">
-            {project.gridImages && project.gridImages.filter((_, idx) => idx % 2 === 1).map((img, i) => (
-              <div key={img} className="gallery-item-wrapper" style={{ order: i * 2 + 1 }} data-photo={i * 2 + 1}>
-                <ProgressiveImage
-                  src={img}
-                  alt={`${project.title} — ${dict.projectDetail.photo} ${i * 2 + 2}`}
-                  className="gallery-item"
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                  onClick={() => openLightbox(img)}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+        <motion.div
+          key={tone ?? 'all'}
+          className="project-gallery-columns"
+          ref={galleryRef}
+          initial={tone === null ? false : { opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {[0, 1].map((col) => (
+            <div key={col} className="gallery-col">
+              {shownImages.map((img, pos) => pos % 2 === col && (
+                <div key={img} className="gallery-item-wrapper" style={{ order: pos }} data-photo={pos}>
+                  <ProgressiveImage
+                    src={img}
+                    alt={`${project.title} — ${dict.projectDetail.photo} ${galleryImages.indexOf(img) + 1}`}
+                    className="gallery-item"
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    onClick={() => openLightbox(img)}
+                  />
+                </div>
+              ))}
+            </div>
+          ))}
+        </motion.div>
 
         {galleryImages.length > 3 && (
           <div className="project-book-row project-book-row--end">
             <PhotoBookTeaser project={project} count={galleryImages.length} label={dict.projectDetail.bookEndCta} onOpen={() => setBookOpen(true)} />
           </div>
         )}
+
+        <BehindTheScenes images={project.btsImages} />
 
         <EditReveal pairs={project.editPairs} title={project.title} />
 
@@ -429,7 +437,7 @@ export default function ProjectDetail() {
       </AnimatePresence>
 
       {galleryImages.length > 1 && (
-        <GalleryRuler count={galleryImages.length} galleryRef={galleryRef} hidden={Boolean(selectedImage) || bookOpen} />
+        <GalleryRuler count={shownImages.length} galleryRef={galleryRef} hidden={Boolean(selectedImage) || bookOpen} />
       )}
       </div>
     </motion.div>

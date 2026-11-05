@@ -5,6 +5,7 @@ import { AnimatePresence, MotionConfig } from 'framer-motion'
 import Home from './pages/Home'
 import Navbar from './components/Navbar'
 import Preloader from './components/Preloader'
+import LetsTalk from './components/LetsTalk'
 import { Toaster } from 'sileo'
 import useUiSounds from './audio/useUiSounds'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -117,6 +118,7 @@ function App() {
       <Seo />
       <Preloader />
       <Navbar />
+      <LetsTalk />
       <ErrorBoundary resetKey={location.pathname}>
       <Suspense fallback={null}>
       <AnimatePresence mode="wait" onExitComplete={resetScroll}>

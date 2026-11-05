@@ -278,6 +278,32 @@
   }
 }
 
+/* Spotlight: the cover you point at stays lit, the rest go dark */
+.swagg-card-img {
+  transition: transform var(--dur-slow) var(--ease-state), filter 0.5s var(--ease-state);
+}
+
+.swagg-works-grid.has-spot .swagg-grid-card-wrap:not(.is-spot) .swagg-card-img {
+  filter: brightness(0.22) grayscale(1);
+}
+
+.swagg-card-field,
+.swagg-card-title {
+  transition: color var(--dur-quick) var(--ease-state), opacity 0.4s;
+}
+
+.swagg-works-grid.has-spot .swagg-grid-card-wrap:not(.is-spot) .swagg-card-header {
+  opacity: 0.35;
+}
+
+@media (hover: none) {
+  .swagg-grid-card-wrap.is-spot .swagg-card-header-inner {
+    transform: translateY(0);
+    opacity: 1;
+    transition: transform var(--dur-quick) var(--ease-out), opacity var(--dur-quick) var(--ease-out);
+  }
+}
+
 /* Center [VIEW] Badge on Hover */
 .swagg-card-hover-overlay {
   position: absolute;
