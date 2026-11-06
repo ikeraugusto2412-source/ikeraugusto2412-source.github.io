@@ -9,9 +9,7 @@ import useScrollLock from '../hooks/useScrollLock';
 import { EASE } from '../components/motion/tokens';
 import { pressable } from '../components/motion/pressable';
 import { useLanguage } from '../context/LanguageContext';
-import { sileo } from 'sileo';
 import { playSound } from '../audio/sound';
-import { responsiveImg } from '../lib/images';
 import './About.css';
 
 /* ─── Shared Animated Divider ─── */
@@ -63,9 +61,6 @@ function FadeIn({ children, delay = 0, className = '' }) {
     </motion.div>
   );
 }
-
-/* ─── Tools ─── */
-const TOOLS = ['Canon', 'Premiere Pro', 'Lightroom', 'Photoshop'];
 
 /* ─── Working Archive Slides (On-Field Behind the Scenes) — captions live in translations ─── */
 const WORKING_ARCHIVE_IMAGES = [
@@ -209,30 +204,6 @@ export default function About() {
 
         <Line delay={0.1} />
 
-        {/* ════════ PHILOSOPHY ════════ */}
-        <section className="about-philosophy container">
-          <div className="about-philosophy-inner">
-            <FadeIn delay={0}><span className="about-tag">{dict.about.approachTag}</span></FadeIn>
-            <div className="about-philosophy-text">
-              <Reveal delay={0.1}>
-                <h2 className="about-philosophy-h2">{dict.about.approachQuote1}</h2>
-              </Reveal>
-              <Reveal delay={0.18}>
-                <h2 className="about-philosophy-h2 about-philosophy-italic">{dict.about.approachQuote2}</h2>
-              </Reveal>
-            </div>
-            <div className="about-philosophy-body-wrap">
-              <FadeIn delay={0.3} className="about-philosophy-body">
-                <p>
-                  {dict.about.approachDesc}
-                </p>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
-
-        <Line delay={0.1} />
-
         {/* ════════ SERVICES ════════ */}
         <section className="about-services container">
           <div className="about-services-header">
@@ -262,10 +233,10 @@ export default function About() {
 
         <Line delay={0.1} />
 
-        {/* ════════ THE PERSON ════════ */}
-        <section className="about-portrait container">
-          <div className="about-portrait-grid">
-            <div className="about-portrait-left">
+        {/* ════════ THE PERSON + WORKING ARCHIVE FOLDER ════════ */}
+        <section className="about-dossier container">
+          <div className="about-dossier-grid">
+            <div className="about-dossier-left">
               <FadeIn delay={0}><span className="about-tag">{dict.about.personTag}</span></FadeIn>
               <Reveal delay={0.1} underline>
                 <h2 className="about-portrait-h2">{dict.about.personH2Part1}<br /><em>{dict.about.personH2Part2}</em></h2>
@@ -277,61 +248,6 @@ export default function About() {
                 <p className="about-bio-body">
                   {dict.about.personBio2}
                 </p>
-              </FadeIn>
-            </div>
-            <motion.div
-              className="about-portrait-right"
-              initial={{ opacity: 0, scale: 0.97 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: '-8%' }}
-              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-              onClick={() => {
-                openLightbox('/assets/profile/me.webp');
-                sileo.info({ title: dict.about.portraitToastTitle, description: dict.about.portraitToastDesc });
-              }}
-              style={{ cursor: 'zoom-in' }}
-            >
-              <img {...responsiveImg('/assets/profile/me.webp', '(max-width: 768px) 100vw, 40vw')} alt="Iker Augusto" className="about-portrait-img" loading="lazy" decoding="async" />
-              <div className="about-portrait-caption">
-                <span className="about-mono about-muted">Sitges, 2024 · [ EXPAND ↗ ]</span>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        <Line delay={0.1} />
-
-        {/* ════════ WORKING ARCHIVE / DOSSIER ════════ */}
-        <section className="about-dossier container">
-          <div className="about-dossier-grid">
-            <div className="about-dossier-left">
-              <FadeIn delay={0}>
-                <span className="about-tag">{dict.about.dossierTag}</span>
-              </FadeIn>
-              <Reveal delay={0.1} underline>
-                <h2 className="about-portrait-h2">
-                  {dict.about.dossierH2Part1}<br />
-                  <em>{dict.about.dossierH2Part2}</em>
-                </h2>
-              </Reveal>
-              <FadeIn delay={0.25} className="about-portrait-text-wrap">
-                <p className="about-bio-body">
-                  {dict.about.dossierDesc}
-                </p>
-                <div className="about-dossier-meta-specs">
-                  <div className="about-spec-row">
-                    <span className="about-spec-label">{dict.about.specFormatLabel}</span>
-                    <span className="about-spec-val">{dict.about.specFormatVal}</span>
-                  </div>
-                  <div className="about-spec-row">
-                    <span className="about-spec-label">{dict.about.specLocationLabel}</span>
-                    <span className="about-spec-val">{dict.about.specLocationVal}</span>
-                  </div>
-                  <div className="about-spec-row">
-                    <span className="about-spec-label">{dict.about.specInteractionLabel}</span>
-                    <span className="about-spec-val">{dict.about.specInteractionVal}</span>
-                  </div>
-                </div>
               </FadeIn>
             </div>
 
@@ -346,72 +262,6 @@ export default function About() {
                   closeLabel={dict.about.dossierHintClose}
                   onSelectCard={(item) => openLightbox(item.image)}
                 />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <Line delay={0.1} />
-
-        {/* ════════ THE KIT ════════ */}
-        <section className="about-kit container">
-          <div className="about-kit-grid">
-            <div className="about-kit-left">
-              <FadeIn delay={0}><span className="about-tag">{dict.about.kitTag}</span></FadeIn>
-              <Reveal delay={0.1} underline>
-                <h2 className="about-portrait-h2">{dict.about.kitH2Part1}<br /><em>{dict.about.kitH2Part2}</em></h2>
-              </Reveal>
-              <FadeIn delay={0.2} className="about-portrait-text-wrap">
-                <p className="about-bio-body">
-                  {dict.about.kitDesc}
-                </p>
-                <div className="about-tools-row">
-                  {TOOLS.map((tool, i) => (
-                    <motion.span
-                      key={tool}
-                      className="about-tool-chip"
-                      initial={{ opacity: 0, y: 12 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.3 + i * 0.07 }}
-                    >
-                      {tool}
-                    </motion.span>
-                  ))}
-                </div>
-                <div className="about-instagram-wrap">
-                  <FadeIn delay={0.55}>
-                    <motion.a
-                      href="https://www.instagram.com/ikeraugusto_ph/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="about-bio-cta"
-                      {...pressable}
-                    >
-                      <span>@ikeraugusto_ph</span>
-                      <span className="about-cta-arrow">↗</span>
-                    </motion.a>
-                  </FadeIn>
-                </div>
-              </FadeIn>
-            </div>
-
-            {/* Kit visual — grid of tool logos / decorative */}
-            <div className="about-kit-right">
-              <div className="about-kit-visual">
-                {TOOLS.map((tool, i) => (
-                  <motion.div
-                    key={tool}
-                    className="about-kit-block"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.15 + i * 0.1 }}
-                  >
-                    <span className="about-kit-num about-mono">0{i + 1}</span>
-                    <span className="about-kit-name">{tool}</span>
-                  </motion.div>
-                ))}
               </div>
             </div>
           </div>
