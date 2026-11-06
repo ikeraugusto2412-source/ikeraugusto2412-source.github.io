@@ -3,12 +3,10 @@ import React, { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useParams, useSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { projects } from '../data/projects';
-import Footer from '../components/Footer';
 import PageTransition from '../components/PageTransition';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { pageVariants, pageFadeVariants } from '../components/motion/tokens';
 import { Reveal, RevealItem } from '../components/motion/Reveal';
-import { pressable, MotionLink } from '../components/motion/pressable';
 import DrawLine from '../components/DrawLine';
 import useScrollLock from '../hooks/useScrollLock';
 import ProgressiveImage from '../components/ProgressiveImage';
@@ -102,15 +100,6 @@ export default function ProjectDetail() {
     setSlideDir(dir);
     showImage(neighbourImage(galleryImages, selectedImage, dir), { replace: true });
     playSound('click');
-  };
-
-  const handleShareProject = () => {
-    Promise.resolve(navigator.clipboard?.writeText(window.location.href))
-      .then(() => {
-        if (!navigator.clipboard) throw new Error('no clipboard');
-        sileo.success({ title: dict.projectDetail.linkCopiedTitle, description: dict.projectDetail.linkCopiedDesc });
-      })
-      .catch(() => sileo.error({ title: dict.projectDetail.linkCopyFailed, description: window.location.href }));
   };
 
   useEffect(() => {
@@ -332,50 +321,7 @@ export default function ProjectDetail() {
 
         <EditReveal pairs={project.editPairs} title={project.title} />
 
-        {project.instagramPosts && project.instagramPosts.length > 0 && (
-          <div className="instagram-section">
-            <h2>{dict.projectDetail.relatedIg}</h2>
-            <div className="instagram-grid">
-              {project.instagramPosts.map((postUrl, idx) => {
-                const embedUrl = postUrl.split('?')[0].replace(/\/$/, '') + '/embed';
-                return (
-                  <iframe
-                    key={idx}
-                    src={embedUrl}
-                    title={`${dict.projectDetail.relatedIg} ${idx + 1}`}
-                    loading="lazy"
-                    width="340" 
-                    height="480" 
-                    frameBorder="0" 
-                    scrolling="no" 
-                    allowtransparency="true"
-                    style={{ background: 'white', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}
-                  ></iframe>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        <div className="project-navigation">
-          <MotionLink to={localePath('/')} className="back-link has-draw-line" {...pressable}>
-            {dict.projectDetail.backToPortfolio}
-            <DrawLine trigger="hover" duration={350} strokeWidth={2} />
-          </MotionLink>
-          <motion.button
-            type="button"
-            className="back-link has-draw-line"
-            onClick={handleShareProject}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: 'auto' }}
-            {...pressable}
-          >
-            {dict.projectDetail.share || 'Compartir ↗'}
-            <DrawLine trigger="hover" duration={350} strokeWidth={2} />
-          </motion.button>
-        </div>
       </div>
-      
-      <Footer />
 
       {nextProject && <NextProject key={nextProject.id} project={nextProject} />}
 
