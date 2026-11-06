@@ -7,7 +7,7 @@ import useFolderSize from '../hooks/useFolderSize';
 import DrawLine from '../components/DrawLine';
 import useScrollLock from '../hooks/useScrollLock';
 import { EASE } from '../components/motion/tokens';
-import { pressable } from '../components/motion/pressable';
+import { pressable, MotionLink } from '../components/motion/pressable';
 import { useLanguage } from '../context/LanguageContext';
 import { playSound } from '../audio/sound';
 import './About.css';
@@ -70,7 +70,7 @@ const WORKING_ARCHIVE_IMAGES = [
 ];
 
 export default function About() {
-  const { dict } = useLanguage();
+  const { dict, localePath } = useLanguage();
   const [selectedLightbox, setSelectedLightbox] = useState(null);
   const folderSize = useFolderSize();
   const archiveSlides = dict.about.archiveSlides.map((slide, i) => ({ ...slide, image: WORKING_ARCHIVE_IMAGES[i] }));
@@ -175,10 +175,10 @@ export default function About() {
                 </p>
               </FadeIn>
               <FadeIn delay={0.42} className="about-bio-cta-wrap">
-                <motion.a href="mailto:ikeraugusto2412@gmail.com" className="about-bio-cta" {...pressable}>
+                <MotionLink to={localePath('/contact')} className="about-bio-cta" {...pressable}>
                   <span>{dict.about.ctaWrite}</span>
                   <span className="about-cta-arrow">→</span>
-                </motion.a>
+                </MotionLink>
               </FadeIn>
             </div>
           </div>
