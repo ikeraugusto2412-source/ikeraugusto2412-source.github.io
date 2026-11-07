@@ -64,10 +64,10 @@ function FadeIn({ children, delay = 0, className = '' }) {
 
 /* ─── Working Archive Slides (On-Field Behind the Scenes) — captions live in translations ─── */
 const WORKING_ARCHIVE_IMAGES = [
-  '/assets/profile/working_street.webp',
+  '/assets/profile/working_set.webp',
   '/assets/profile/me.webp',
-  '/assets/profile/working_studio.webp',
-];
+  '/assets/profile/working_rig.webp',
+]
 
 export default function About() {
   const { dict, localePath } = useLanguage();

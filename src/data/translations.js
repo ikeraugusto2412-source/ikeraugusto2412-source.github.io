@@ -55,9 +55,9 @@ export const translations = {
       lightboxClose: 'Close',
       folderToggle: 'Open or close the folder',
       archiveSlides: [
-        { title: 'STREET & CANDID // ON LOCATION', tag: 'SLIDE 01 · 35MM LENS', desc: 'Candid framing and natural light study on European streets.' },
+        { title: 'INTERVIEW // ON SET', tag: 'SLIDE 01 · ON SET', desc: 'Camera on a tripod and an external monitor to frame the interview.' },
         { title: 'IKER AUGUSTO // CAMERA RIG', tag: 'SLIDE 02 · PRODUCTION', desc: 'Primary handheld gimbal and microphone rig setup.' },
-        { title: 'DARKROOM // CONTACT SHEETS', tag: 'SLIDE 03 · POST ARCHIVE', desc: 'Negative inspection with optical loupe and analog curation.' },
+        { title: 'READY TO ROLL // GIMBAL', tag: 'SLIDE 03 · GEAR', desc: 'Gimbal rig with monitor and mic, on the way to the shoot.' },
       ],
       tag: '[ ABOUT ]',
       role: 'Photographer · Filmmaker',
@@ -381,9 +381,9 @@ export const translations = {
       lightboxClose: 'Cerrar',
       folderToggle: 'Abrir o cerrar la carpeta',
       archiveSlides: [
-        { title: 'CALLE Y ESPONTÁNEO // EN LOCALIZACIÓN', tag: 'DIAPOSITIVA 01 · OBJETIVO 35MM', desc: 'Encuadre espontáneo y estudio de luz natural en calles europeas.' },
+        { title: 'ENTREVISTA // EN EL SET', tag: 'DIAPOSITIVA 01 · RODAJE', desc: 'Cámara en trípode y monitor externo para encuadrar la entrevista.' },
         { title: 'IKER AUGUSTO // EQUIPO DE CÁMARA', tag: 'DIAPOSITIVA 02 · PRODUCCIÓN', desc: 'Montaje principal de gimbal de mano y micrófono.' },
-        { title: 'CUARTO OSCURO // HOJAS DE CONTACTO', tag: 'DIAPOSITIVA 03 · ARCHIVO DE POSTPRODUCCIÓN', desc: 'Revisión de negativos con lupa óptica y selección analógica.' },
+        { title: 'LISTO PARA RODAR // GIMBAL', tag: 'DIAPOSITIVA 03 · EQUIPO', desc: 'Gimbal con monitor y micro, de camino al rodaje.' },
       ],
       tag: '[ SOBRE MÍ ]',
       role: 'Fotógrafo · Filmmaker',
