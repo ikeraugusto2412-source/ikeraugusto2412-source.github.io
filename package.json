@@ -11,6 +11,7 @@
     "optimize": "node scripts/optimize-images.cjs",
     "images": "node scripts/build-images.mjs",
     "palette": "node scripts/build-palette.mjs",
+    "photo-info": "node scripts/build-photo-info.mjs",
     "check:assets": "node scripts/check-assets.mjs",
     "check:responsive": "node scripts/check-responsive.mjs",
     "check:responsive:prod": "node scripts/check-responsive.mjs --prod"

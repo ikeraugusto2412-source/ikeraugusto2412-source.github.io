@@ -1,5 +1,5 @@
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import React, { useEffect, useRef, useState, lazy, Suspense } from 'react';
+import React, { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useParams, useSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { projects } from '../data/projects';
@@ -19,6 +19,7 @@ import NextProject from '../components/NextProject';
 import LiveVisitors from '../components/LiveVisitors';
 import GalleryPalette from '../components/GalleryPalette';
 import BehindTheScenes from '../components/BehindTheScenes';
+import PhotoInfo from '../components/PhotoInfo';
 import palettes from '../data/palettes.json';
 import { sizedSrc } from '../lib/images';
 import CinemaVideoPlayer from '../components/CinemaVideoPlayer';
@@ -69,6 +70,8 @@ export default function ProjectDetail() {
   const galleryIndex = Math.max(0, galleryImages.indexOf(selectedImage));
   const [slideDir, setSlideDir] = useState(0);
   const [bookOpen, setBookOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
+  const toggleInfo = useCallback(() => setInfoOpen((v) => !v), []);
   // Palette filter: the colour picked in this gallery (null = every photo)
   const [toneOf, setToneOf] = useState({ id: null, tone: null });
   const tone = toneOf.id === id ? toneOf.tone : null;
@@ -371,6 +374,7 @@ export default function ProjectDetail() {
                 </span>
               </>
             )}
+            <PhotoInfo src={selectedImage} project={project} open={infoOpen} onToggle={toggleInfo} />
             <button className="lightbox-close" onClick={(e) => { e.stopPropagation(); closeLightbox(); }}>
               {dict.projectDetail.close}
             </button>

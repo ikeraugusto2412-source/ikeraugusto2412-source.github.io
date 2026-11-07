@@ -1,0 +1,103 @@
+/* ── Per-photo sheet in the full-screen viewer ── */
+.photo-info-toggle {
+  position: absolute;
+  top: max(2rem, calc(var(--safe-top) + 0.75rem));
+  left: max(2rem, calc(var(--safe-left) + 0.75rem));
+  z-index: 1002;
+  width: var(--tap);
+  height: var(--tap);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+}
+
+.photo-info-toggle.is-on {
+  background: #fff;
+  color: #000;
+}
+
+.photo-info-toggle:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.photo-info {
+  position: absolute;
+  right: max(2rem, calc(var(--safe-right) + 0.75rem));
+  bottom: max(3.5rem, calc(var(--safe-bottom) + 3rem));
+  z-index: 1002;
+  width: min(320px, calc(100vw - 2rem));
+  padding: 16px 18px;
+  border-radius: 12px;
+  background-color: rgba(245, 244, 240, 0.96);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 14px 14px;
+  color: #1a1a1a;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1.4;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+  cursor: default;
+}
+
+.photo-info-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.photo-info-head span:last-child {
+  color: #777;
+}
+
+.photo-info dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 7px 16px;
+  margin: 0;
+}
+
+.photo-info dt {
+  color: #777;
+}
+
+.photo-info dd {
+  margin: 0;
+}
+
+.photo-info-palette {
+  display: flex;
+  gap: 6px;
+}
+
+.photo-info-palette i {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.photo-info-palette i.is-main {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .photo-info {
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    bottom: max(3rem, calc(var(--safe-bottom) + 2.5rem));
+  }
+}

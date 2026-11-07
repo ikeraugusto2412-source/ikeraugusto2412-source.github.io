@@ -1,0 +1,44 @@
+/* ── Fan of photos after sending a message ── */
+.thanks-fan {
+  margin: 0 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+
+.thanks-fan-cards {
+  position: relative;
+  width: min(320px, 100%);
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thanks-fan-cards img {
+  position: absolute;
+  width: 78px;
+  height: 104px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 3px solid #fff;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+}
+
+.thanks-fan figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+@media (max-width: 380px) {
+  .thanks-fan-cards img {
+    width: 64px;
+    height: 86px;
+  }
+}

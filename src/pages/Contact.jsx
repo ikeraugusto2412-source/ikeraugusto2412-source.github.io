@@ -7,6 +7,7 @@ import { sileo } from 'sileo';
 import ContactSphereCompanion from '../components/ContactSphereCompanion';
 import DrawLine from '../components/DrawLine';
 import { pressable, lift } from '../components/motion/pressable';
+import ThanksFan from '../components/ThanksFan';
 import './Contact.css';
 
 const CONTACT_EMAIL = 'ikeraugusto2412@gmail.com';
@@ -393,7 +394,11 @@ export default function Contact() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <div className="contact-success-icon">✓</div>
+                  {submitted === 'sent' ? (
+                    <ThanksFan caption={dict.contact.thanksFan} />
+                  ) : (
+                    <div className="contact-success-icon">✓</div>
+                  )}
                   <h3 className="contact-success-title">
                     {submitted === 'sent' ? dict.contact.sentTitle : dict.contact.successTitle}
                   </h3>
