@@ -129,6 +129,19 @@ const GALLERIES = [
     active: false,
     link: '/project/hugo-bravo',
   },
+  {
+    id: 'vie-nuit',
+    num: '008',
+    title: 'VIE NUIT',
+    field: 'DJ SET · BARCELONA',
+    count: 'VERTICAL 4K REEL',
+    image: '/assets/vie-nuit/cover.webp',
+    // Vertical reel still (9:16), in black and white
+    width: 300,
+    height: 520,
+    active: false,
+    link: '/project/vie-nuit',
+  },
 ];
 
 export default function PlaybookHero() {
