@@ -33,6 +33,8 @@ const DIRS = [
   'assets/profile',
   'assets/vie-nuit',
 ];
+// Photos encoded at higher quality (paths relative to public/)
+const FINE = new Set(['assets/vie-nuit/cover.webp']);
 // Keep in sync with VARIANT_WIDTHS in src/lib/images.js
 const WIDTHS = [640, 1280];
 const VARIANT_DIR = '_w';
@@ -82,13 +84,17 @@ async function processFile(file) {
   const outDir = path.join(path.dirname(file), VARIANT_DIR);
   await fs.mkdir(outDir, { recursive: true });
 
+  // Dark, grainy black-and-white stills band and smear at the usual settings
+  const fine = FINE.has(path.relative(PUBLIC, file).split(path.sep).join('/'));
+  const q = fine ? { webp: 90, avif: 72, full: 75 } : { webp: 78, avif: 52, full: 55 };
+
   const jobs = [];
   for (const w of WIDTHS) {
     if (meta.width <= w) continue; // never upscale: the original is served instead
-    jobs.push([`${base}-${w}.webp`, (s) => s.resize({ width: w }).webp({ quality: 78, effort: 5 })]);
-    jobs.push([`${base}-${w}.avif`, (s) => s.resize({ width: w }).avif({ quality: 52, effort: 4 })]);
+    jobs.push([`${base}-${w}.webp`, (s) => s.resize({ width: w }).webp({ quality: q.webp, effort: 5 })]);
+    jobs.push([`${base}-${w}.avif`, (s) => s.resize({ width: w }).avif({ quality: q.avif, effort: 4 })]);
   }
-  jobs.push([`${base}-full.avif`, (s) => s.avif({ quality: 55, effort: 4 })]);
+  jobs.push([`${base}-full.avif`, (s) => s.avif({ quality: q.full, effort: 4 })]);
 
   for (const [name, encode] of jobs) {
     const out = path.join(outDir, name);
