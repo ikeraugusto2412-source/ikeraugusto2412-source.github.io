@@ -165,6 +165,7 @@ export default function ProjectDetail() {
           </div>
           <h1 className="project-reel-h1">{project.title}</h1>
           <ReelPlayer
+            project={project.id}
             sources={project.reel.sources}
             poster={project.reel.poster}
             caption={`${project.title} · ${project.subtitle}`}

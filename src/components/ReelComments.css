@@ -1,0 +1,179 @@
+/* ── Reel comment sheet (Instagram-style, dark) ── */
+.reel-comments {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  height: 68%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px 16px 0 0;
+  background: #262626;
+  color: #f5f5f5;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+  cursor: default;
+}
+
+.reel-comments-head {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reel-comments-grip {
+  width: 38px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.reel-comments-head strong {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.reel-comments-head button {
+  position: absolute;
+  right: 8px;
+  top: 10px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.reel-comments-list {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reel-comments-empty {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.reel-comments-empty b {
+  font-size: 1.15rem;
+  color: #fff;
+}
+
+.reel-comment {
+  display: flex;
+  gap: 10px;
+}
+
+.reel-comment-avatar {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.reel-comment-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+
+.reel-comment-meta time {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.72rem;
+}
+
+.reel-comment p {
+  margin: 2px 0 0;
+  font-size: 0.86rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.reel-comments-form {
+  padding: 10px 12px calc(12px + var(--safe-bottom, 0px));
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reel-comments-notice {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  color: #ff8a80;
+}
+
+.reel-comments-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.reel-comments-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reel-comments-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.reel-comments-fields input {
+  width: 100%;
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 16px; /* no zoom-in on iPhone */
+  outline: none;
+}
+
+.reel-comments-fields input:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.reel-comments-row button {
+  border: 0;
+  background: none;
+  color: #0095f6;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.reel-comments-row button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}

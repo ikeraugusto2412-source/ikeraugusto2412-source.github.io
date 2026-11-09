@@ -1,16 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { sileo } from 'sileo';
 import { useLanguage } from '../context/LanguageContext';
 import { playSound } from '../audio/sound';
+import { commentsEnabled, listComments } from '../lib/comments';
+import ReelComments from './ReelComments';
 import './ReelPlayer.css';
 
 /*
  * A vertical video shown the way it would look as an Instagram reel: header, action rail on the
  * right, account + caption + audio at the bottom and a thin progress bar. It plays muted and
  * looped while on screen, like the app: tap toggles the sound, double-tap likes (big heart),
- * press and hold pauses. Like / save only live in this visit; there are no made-up counts.
+ * press and hold pauses. Comments are real (ReelComments); like / save only live in this visit,
+ * and there are no made-up counts.
  */
 const INSTAGRAM = 'https://www.instagram.com/ikeraugusto_ph/';
 const HOLD_MS = 260;
@@ -75,8 +77,8 @@ const Icon = {
   ),
 };
 
-export default function ReelPlayer({ sources, poster, caption, description, avatar }) {
-  const { dict, localePath } = useLanguage();
+export default function ReelPlayer({ project, sources, poster, caption, description, avatar }) {
+  const { dict } = useLanguage();
   const t = dict.reel;
   const boxRef = useRef(null);
   const videoRef = useRef(null);
@@ -92,6 +94,16 @@ export default function ReelPlayer({ sources, poster, caption, description, avat
   const [hearts, setHearts] = useState([]);
   const [soundFlash, setSoundFlash] = useState(0);
   const [expanded, setExpanded] = useState(false);
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [commentCount, setCommentCount] = useState(0);
+
+  // Real number of comments under the icon (nothing shown while there are none)
+  useEffect(() => {
+    if (!commentsEnabled || !project) return undefined;
+    let stop = false;
+    listComments(project).then((rows) => !stop && setCommentCount(rows.length)).catch(() => {});
+    return () => { stop = true; };
+  }, [project]);
 
   // Plays only while on screen, like the feed
   useEffect(() => {
@@ -261,10 +273,10 @@ export default function ReelPlayer({ sources, poster, caption, description, avat
           </motion.span>
           <small>{t.like}</small>
         </button>
-        <Link to={localePath('/contact')} aria-label={t.comment}>
+        <button type="button" onClick={() => setCommentsOpen(true)} aria-label={t.comment} aria-expanded={commentsOpen}>
           {Icon.comment}
-          <small>{t.comment}</small>
-        </Link>
+          <small>{commentCount > 0 ? commentCount : t.comment}</small>
+        </button>
         <button type="button" onClick={share} aria-label={t.share}>
           {Icon.send}
           <small>{t.share}</small>
@@ -301,6 +313,12 @@ export default function ReelPlayer({ sources, poster, caption, description, avat
       <button type="button" className="reel-mute" onClick={toggleSound} aria-label={muted ? t.soundOn : t.soundOff}>
         {Icon.sound(!muted)}
       </button>
+
+      <AnimatePresence>
+        {commentsOpen && (
+          <ReelComments project={project} onClose={() => setCommentsOpen(false)} onCount={setCommentCount} />
+        )}
+      </AnimatePresence>
 
       <div className="reel-progress" aria-hidden="true">
         <span style={{ transform: `scaleX(${progress})` }} />
