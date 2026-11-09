@@ -67,6 +67,7 @@ const ROUTES = [
   '/project/norway',
   '/project/huck-knife-pro',
   '/project/tour-de-france',
+  '/project/vie-nuit',
 ];
 
 // ─── CLI ──────────────────────────────────────────────────────

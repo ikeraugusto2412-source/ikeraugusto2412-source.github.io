@@ -44,6 +44,7 @@ for (const p of projects) {
     const avg = [0, 1, 2].map((i) => Math.round(px.reduce((s, q) => s + q[i], 0) / px.length));
     photos.push({ src, px, avg });
   }
+  if (!photos.length) continue; // a gallery with no photos (e.g. a reel)
   const colours = kmeans(photos.flatMap((f) => f.px), K);
   const main = photos.map((f) => {
     // the colour that covers most of the photo

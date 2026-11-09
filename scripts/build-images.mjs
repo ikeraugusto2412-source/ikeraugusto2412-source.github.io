@@ -31,6 +31,7 @@ const DIRS = [
   'assets/salomon',
   'assets/the-weeknd',
   'assets/profile',
+  'assets/vie-nuit',
 ];
 // Keep in sync with VARIANT_WIDTHS in src/lib/images.js
 const WIDTHS = [640, 1280];

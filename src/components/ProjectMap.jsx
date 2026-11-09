@@ -18,12 +18,14 @@ const PLACES = {
   norway: [6.86, 61.7],
   'huck-knife-pro': [2.04, 42.5], // Font-Romeu, France
   'the-weeknd': [2.15, 41.36],
+  'vie-nuit': [2.19, 41.4],
   'tour-de-france': [1.81, 41.24],
 };
 // Label placement around the pin for the points that sit close together (Pyrenees / Barcelona coast)
 const LABEL_AT = {
   'huck-knife-pro': { dx: -10, dy: -8, anchor: 'end' },
-  'the-weeknd': { dx: 12, dy: 2, anchor: 'start' },
+  'the-weeknd': { dx: 12, dy: 6, anchor: 'start' },
+  'vie-nuit': { dx: 12, dy: -12, anchor: 'start' },
   'tour-de-france': { dx: -10, dy: 22, anchor: 'end' },
 };
 const LABEL_DEFAULT = { dx: 10, dy: -10, anchor: 'start' };

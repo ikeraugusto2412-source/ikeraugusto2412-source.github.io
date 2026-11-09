@@ -20,6 +20,7 @@ import LiveVisitors from '../components/LiveVisitors';
 import GalleryPalette from '../components/GalleryPalette';
 import BehindTheScenes from '../components/BehindTheScenes';
 import PhotoInfo from '../components/PhotoInfo';
+import ReelPlayer from '../components/ReelPlayer';
 import palettes from '../data/palettes.json';
 import { sizedSrc } from '../lib/images';
 import CinemaVideoPlayer from '../components/CinemaVideoPlayer';
@@ -139,7 +140,11 @@ export default function ProjectDetail() {
           key={project.id}
           brand="IK®"
           title={project.title.toUpperCase()}
-          subtitle={`${project.gridImages ? project.gridImages.length : '30'} ${dict.projectDetail.photographs} · ${dict.projectDetail.archivalSeries}`}
+          subtitle={
+            project.reel
+              ? `${dict.reel.label} · ${project.location}`
+              : `${project.gridImages ? project.gridImages.length : '30'} ${dict.projectDetail.photographs} · ${dict.projectDetail.archivalSeries}`
+          }
           previewImages={
             project.gridImages && project.gridImages.length > 0
               ? project.gridImages.slice(0, 8).map((src) => sizedSrc(src, 640))
@@ -147,7 +152,31 @@ export default function ProjectDetail() {
           }
         />
       {/* Top Hero: Video Player for Norway, 3D Spiral Helix on New York, or Monumental Static Cover Hero on London/Salomon/Tour */}
-      {project.videoUrl ? (
+      {project.reel ? (
+        <div className="project-reel-hero">
+          <div className="project-reel-mobile-head" aria-hidden="true">
+            <span className="project-brand-name">IK®</span>
+            <span className="project-reel-word">{project.title}</span>
+            <span className="project-reel-meta">{project.year} · {project.location}</span>
+          </div>
+          <div className="project-reel-title" aria-hidden="true">
+            <span className="project-brand-name">IK®</span>
+            <span className="project-reel-word">{project.title.split(' ')[0]}</span>
+          </div>
+          <h1 className="project-reel-h1">{project.title}</h1>
+          <ReelPlayer
+            sources={project.reel.sources}
+            poster={project.reel.poster}
+            caption={`${project.title} · ${project.subtitle}`}
+            description={typeof project.description === 'object' ? (project.description[language] || project.description.en) : project.description}
+            avatar={sizedSrc('/assets/profile/me.webp', 320)}
+          />
+          <div className="project-reel-title project-reel-title--end" aria-hidden="true">
+            <span className="project-reel-word">{project.title.split(' ').slice(1).join(' ')}</span>
+            <span className="project-reel-meta">{project.year} · {project.location}</span>
+          </div>
+        </div>
+      ) : project.videoUrl ? (
         <div className="project-video-hero-wrap">
           <div className="project-detail-video-wrap container">
             <CinemaVideoPlayer

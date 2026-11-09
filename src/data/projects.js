@@ -175,6 +175,34 @@ const theWeekndGridImages = [
 
 export const projects = [
   {
+    id: 'vie-nuit',
+    type: 'video',
+    title: 'Vie Nuit',
+    subtitle: 'DJ Set Reel · Barcelona',
+    category: {
+      en: 'Event Video · DJ Reel',
+      es: 'Vídeo de evento · Reel DJ'
+    },
+    description: {
+      en: 'A vertical reel for two DJs during their set at a Barcelona club: the booth, the crowd and the lights, cut to the music. Shot in 4K at 60 fps.',
+      es: 'Un reel vertical para dos DJs durante su sesión en una discoteca de Barcelona: la cabina, el público y las luces, montado al ritmo de la música. Rodado en 4K a 60 fps.'
+    },
+    // Vertical reel, shown in an Instagram-style player. Web encodes of the 4K master
+    reel: {
+      poster: '/assets/vie-nuit/poster.webp',
+      sources: [
+        { src: '/assets/vie-nuit/vie-nuit-2160p.mp4', height: 3840 },
+        { src: '/assets/vie-nuit/vie-nuit-1080p.mp4', height: 1920 },
+      ],
+    },
+    coverImage: '/assets/vie-nuit/cover.webp', // still from the reel, in black and white
+    coverPosition: 'center 38%',
+    gridImages: [],
+    location: 'Barcelona, Spain',
+    year: '2026',
+    format: 'Vertical 4K reel · 60 fps',
+  },
+  {
     id: 'the-weeknd',
     type: 'photo',
     title: 'The Weeknd',
