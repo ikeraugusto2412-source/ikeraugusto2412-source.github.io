@@ -195,7 +195,7 @@ export const projects = [
         { src: '/assets/vie-nuit/vie-nuit-1080p.mp4', height: 1920 },
       ],
     },
-    coverImage: '/assets/vie-nuit/cover.webp', // still from the reel, in black and white
+    coverImage: '/assets/vie-nuit/cover.webp', // frame from the original camera clip (R6M26589, 0:50)
     coverPosition: 'center 38%',
     gridImages: [],
     location: 'Barcelona, Spain',

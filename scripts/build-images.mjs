@@ -84,7 +84,7 @@ async function processFile(file) {
   const outDir = path.join(path.dirname(file), VARIANT_DIR);
   await fs.mkdir(outDir, { recursive: true });
 
-  // Dark, grainy black-and-white stills band and smear at the usual settings
+  // Dark, grainy nightclub stills band and smear at the usual settings
   const fine = FINE.has(path.relative(PUBLIC, file).split(path.sep).join('/'));
   const q = fine ? { webp: 90, avif: 72, full: 75 } : { webp: 78, avif: 52, full: 55 };
 

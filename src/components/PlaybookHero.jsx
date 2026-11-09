@@ -136,7 +136,7 @@ const GALLERIES = [
     field: 'DJ SET · BARCELONA',
     count: 'VERTICAL 4K REEL',
     image: '/assets/vie-nuit/cover.webp',
-    // Vertical reel still (9:16), in black and white
+    // Vertical reel still (9:16)
     width: 300,
     height: 520,
     active: false,
