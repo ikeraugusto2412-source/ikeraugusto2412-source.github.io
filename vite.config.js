@@ -65,7 +65,7 @@ const CSP = [
  * - a 1200×630 share image per project, made from its cover;
  * - robots.txt, sitemap.xml (both languages) and 404.html (unknown URLs still load the app);
  * - drops macOS .DS_Store files from the output.
- * VITE_SITE_URL (e.g. https://ikeraugusto2412-source.github.io) makes the URLs absolute.
+ * VITE_SITE_URL (e.g. https://ik-com.com) makes the URLs absolute.
  */
 function siteMeta(siteUrl) {
   const base = (siteUrl || '').replace(/\/$/, '')

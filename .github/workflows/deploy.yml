@@ -1,4 +1,4 @@
-# Publishes the site to GitHub Pages (https://ikeraugusto2412-source.github.io) on every push to main.
+# Publishes the site to GitHub Pages (https://ik-com.com, custom domain set in Settings › Pages) on every push to main.
 # Optional settings live in Settings › Secrets and variables › Actions › Variables:
 #   VITE_WEB3FORMS_KEY (contact form), VITE_UMAMI_WEBSITE_ID (visit statistics) and
 #   VITE_UMAMI_SHARE_ID (live visitors pill, from the Umami share URL).
@@ -40,7 +40,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_SITE_URL: https://ikeraugusto2412-source.github.io
+          VITE_SITE_URL: https://ik-com.com
           VITE_WEB3FORMS_KEY: ${{ vars.VITE_WEB3FORMS_KEY }}
           VITE_UMAMI_WEBSITE_ID: ${{ vars.VITE_UMAMI_WEBSITE_ID }}
           VITE_UMAMI_SHARE_ID: ${{ vars.VITE_UMAMI_SHARE_ID }}
