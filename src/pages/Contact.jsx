@@ -278,6 +278,7 @@ export default function Contact() {
                         id="contact-name"
                         type="text"
                         name="name"
+                        maxLength={80}
                         autoComplete="name"
                         required
                         value={formData.name}
@@ -294,6 +295,7 @@ export default function Contact() {
                         id="contact-email"
                         type="email"
                         name="email"
+                        maxLength={120}
                         autoComplete="email"
                         required
                         value={formData.email}
@@ -313,6 +315,7 @@ export default function Contact() {
                         id="contact-company"
                         type="text"
                         name="company"
+                        maxLength={120}
                         autoComplete="organization"
                         value={formData.company}
                         onChange={handleInputChange}
@@ -328,6 +331,7 @@ export default function Contact() {
                         id="contact-timeline"
                         type="text"
                         name="timeline"
+                        maxLength={120}
                         value={formData.timeline}
                         onChange={handleInputChange}
                         onFocus={() => setFocusedField('timeline')}
@@ -343,6 +347,7 @@ export default function Contact() {
                     <textarea
                       id="contact-message"
                       name="message"
+                      maxLength={4000}
                       required
                       value={formData.message}
                       onChange={handleInputChange}

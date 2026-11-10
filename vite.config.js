@@ -39,6 +39,25 @@ function pageHtml(template, base, pagePath, lang, meta) {
   return html.replace('</head>', `    ${links.join('\n    ')}\n  </head>`)
 }
 
+/*
+ * Content-Security-Policy for the published site (GitHub Pages can't send headers, so it goes in
+ * a <meta>): only our own files plus the few services the site talks to. Anything injected from
+ * elsewhere (a script, a form posting to another server) is refused by the browser.
+ */
+const CSP = [
+  "default-src 'self'",
+  // 'unsafe-eval': the contact-page avatar library builds its validators with Function()
+  "script-src 'self' 'unsafe-eval' https://cloud.umami.is",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  "img-src 'self' data: blob:",
+  "media-src 'self' blob:",
+  "connect-src 'self' https://cloud.umami.is https://*.umami.is https://api.web3forms.com https://*.supabase.co",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self' https://api.web3forms.com",
+].join('; ')
+
 /**
  * Build-time SEO for a static host (GitHub Pages):
  * - one HTML file per page and language (/works/index.html, /es/works/index.html…) so link
@@ -54,7 +73,10 @@ function siteMeta(siteUrl) {
   return {
     name: 'site-meta',
     apply: 'build',
-    transformIndexHtml: (html) => html.replaceAll('%SITE_URL%', base),
+    transformIndexHtml: (html) =>
+      html
+        .replaceAll('%SITE_URL%', base)
+        .replace('<meta name="viewport"', `<meta http-equiv="Content-Security-Policy" content="${CSP}" />\n    <meta name="referrer" content="strict-origin-when-cross-origin" />\n    <meta name="viewport"`),
     generateBundle() {
       const robots = ['User-agent: *', 'Allow: /']
       if (base) robots.push('', `Sitemap: ${base}/sitemap.xml`)
