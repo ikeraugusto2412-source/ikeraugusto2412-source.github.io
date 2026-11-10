@@ -7,6 +7,7 @@ import sharp from 'sharp'
 import { projects } from './src/data/projects.js'
 import { LANGS, localize } from './src/lib/i18nPath.js'
 import { STATIC_PATHS, metaFor, canonicalUrl, alternates, projectOgImage } from './src/lib/seoMeta.js'
+import { jsonLdFor } from './src/lib/structuredData.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const OUT_DIR = path.resolve(__dirname, 'dist')
@@ -34,6 +35,8 @@ function pageHtml(template, base, pagePath, lang, meta) {
         `<meta property="og:url" content="${canonicalUrl(base, pagePath, lang)}" />`,
         `<link rel="canonical" href="${canonicalUrl(base, pagePath, lang)}" />`,
         ...alternates(base, pagePath).map(({ hreflang, href }) => `<link rel="alternate" hreflang="${hreflang}" href="${href}" />`),
+        // schema.org data for search engines ("<" escaped so no text can close the script tag)
+        `<script type="application/ld+json">${JSON.stringify(jsonLdFor(base, pagePath, lang)).replace(/</g, '\\u003c')}</script>`,
       ]
     : []
   return html.replace('</head>', `    ${links.join('\n    ')}\n  </head>`)

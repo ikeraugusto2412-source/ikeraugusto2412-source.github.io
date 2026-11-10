@@ -9,7 +9,7 @@ import { LANGS, localize } from './i18nPath.js';
  */
 
 // Menu labels are written in capitals ("SOBRE MÍ"); a title reads better as "Sobre mí"
-function sentenceCase(text, lang) {
+export function sentenceCase(text, lang) {
   if (text !== text.toLocaleUpperCase(lang)) return text;
   const lower = text.toLocaleLowerCase(lang);
   return lower.charAt(0).toLocaleUpperCase(lang) + lower.slice(1);

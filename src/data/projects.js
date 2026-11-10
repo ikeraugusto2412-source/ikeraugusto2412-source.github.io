@@ -188,6 +188,8 @@ export const projects = [
       es: 'Un reel vertical para dos DJs durante su sesión en una discoteca de Barcelona: la cabina, el público y las luces, montado al ritmo de la música. Rodado en 4K a 60 fps.'
     },
     // Vertical reel, shown in an Instagram-style player. Web encodes of the 4K master
+    // For search engines (VideoObject): first published and length
+    videoMeta: { uploadDate: '2026-11-09', duration: 'PT22S' },
     reel: {
       poster: '/assets/vie-nuit/poster.webp',
       sources: [
@@ -312,6 +314,7 @@ export const projects = [
     },
     // Web encodes of the 4K master (kept outside public/, see originals/README.md): the player
     // starts at the level that suits the screen and the viewer can switch in Settings › Quality
+    videoMeta: { uploadDate: '2026-10-22', duration: 'PT34S' },
     videoUrl: '/assets/Noruega/Video/norway-1080p.mp4',
     videoSources: [
       { src: '/assets/Noruega/Video/norway-2160p.mp4', label: '2160p', badge: '4K', height: 2160 },
