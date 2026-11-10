@@ -92,7 +92,7 @@ export default function Preloader({ onComplete }) {
         el.style.visibility = 'visible';
 
         // Opacity tiers (matching swagg optical hierarchy)
-        let opacity = 0;
+        let opacity;
         if (absDiff <= 1) {
           opacity = 1 - absDiff * 0.62;
         } else if (absDiff <= 2) {
@@ -102,7 +102,7 @@ export default function Preloader({ onComplete }) {
         }
 
         // Blur tiers
-        let blur = 0;
+        let blur;
         if (absDiff <= 1) {
           blur = absDiff * 3;
         } else if (absDiff <= 2) {

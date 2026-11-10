@@ -190,7 +190,7 @@ export default function AvatarLab({ size = 260 }) {
 
     const angle = Math.atan2(dy, dx) * (180 / Math.PI);
 
-    let targetExpr = 'neutral';
+    let targetExpr;
     if (angle >= -45 && angle <= 45) {
       targetExpr = 'playful-right';
     } else if (angle > 45 && angle < 135) {
