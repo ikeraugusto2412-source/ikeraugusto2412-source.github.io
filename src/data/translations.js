@@ -193,6 +193,8 @@ export const translations = {
         'Other',
       ],
       submitBtn: 'SEND INQUIRY',
+      privacyNote: 'I only use your details to reply to you. More in the',
+      privacyLink: 'privacy policy',
       successTitle: 'REQUEST READY!',
       successDesc: 'Thank you {name}. I have prepared the summary of your inquiry. You can send it directly with one click to my inbox:',
       briefName: 'Name:',
@@ -355,10 +357,112 @@ export const translations = {
       soundOff: 'Enter in silence',
       soundNote: 'The site uses soft sounds as you browse',
     },
+    legal: {
+      "tag": "Legal",
+      "title": "Legal notice & privacy",
+      "updated": "Last updated: November 2026",
+      "sections": [
+        {
+          "id": "aviso",
+          "title": "Legal notice",
+          "blocks": [
+            {
+              "h": "Owner",
+              "p": [
+                "This website (ik-com.com) is the personal portfolio of Iker Augusto, a photographer and filmmaker based in Sitges (Barcelona), Spain.",
+                "Contact: ikeraugusto2412@gmail.com"
+              ]
+            },
+            {
+              "h": "Purpose",
+              "p": [
+                "The site shows Iker Augusto's photography and video work and lets you get in touch about commissions or collaborations."
+              ]
+            },
+            {
+              "h": "Intellectual property",
+              "p": [
+                "All photographs, videos and texts on this site are the work of Iker Augusto unless stated otherwise and are protected by copyright. They may not be copied, downloaded for reuse, altered or published elsewhere without written permission.",
+                "If you would like to use an image, write to me and we can talk."
+              ]
+            },
+            {
+              "h": "Liability",
+              "p": [
+                "Links to other websites (for example Instagram) are provided for convenience; I am not responsible for their content."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "privacidad",
+          "title": "Privacy policy",
+          "blocks": [
+            {
+              "h": "Data controller",
+              "p": [
+                "Iker Augusto · ikeraugusto2412@gmail.com"
+              ]
+            },
+            {
+              "h": "What data I collect and why",
+              "p": [
+                "Contact form: your name, email and, if you add them, brand, dates and message. I only use them to answer your enquiry and, if we work together, to manage the job.",
+                "Reel comments: the name and text you write are published on the site and can be seen by any visitor. Please do not include personal data in them.",
+                "I never sell or pass your data to third parties, nor use it for advertising."
+              ]
+            },
+            {
+              "h": "Legal basis",
+              "p": [
+                "Your consent when you send the form or post a comment (Art. 6.1.a GDPR), and pre-contractual steps if you ask for a quote (Art. 6.1.b GDPR)."
+              ]
+            },
+            {
+              "h": "Services involved",
+              "p": [
+                "GitHub Pages (hosting): like any server, it logs technical data such as your IP address for security.",
+                "Web3Forms: delivers the contact form messages by email.",
+                "Umami: anonymous, aggregated visit statistics, with no cookies and nothing that identifies you.",
+                "Supabase: stores the reel comments.",
+                "Some of these providers may process data outside the European Economic Area, always with GDPR safeguards (standard contractual clauses or the EU-US Data Privacy Framework)."
+              ]
+            },
+            {
+              "h": "How long",
+              "p": [
+                "Messages are kept as long as needed to answer the enquiry and, if there is a job, for the periods required by law. Comments stay while the post is on the site or until you ask for them to be removed."
+              ]
+            },
+            {
+              "h": "Your rights",
+              "p": [
+                "You can ask to access, correct, delete, object to, restrict or take away your data by writing to ikeraugusto2412@gmail.com. You can also withdraw your consent at any time.",
+                "If you think your data has not been handled properly, you can complain to the Spanish Data Protection Agency (aepd.es)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cookies",
+          "title": "Cookies",
+          "blocks": [
+            {
+              "h": "This site does not use cookies",
+              "p": [
+                "There are no advertising, tracking or third-party cookies, which is why you see no cookie banner.",
+                "Your browser keeps a few preferences in local storage (language, whether sound is on, the name you use for comments). They stay on your device, are never sent anywhere and can be cleared from your browser settings."
+              ]
+            }
+          ]
+        }
+      ]
+    },
     footer: {
       title1: "LET'S CREATE",
       title2: 'TOGETHER.',
       rights: 'ALL RIGHTS RESERVED',
+      legal: "LEGAL & PRIVACY",
       photoFilm: 'PHOTOGRAPHY & FILM',
       location: 'SITGES (BARCELONA), SPAIN',
     },
@@ -558,6 +662,8 @@ export const translations = {
         'Otro',
       ],
       submitBtn: 'ENVIAR CONSULTA',
+      privacyNote: 'Solo uso tus datos para responderte. Más información en la',
+      privacyLink: 'política de privacidad',
       successTitle: '¡SOLICITUD LISTA!',
       successDesc: 'Gracias {name}. He preparado el resumen de tu consulta. Puedes enviarlo directamente con un clic a mi bandeja de entrada:',
       briefName: 'Nombre:',
@@ -720,10 +826,112 @@ export const translations = {
       soundOff: 'Entrar en silencio',
       soundNote: 'La web usa sonidos suaves al navegar',
     },
+    legal: {
+      "tag": "Legal",
+      "title": "Aviso legal y privacidad",
+      "updated": "Última actualización: noviembre de 2026",
+      "sections": [
+        {
+          "id": "aviso",
+          "title": "Aviso legal",
+          "blocks": [
+            {
+              "h": "Titular",
+              "p": [
+                "Esta web (ik-com.com) es el portfolio personal de Iker Augusto, fotógrafo y filmmaker con base en Sitges (Barcelona), España.",
+                "Contacto: ikeraugusto2412@gmail.com"
+              ]
+            },
+            {
+              "h": "Objeto",
+              "p": [
+                "La web muestra el trabajo fotográfico y audiovisual de Iker Augusto y permite contactar con él para encargos o colaboraciones."
+              ]
+            },
+            {
+              "h": "Propiedad intelectual",
+              "p": [
+                "Todas las fotografías, vídeos y textos de esta web son obra de Iker Augusto, salvo que se indique lo contrario, y están protegidos por la Ley de Propiedad Intelectual. No se permite copiarlos, descargarlos para su reutilización, modificarlos ni publicarlos en otros medios sin permiso por escrito.",
+                "Si quieres usar alguna imagen, escríbeme y lo hablamos."
+              ]
+            },
+            {
+              "h": "Responsabilidad",
+              "p": [
+                "Los enlaces a otras webs (por ejemplo, Instagram) se ofrecen por comodidad; no me hago responsable de su contenido."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "privacidad",
+          "title": "Política de privacidad",
+          "blocks": [
+            {
+              "h": "Responsable",
+              "p": [
+                "Iker Augusto · ikeraugusto2412@gmail.com"
+              ]
+            },
+            {
+              "h": "Qué datos recojo y para qué",
+              "p": [
+                "Formulario de contacto: tu nombre, email y, si los añades, marca, fechas y mensaje. Los uso solo para responder a tu consulta y, si llegamos a trabajar juntos, para gestionar el encargo.",
+                "Comentarios del reel: el nombre y el texto que escribas se publican en la web y los puede ver cualquier visitante. No pongas datos personales en ellos.",
+                "Nunca vendo ni cedo tus datos a terceros ni los uso para publicidad."
+              ]
+            },
+            {
+              "h": "Base legal",
+              "p": [
+                "Tu consentimiento, al enviar el formulario o publicar un comentario (art. 6.1.a RGPD), y la aplicación de medidas precontractuales si me pides un presupuesto (art. 6.1.b RGPD)."
+              ]
+            },
+            {
+              "h": "Servicios que intervienen",
+              "p": [
+                "GitHub Pages (alojamiento de la web): como cualquier servidor, registra datos técnicos como la dirección IP por seguridad.",
+                "Web3Forms: entrega por email los mensajes del formulario.",
+                "Umami: estadísticas de visitas anónimas y agregadas, sin cookies ni datos que te identifiquen.",
+                "Supabase: guarda los comentarios del reel.",
+                "Algunos de estos proveedores pueden tratar datos fuera del Espacio Económico Europeo, siempre con las garantías del RGPD (cláusulas contractuales tipo o marco de privacidad UE-EE. UU.)."
+              ]
+            },
+            {
+              "h": "Cuánto tiempo",
+              "p": [
+                "Los mensajes se conservan el tiempo necesario para atender la consulta y, si hay encargo, durante los plazos que exija la ley. Los comentarios se mantienen mientras la publicación esté en la web o hasta que pidas borrarlos."
+              ]
+            },
+            {
+              "h": "Tus derechos",
+              "p": [
+                "Puedes pedir acceder a tus datos, corregirlos, borrarlos, oponerte a su uso, limitarlo o llevártelos escribiendo a ikeraugusto2412@gmail.com. También puedes retirar tu consentimiento en cualquier momento.",
+                "Si crees que no se han tratado bien, puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es)."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cookies",
+          "title": "Cookies",
+          "blocks": [
+            {
+              "h": "Esta web no usa cookies",
+              "p": [
+                "No hay cookies de publicidad, de seguimiento ni de terceros, por eso no ves ningún aviso de cookies.",
+                "Tu navegador guarda algunas preferencias en el almacenamiento local (idioma, sonido activado o no, el nombre que usas en los comentarios). Se quedan en tu dispositivo, no se envían a nadie y puedes borrarlas desde los ajustes del navegador."
+              ]
+            }
+          ]
+        }
+      ]
+    },
     footer: {
       title1: 'CREEMOS',
       title2: 'JUNTOS.',
       rights: 'TODOS LOS DERECHOS RESERVADOS',
+      legal: "AVISO LEGAL Y PRIVACIDAD",
       photoFilm: 'FOTOGRAFÍA & CINE',
       location: 'SITGES (BARCELONA), ESPAÑA',
     },

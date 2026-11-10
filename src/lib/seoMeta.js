@@ -16,7 +16,7 @@ function sentenceCase(text, lang) {
 }
 
 /** Pages that exist for every language (path without the language prefix). */
-export const STATIC_PATHS = ['/', '/works', '/about', '/contact', ...projects.map((p) => `/project/${p.id}`)];
+export const STATIC_PATHS = ['/', '/works', '/about', '/contact', '/legal', ...projects.map((p) => `/project/${p.id}`)];
 
 /** Share image of a project, generated at build time from its cover. */
 export const projectOgImage = (id) => `/og/${id}.jpg`;
@@ -34,6 +34,7 @@ export function metaFor(path, lang) {
   if (path === '/works') return page(dict.nav.work, dict.seo.worksDescription);
   if (path === '/about') return page(dict.nav.about, dict.seo.aboutDescription);
   if (path === '/contact') return page(dict.nav.contact, dict.seo.contactDescription);
+  if (path === '/legal') return page(dict.legal.title, dict.legal.sections[1].blocks[1].p[0]);
 
   const projectId = path.match(/^\/project\/([^/]+)$/)?.[1];
   const project = projectId && projects.find((p) => p.id === projectId);

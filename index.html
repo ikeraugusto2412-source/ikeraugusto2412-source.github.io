@@ -24,10 +24,30 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#050505" />
 
-    <!-- Performance hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@700;800;900&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,600&family=Space+Mono:wght@400;700&display=swap" />
+    <!-- Who this site is about, for search engines -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "name": "Iker Augusto",
+            "alternateName": "Iker Augusto — Fotógrafo & Filmmaker",
+            "url": "%SITE_URL%/"
+          },
+          {
+            "@type": "Person",
+            "name": "Iker Augusto",
+            "jobTitle": "Photographer & Filmmaker",
+            "url": "%SITE_URL%/",
+            "image": "%SITE_URL%/og-image.jpg",
+            "email": "mailto:ikeraugusto2412@gmail.com",
+            "address": { "@type": "PostalAddress", "addressLocality": "Sitges", "addressRegion": "Barcelona", "addressCountry": "ES" },
+            "sameAs": ["https://www.instagram.com/ikeraugusto_ph/"]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

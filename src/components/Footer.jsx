@@ -3,6 +3,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion
 import { useLanguage } from '../context/LanguageContext';
 import { Reveal, RevealItem } from './motion/Reveal';
 import DrawLine from './DrawLine';
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
 /*
@@ -39,7 +40,7 @@ function RisingTitle({ lines }) {
 }
 
 export default function Footer() {
-  const { dict } = useLanguage();
+  const { dict, localePath } = useLanguage();
 
   return (
     <footer id="contact" className="footer">
@@ -65,7 +66,10 @@ export default function Footer() {
 
       {/* Editorial bottom bar — Untitled Film style */}
       <div className="footer-editorial-bar">
-        <span className="footer-bar-copy">©{new Date().getFullYear()} {dict.footer.rights} | "IKER AUGUSTO."</span>
+        <span className="footer-bar-copy">
+          ©{new Date().getFullYear()} {dict.footer.rights} | "IKER AUGUSTO."<span className="footer-bar-sep"> | </span>
+          <Link to={localePath('/legal')} className="footer-bar-legal">{dict.footer.legal}</Link>
+        </span>
         <span className="footer-bar-center">{dict.footer.photoFilm}</span>
         <span className="footer-bar-location">{dict.footer.location}</span>
       </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import PageTransition from '../components/PageTransition';
 import Footer from '../components/Footer';
 import { useLanguage } from '../context/LanguageContext';
@@ -29,7 +30,7 @@ function Line({ delay = 0 }) {
 }
 
 export default function Contact() {
-  const { dict } = useLanguage();
+  const { dict, localePath } = useLanguage();
 
   // Form State
   const [formData, setFormData] = useState({
@@ -391,6 +392,10 @@ export default function Contact() {
                     <span>{sending ? dict.contact.sending : dict.contact.submitBtn}</span>
                     <span className="form-submit-arrow">→</span>
                   </motion.button>
+                  <p className="form-privacy-note">
+                    {dict.contact.privacyNote}{' '}
+                    <Link to={`${localePath('/legal')}#privacidad`}>{dict.contact.privacyLink}</Link>.
+                  </p>
                 </form>
               ) : (
                 <motion.div

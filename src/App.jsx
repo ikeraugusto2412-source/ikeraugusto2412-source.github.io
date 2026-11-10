@@ -19,6 +19,7 @@ const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Works = lazy(() => import('./pages/Works'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+const Legal = lazy(() => import('./pages/Legal'))
 
 // Experiments and component showcases: only in `npm run dev`, never shipped in the build
 const DEV = import.meta.env.DEV
@@ -131,6 +132,7 @@ function App() {
             <Route key={`${prefix}about`} path={`${prefix}/about`} element={<About />} />,
             <Route key={`${prefix}project`} path={`${prefix}/project/:id`} element={<ProjectDetail />} />,
             <Route key={`${prefix}contact`} path={`${prefix}/contact`} element={<Contact />} />,
+            <Route key={`${prefix}legal`} path={`${prefix}/legal`} element={<Legal />} />,
           ])}
           {DEV && <Route path="/lens" element={<LensExperiment />} />}
           {DEV && <Route path="/portfolio/:type" element={<PortfolioCategory />} />}

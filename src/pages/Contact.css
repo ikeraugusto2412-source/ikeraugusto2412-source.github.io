@@ -648,3 +648,16 @@
     min-height: var(--tap);
   }
 }
+
+.form-privacy-note {
+  margin: 0.9rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.form-privacy-note a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

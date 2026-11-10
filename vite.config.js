@@ -48,8 +48,8 @@ const CSP = [
   "default-src 'self'",
   // 'unsafe-eval': the contact-page avatar library builds its validators with Function()
   "script-src 'self' 'unsafe-eval' https://cloud.umami.is",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src 'self' https://fonts.gstatic.com",
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self'",
   "img-src 'self' data: blob:",
   "media-src 'self' blob:",
   "connect-src 'self' https://cloud.umami.is https://*.umami.is https://api.web3forms.com https://*.supabase.co",

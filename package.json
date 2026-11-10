@@ -18,6 +18,10 @@
   },
   "dependencies": {
     "@bible-strong/avatar-react": "^0.1.0",
+    "@fontsource/barlow": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/playfair-display": "^5.3.0",
+    "@fontsource/space-mono": "^5.3.0",
     "@react-spring/web": "^10.1.2",
     "@use-gesture/react": "^10.3.1",
     "animejs": "^4.5.0",
