@@ -189,7 +189,7 @@ export const projects = [
     },
     // Vertical reel, shown in an Instagram-style player. Web encodes of the 4K master
     // For search engines (VideoObject): first published and length
-    videoMeta: { uploadDate: '2026-11-09', duration: 'PT22S' },
+    videoMeta: { uploadDate: '2026-11-09T12:00:00+01:00', duration: 'PT22S' },
     reel: {
       poster: '/assets/vie-nuit/poster.webp',
       sources: [
@@ -314,7 +314,7 @@ export const projects = [
     },
     // Web encodes of the 4K master (kept outside public/, see originals/README.md): the player
     // starts at the level that suits the screen and the viewer can switch in Settings › Quality
-    videoMeta: { uploadDate: '2026-10-22', duration: 'PT34S' },
+    videoMeta: { uploadDate: '2026-10-22T12:00:00+02:00', duration: 'PT34S' },
     videoUrl: '/assets/Noruega/Video/norway-1080p.mp4',
     videoSources: [
       { src: '/assets/Noruega/Video/norway-2160p.mp4', label: '2160p', badge: '4K', height: 2160 },
