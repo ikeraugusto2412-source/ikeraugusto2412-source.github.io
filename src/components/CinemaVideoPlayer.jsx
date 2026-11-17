@@ -34,10 +34,12 @@ export default function CinemaVideoPlayer({
   ambientGlow = true,
   autoPlay = false,
   muted = false,
+  meta, // per-video texts: { title, views, date, descBody, tags, likes } (defaults: the Norway vlog)
 }) {
   const { dict } = useLanguage();
   const yt = dict?.youtubePlayer || {};
-  const currentTitle = title || yt.videoTitle || 'Norway 4K — The Nordic Fjords & Endless Highways [Video Blog]';
+  const info = { ...yt, ...meta };
+  const currentTitle = title || meta?.title || info.videoTitle || 'Norway 4K — The Nordic Fjords & Endless Highways [Video Blog]';
 
   const videoRef = useRef(null);
   const playerContainerRef = useRef(null);
@@ -74,7 +76,7 @@ export default function CinemaVideoPlayer({
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
-  const [likesCount, setLikesCount] = useState(24810);
+  const [likesCount, setLikesCount] = useState(meta?.likes ?? 24810);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
@@ -835,14 +837,15 @@ export default function CinemaVideoPlayer({
         {/* YouTube Description Card */}
         <div className="yt-description-box">
           <div className="yt-desc-header">
-            <span className="yt-desc-views">{yt.views || '418.924 visualizaciones'}</span>
-            <span className="yt-desc-date">{yt.date || 'hace 4 días'}</span>
-            <span className="yt-desc-tag">#norway</span>
-            <span className="yt-desc-tag">#trip</span>
+            <span className="yt-desc-views">{info.views || '418.924 visualizaciones'}</span>
+            <span className="yt-desc-date">{info.date || 'hace 4 días'}</span>
+            {(meta?.tags ?? ['#norway', '#trip']).map((tag) => (
+              <span key={tag} className="yt-desc-tag">{tag}</span>
+            ))}
           </div>
 
           <p className="yt-desc-body">
-            {yt.descBody || 'Video blog in Norway · Trip in Norway 🇳🇴'}
+            {info.descBody || 'Video blog in Norway · Trip in Norway 🇳🇴'}
           </p>
         </div>
       </div>

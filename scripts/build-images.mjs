@@ -32,6 +32,7 @@ const DIRS = [
   'assets/the-weeknd',
   'assets/profile',
   'assets/vie-nuit',
+  'assets/hyrox-barcelona',
 ];
 // Photos encoded at higher quality (paths relative to public/)
 const FINE = new Set(['assets/vie-nuit/cover.webp']);

@@ -143,6 +143,8 @@ export default function ProjectDetail() {
           subtitle={
             project.reel
               ? `${dict.reel.label} · ${project.location}`
+              : project.videoUrl && !galleryImages.length
+              ? `${project.category[language] || project.category.en} · ${project.year}`
               : `${project.gridImages ? project.gridImages.length : '30'} ${dict.projectDetail.photographs} · ${dict.projectDetail.archivalSeries}`
           }
           previewImages={
@@ -183,6 +185,7 @@ export default function ProjectDetail() {
             <CinemaVideoPlayer
               src={project.videoUrl}
               sources={project.videoSources}
+              meta={project.player && { ...project.player[language] ?? project.player.en, tags: project.player.tags, likes: project.player.likes }}
               poster={sizedSrc(project.coverImage, window.innerWidth * (window.devicePixelRatio || 1))}
             />
           </div>
@@ -302,7 +305,7 @@ export default function ProjectDetail() {
           </RevealItem>
         </Reveal>
 
-        {project.videoUrl && (
+        {project.videoUrl && galleryImages.length > 0 && (
           <div className="video-stills-header">
             <span className="video-stills-tag">{dict.projectDetail.nordicArchiveTag}</span>
             <h2>{dict.projectDetail.nordicArchiveTitle}</h2>

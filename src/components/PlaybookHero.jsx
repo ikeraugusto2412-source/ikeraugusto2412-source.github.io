@@ -142,6 +142,19 @@ const GALLERIES = [
     active: false,
     link: '/project/vie-nuit',
   },
+  {
+    id: 'hyrox-barcelona',
+    num: '009',
+    title: 'HYROX BARCELONA',
+    field: 'RACE EDIT · GERARD',
+    count: '4K RACE EDIT',
+    image: '/assets/hyrox-barcelona/cover.webp',
+    // Wide cinematic cover (16:9 video still)
+    width: 440,
+    height: 380,
+    active: false,
+    link: '/project/hyrox-barcelona',
+  },
 ];
 
 export default function PlaybookHero() {

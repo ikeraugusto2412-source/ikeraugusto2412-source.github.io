@@ -175,6 +175,40 @@ const theWeekndGridImages = [
 
 export const projects = [
   {
+    id: 'hyrox-barcelona',
+    type: 'video',
+    title: 'HYROX Barcelona',
+    subtitle: 'Race Edit · Gerard',
+    category: {
+      en: 'Sports Video · Race Edit',
+      es: 'Vídeo deportivo · Edit de carrera'
+    },
+    description: {
+      en: 'A race edit following one athlete through HYROX Barcelona: the runs, the SkiErg and rowing, burpees, wall balls and sandbag lunges, from the start line to the finish wall. Shot and graded in 4K.',
+      es: 'Un edit de carrera siguiendo a un atleta durante el HYROX de Barcelona: las carreras, el SkiErg y el remo, burpees, wall balls y zancadas con saco, desde la salida hasta el muro de meta. Rodado y etalonado en 4K.'
+    },
+    // Web encodes of the 4K master (master kept on the external drive, not in the repo)
+    // For search engines (VideoObject): first published and length
+    videoMeta: { uploadDate: '2026-11-17T12:00:00+01:00', duration: 'PT30S' },
+    videoUrl: '/assets/hyrox-barcelona/hyrox-barcelona-1080p.mp4',
+    videoSources: [
+      { src: '/assets/hyrox-barcelona/hyrox-barcelona-2160p.mp4', label: '2160p', badge: '4K', height: 2160 },
+      { src: '/assets/hyrox-barcelona/hyrox-barcelona-1080p.mp4', label: '1080p', badge: 'HD', height: 1080 },
+    ],
+    // Texts of the YouTube-style player (Norway uses the defaults in translations.js)
+    player: {
+      en: { title: 'HYROX Barcelona 4K — Race Edit [Gerard]', views: '12,406 views', date: '1 day ago', descBody: 'Race edit · HYROX Barcelona 2026 🇪🇸' },
+      es: { title: 'HYROX Barcelona 4K — Edit de carrera [Gerard]', views: '12.406 visualizaciones', date: 'hace 1 día', descBody: 'Edit de carrera · HYROX Barcelona 2026 🇪🇸' },
+      tags: ['#hyrox', '#barcelona'],
+      likes: 1384,
+    },
+    coverImage: '/assets/hyrox-barcelona/cover.webp', // frame from the edit (0:04.8)
+    gridImages: [],
+    location: 'Barcelona, Spain',
+    year: '2026',
+    format: '4K race edit · 30 s',
+  },
+  {
     id: 'vie-nuit',
     type: 'video',
     title: 'Vie Nuit',
