@@ -202,6 +202,14 @@ export const projects = [
       tags: ['#hyrox', '#barcelona'],
       likes: 1384,
     },
+    // Colour grade before / after: each file is C-Log (top) + graded (bottom), 6 s loops
+    gradeShots: [
+      { src: '/assets/hyrox-barcelona/grade/walk.mp4', poster: '/assets/hyrox-barcelona/grade/walk.webp', label: { en: 'Close-up', es: 'Primer plano' } },
+      { src: '/assets/hyrox-barcelona/grade/start.mp4', poster: '/assets/hyrox-barcelona/grade/start.webp', label: { en: 'Start line', es: 'Salida' } },
+      { src: '/assets/hyrox-barcelona/grade/stand.mp4', poster: '/assets/hyrox-barcelona/grade/stand.webp', label: { en: 'Wall balls', es: 'Wall balls' } },
+      { src: '/assets/hyrox-barcelona/grade/sandbag.mp4', poster: '/assets/hyrox-barcelona/grade/sandbag.webp', label: { en: 'Sandbag lunges', es: 'Zancadas con saco' } },
+      { src: '/assets/hyrox-barcelona/grade/row.mp4', poster: '/assets/hyrox-barcelona/grade/row.webp', label: { en: 'Row', es: 'Remo' } },
+    ],
     coverImage: '/assets/hyrox-barcelona/cover.webp', // frame from the edit (0:04.8)
     gridImages: [],
     location: 'Barcelona, Spain',

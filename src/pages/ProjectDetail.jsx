@@ -15,6 +15,7 @@ import GalleryRuler from '../components/GalleryRuler';
 import PhotoBook from '../components/PhotoBook';
 import PhotoBookTeaser from '../components/PhotoBookTeaser';
 import EditReveal from '../components/EditReveal';
+import GradeCompare from '../components/GradeCompare';
 import NextProject from '../components/NextProject';
 import LiveVisitors from '../components/LiveVisitors';
 import GalleryPalette from '../components/GalleryPalette';
@@ -304,6 +305,8 @@ export default function ProjectDetail() {
             {typeof project.description === 'object' ? (project.description[language] || project.description.en) : project.description}
           </RevealItem>
         </Reveal>
+
+        <GradeCompare shots={project.gradeShots} />
 
         {project.videoUrl && galleryImages.length > 0 && (
           <div className="video-stills-header">
