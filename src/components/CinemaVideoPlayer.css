@@ -13,6 +13,7 @@
   flex-direction: column;
   gap: 1rem;
   transition: max-width 0.3s ease;
+  container-type: inline-size; /* lets the glow size itself from the player width (cqw) */
 }
 
 .yt-ambient-wrapper.theater-mode {
@@ -22,13 +23,15 @@
 /* Ambient Glow Canvas — YouTube ambient mode.
    Samples 64x36 frame colors in real time and upscales with heavy CSS blur. */
 .yt-ambient-glow-canvas {
+  /* As tall as the player, but as wide as the screen: the glow reaches both edges of the
+     window instead of stopping at the player's column. The page section clips the overflow. */
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
-  aspect-ratio: 16 / 9;
+  left: 50%;
+  width: 100vw;
+  height: calc(100cqw * 9 / 16);
   max-height: 80vh;
-  transform: scale(1.12);
+  transform: translateX(-50%) scaleY(1.12);
   pointer-events: none;
   border-radius: 20px;
   z-index: 0;
@@ -853,12 +856,8 @@
   }
 }
 
-/* The ambient glow canvas bleeds a few px past the player: keep the vertical bloom,
-   clip it sideways so it can never create horizontal scroll on phones */
-.yt-ambient-wrapper {
-  overflow-x: clip;
-  overflow-y: visible;
-}
+/* The glow is clipped sideways by the full-width page section (.project-video-hero-wrap),
+   so it reaches the window edges without ever creating horizontal scroll */
 
 /* Small phones: the full title is printed right under the player, so the truncated
    overlay copy is dropped instead of being cut off */

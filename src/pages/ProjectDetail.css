@@ -147,7 +147,8 @@
   width: 100%;
   padding-top: clamp(5.5rem, 9.5vh, 7.5rem);
   padding-bottom: 2rem;
-  overflow: visible;
+  overflow-x: clip; /* the player's ambient glow is window-wide; keep it from scrolling sideways */
+  overflow-y: visible;
 }
 
 .project-detail-video-wrap {
