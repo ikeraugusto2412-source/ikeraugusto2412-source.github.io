@@ -341,6 +341,8 @@ export const translations = {
       listToastDesc: 'Showing projects as a list',
       mapTitle: 'On the map',
       mapHint: 'Hover or tap a point to see the project',
+      mapProjects: 'projects',
+      areas: { barcelona: 'Barcelona' },
       places: {
         'new-york': 'New York',
         london: 'London',
@@ -822,6 +824,8 @@ export const translations = {
       listToastDesc: 'Mostrando proyectos en modo lista',
       mapTitle: 'En el mapa',
       mapHint: 'Pasa o toca un punto para ver el proyecto',
+      mapProjects: 'proyectos',
+      areas: { barcelona: 'Barcelona' },
       places: {
         'new-york': 'Nueva York',
         london: 'Londres',

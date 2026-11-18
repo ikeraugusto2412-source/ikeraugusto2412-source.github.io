@@ -70,7 +70,7 @@
 .swagg-type-toggle {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 8px;
   align-items: flex-start;
   padding-bottom: clamp(6px, 1vw, 14px);
 }
@@ -78,14 +78,14 @@
 .swagg-type-btn {
   background: none;
   border: none;
-  padding: 0;
+  padding: 4px 0;
   margin: 0;
   cursor: pointer;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 7px;
-  opacity: 0.35;
+  gap: 10px;
+  opacity: 0.4;
   transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -101,8 +101,8 @@
 
 .swagg-type-square {
   display: inline-block;
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
   background-color: #ffffff;
   opacity: 0;
   flex-shrink: 0;
@@ -115,7 +115,7 @@
 
 .swagg-type-label {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 17px;
   font-weight: 700;
   letter-spacing: 0.04em;
   color: #ffffff;

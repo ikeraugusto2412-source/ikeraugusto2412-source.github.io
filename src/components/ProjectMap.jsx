@@ -22,18 +22,44 @@ const PLACES = {
   'hyrox-barcelona': [2.13, 41.355],
   'tour-de-france': [1.81, 41.24],
 };
-// Label placement around the pin for the points that sit close together (Pyrenees / Barcelona coast)
-const LABEL_AT = {
-  'huck-knife-pro': { dx: -10, dy: -8, anchor: 'end' },
-  'the-weeknd': { dx: 12, dy: 6, anchor: 'start' },
-  'vie-nuit': { dx: 12, dy: -12, anchor: 'start' },
-  'hyrox-barcelona': { dx: -10, dy: 6, anchor: 'end' },
-  'tour-de-france': { dx: -10, dy: 22, anchor: 'end' },
+// Points closer than this (in map units, 1000 wide) are merged into one pin, so the map never
+// shows a pile of dots on top of each other. The merged pin sits on the nearest named area.
+const MERGE_DIST = 45;
+const AREAS = {
+  barcelona: [2.17, 41.39],
 };
-const LABEL_DEFAULT = { dx: 10, dy: -10, anchor: 'start' };
+const LABEL = { dx: 10, dy: -10, anchor: 'start' };
 
 const { lon0, lon1, lat0, lat1, width: W, height: H } = MAP_VIEW;
 const proj = ([lon, lat]) => [((lon - lon0) / (lon1 - lon0)) * W, ((lat1 - lat) / (lat1 - lat0)) * H];
+const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+
+// [{ id, xy, projects: [...], area? }]
+function groupPoints(list) {
+  const groups = [];
+  list.forEach((p) => {
+    const xy = proj(PLACES[p.id]);
+    const near = groups.find((g) => g.members.some((m) => dist(m.xy, xy) < MERGE_DIST));
+    if (near) near.members.push({ p, xy });
+    else groups.push({ members: [{ p, xy }] });
+  });
+  return groups.map(({ members }) => {
+    if (members.length === 1) return { id: members[0].p.id, xy: members[0].xy, projects: [members[0].p] };
+    const c = [0, 1].map((i) => members.reduce((s, m) => s + m.xy[i], 0) / members.length);
+    const area = Object.entries(AREAS)
+      .map(([key, ll]) => ({ key, xy: proj(ll) }))
+      .sort((a, b) => dist(a.xy, c) - dist(b.xy, c))[0];
+    const onArea = area && dist(area.xy, c) < MERGE_DIST;
+    return {
+      id: onArea ? `area-${area.key}` : `group-${members[0].p.id}`,
+      area: onArea ? area.key : null,
+      xy: onArea ? area.xy : c,
+      projects: members.map((m) => m.p),
+    };
+  });
+}
+
+const POINTS = groupPoints(projects.filter((p) => PLACES[p.id]));
 
 export default function ProjectMap() {
   const { dict, localePath, language } = useLanguage();
@@ -41,10 +67,11 @@ export default function ProjectMap() {
   const navigate = useNavigate();
   const [active, setActive] = useState(null);
   const firstTap = useRef(false); // touch: was this point not yet shown when the finger went down?
-  const points = projects.filter((p) => PLACES[p.id]);
-  const current = points.find((p) => p.id === active);
+  const current = POINTS.find((g) => g.id === active);
 
   const open = (id) => navigate(localePath(`/project/${id}`));
+  const placeOf = (g) => (g.area ? t.areas[g.area] : t.places[g.id]);
+  const categoryOf = (p) => (typeof p.category === 'object' ? p.category[language] || p.category.en : p.category);
 
   return (
     <section className="project-map" aria-label={t.mapTitle}>
@@ -52,7 +79,7 @@ export default function ProjectMap() {
         <h2>{t.mapTitle}</h2>
         <span>{t.mapHint}</span>
       </div>
-      <div className="project-map-frame">
+      <div className="project-map-frame" onPointerLeave={(e) => e.pointerType === 'mouse' && setActive(null)}>
         <svg viewBox={`0 0 ${W} ${H}`} role="presentation">
           <defs>
             <pattern id="project-map-dots" width="7" height="7" patternUnits="userSpaceOnUse">
@@ -63,37 +90,41 @@ export default function ProjectMap() {
             </clipPath>
           </defs>
           <path d={MAP_LAND} className="project-map-land" clipPath="url(#project-map-clip)" />
-          {points.map((p) => {
-            const [x, y] = proj(PLACES[p.id]);
-            const label = LABEL_AT[p.id] ?? LABEL_DEFAULT;
+          {POINTS.map((g) => {
+            const [x, y] = g.xy;
+            const many = g.projects.length > 1;
+            const place = placeOf(g);
             return (
               <g
-                key={p.id}
-                className={`project-map-point ${active === p.id ? 'is-on' : ''}`}
-                role="link"
+                key={g.id}
+                className={`project-map-point ${many ? 'is-group' : ''} ${active === g.id ? 'is-on' : ''}`}
+                role={many ? 'button' : 'link'}
                 tabIndex={0}
-                aria-label={`${p.title} — ${t.places[p.id]}`}
-                onPointerEnter={(e) => e.pointerType === 'mouse' && setActive(p.id)}
-                onPointerLeave={(e) => e.pointerType === 'mouse' && setActive(null)}
-                onFocus={() => setActive(p.id)}
-                onBlur={() => setActive(null)}
+                aria-label={many ? `${place} — ${g.projects.length} ${t.mapProjects}` : `${g.projects[0].title} — ${place}`}
+                aria-expanded={many ? active === g.id : undefined}
+                onPointerEnter={(e) => e.pointerType === 'mouse' && setActive(g.id)}
+                // a group's card stays open so the pointer can reach it; it closes when leaving the map
+                onPointerLeave={(e) => !many && e.pointerType === 'mouse' && setActive(null)}
+                onFocus={() => setActive(g.id)}
                 onPointerDown={(e) => {
-                  firstTap.current = e.pointerType !== 'mouse' && active !== p.id;
+                  firstTap.current = e.pointerType !== 'mouse' && active !== g.id;
                 }}
                 onClick={() => {
-                  // Touch: the first tap shows the card, a second tap (or the card) opens the project
-                  if (firstTap.current) setActive(p.id);
-                  else open(p.id);
+                  // Touch: the first tap shows the card, a second tap (or the card) opens the project.
+                  // A group never navigates by itself: its card lists the projects.
+                  if (many || firstTap.current) setActive(g.id);
+                  else open(g.id);
                   firstTap.current = false;
                 }}
-                onKeyDown={(e) => e.key === 'Enter' && open(p.id)}
-                data-cursor-text="VIEW"
+                onKeyDown={(e) => e.key === 'Enter' && !many && open(g.id)}
+                data-cursor-text={many ? undefined : 'VIEW'}
               >
                 <circle cx={x} cy={y} r="22" className="project-map-hit" />
-                <circle cx={x} cy={y} r="16" className="project-map-pulse" />
-                <circle cx={x} cy={y} r="5" className="project-map-pin" />
-                <text x={x + label.dx} y={y + label.dy} textAnchor={label.anchor}>
-                  {t.places[p.id]}
+                <circle cx={x} cy={y} r={many ? 22 : 16} className="project-map-pulse" />
+                <circle cx={x} cy={y} r={many ? 7 : 5} className="project-map-pin" />
+                <text x={x + LABEL.dx} y={y + LABEL.dy} textAnchor={LABEL.anchor}>
+                  {place}
+                  {many && <tspan className="project-map-count">{` · ${g.projects.length}`}</tspan>}
                 </text>
               </g>
             );
@@ -104,20 +135,27 @@ export default function ProjectMap() {
           {current && (
             <motion.div
               key={current.id}
-              className="project-map-card"
+              className={`project-map-card ${current.projects.length > 1 ? 'is-list' : ''}`}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
             >
-              <Link to={localePath(`/project/${current.id}`)} tabIndex={-1}>
-                <img src={sizedSrc(current.coverImage, 320)} alt="" style={{ objectPosition: current.coverPosition }} />
-                <span>
-                  <strong>{current.title}</strong>
-                  <small>{typeof current.category === 'object' ? current.category[language] || current.category.en : current.category}</small>
-                </span>
-                <span className="project-map-card-arrow" aria-hidden="true">→</span>
-              </Link>
+              {current.projects.length > 1 && (
+                <p className="project-map-card-head">
+                  {placeOf(current)} · {current.projects.length} {t.mapProjects}
+                </p>
+              )}
+              {current.projects.map((p) => (
+                <Link key={p.id} to={localePath(`/project/${p.id}`)} tabIndex={current.projects.length > 1 ? 0 : -1}>
+                  <img src={sizedSrc(p.coverImage, 320)} alt="" style={{ objectPosition: p.coverPosition }} />
+                  <span>
+                    <strong>{p.title}</strong>
+                    <small>{current.projects.length > 1 ? t.places[p.id] : categoryOf(p)}</small>
+                  </span>
+                  <span className="project-map-card-arrow" aria-hidden="true">→</span>
+                </Link>
+              ))}
             </motion.div>
           )}
         </AnimatePresence>

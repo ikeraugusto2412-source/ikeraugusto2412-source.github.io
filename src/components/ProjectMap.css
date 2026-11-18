@@ -139,6 +139,52 @@
   color: var(--text-muted);
 }
 
+.project-map-count {
+  fill: #ff4d3d;
+}
+
+.project-map-card.is-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(16, 16, 16, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  min-width: 280px;
+}
+
+.project-map-card.is-list a {
+  padding: 6px 14px 6px 6px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  transition: background-color 0.2s ease;
+}
+
+.project-map-card.is-list a:hover,
+.project-map-card.is-list a:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.project-map-card.is-list img {
+  width: 64px;
+  height: 46px;
+}
+
+.project-map-card.is-list .project-map-card-arrow {
+  margin-left: auto;
+}
+
+.project-map-card-head {
+  margin: 2px 6px 4px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
 .project-map-card .project-map-card-arrow {
   margin-left: 6px;
 }
