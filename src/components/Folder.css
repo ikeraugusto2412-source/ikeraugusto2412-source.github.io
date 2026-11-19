@@ -102,7 +102,6 @@
 .rare-folder-photo-frame {
   position: relative;
   width: 100%;
-  /* photo takes whatever the caption leaves, so wrapped captions never get cut */
   flex: 1 1 auto;
   min-height: 0;
   overflow: hidden;
@@ -128,73 +127,6 @@
   inset: 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.2) 100%);
   pointer-events: none;
-}
-
-.rare-folder-photo-info {
-  flex: 0 0 auto;
-  padding: 8px 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  background: #161616;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.rare-folder-photo-tag {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #888888;
-  text-transform: uppercase;
-}
-
-.rare-folder-photo-title {
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  color: #ffffff;
-  text-transform: uppercase;
-  line-height: 1.1;
-  /* wrap instead of truncating: the whole caption stays readable */
-  overflow-wrap: anywhere;
-}
-
-.rare-folder-photo-desc {
-  font-family: var(--font-sans);
-  font-size: 8.5px;
-  color: #aaaaaa;
-  line-height: 1.2;
-}
-
-.rare-folder-card-inspect-hint {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  padding: 2px 6px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  font-family: var(--font-mono);
-  font-size: 7.5px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: #ffffff;
-  opacity: 0;
-  transform: translateY(-2px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  pointer-events: none;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .rare-folder-photo-card.is-interactive:hover .rare-folder-card-inspect-hint {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* ─── 3D Flap Isolated Anchor ─── */

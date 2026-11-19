@@ -67,16 +67,6 @@ const Card = ({ id, theme, item, isOpen }) => {
           <img {...responsiveImg(item.image, '320px')} alt={item.title || ''} className="rare-folder-photo-img" loading="eager" decoding="async" />
           <div className="rare-folder-photo-overlay-glass" />
         </div>
-        <div className="rare-folder-photo-info">
-          {item.tag && <span className="rare-folder-photo-tag">{item.tag}</span>}
-          {item.title && <span className="rare-folder-photo-title">{item.title}</span>}
-          {item.desc && <span className="rare-folder-photo-desc">{item.desc}</span>}
-        </div>
-        {isOpen && (
-          <div className="rare-folder-card-inspect-hint">
-            <span>EXPAND ↗</span>
-          </div>
-        )}
       </div>
     );
   }
